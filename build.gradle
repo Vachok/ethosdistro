@@ -1,10 +1,10 @@
 plugins {
-    id 'com.gradle.build-scan' version '1.13.4'
+    id 'com.gradle.build-scan' version '1.16'
     id 'java'
     id 'application'
     id 'idea'
 }
-group 'ru.vachok.kirya'
+group 'ru.vachok.ethosdistro'
 version('0.1')
 mainClassName = group + '.AppStarter'
 sourceCompatibility = 1.8
@@ -32,13 +32,6 @@ dependencies {
     compile group: 'commons-net', name: 'commons-net', version: '3.6'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-jdbc-client
-    compile group: 'io.vertx', name: 'vertx-jdbc-client', version: '3.5.2'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-web
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.5.2'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-web-client
-    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.5.2'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     // https://mvnrepository.com/artifact/org.testng/testng
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
@@ -55,7 +48,7 @@ jar {
     manifest {
         attributes(
                 'Main-Class': mainClassName,
-                'JavaFX-Version': 9,
+                'JavaFX-Version': 8,
                 'Class-Path': configurations.runtime.collect() { 'lib/' + it.name }.join('')
         )
     }
