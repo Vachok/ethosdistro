@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
  @since 23.08.2018 (15:34) */
 public class AppStarter {
 
-   private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
-
    private static MessageToUser messageToUser = new MessageCons();
 
    private static final Long START_LONG = System.currentTimeMillis();
@@ -33,9 +31,17 @@ public class AppStarter {
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm",
             Locale.forLanguageTag("RU"));
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
-      messageToUser.info(AppStarter.class.getName(), "start at", startTime);
-      ScheduledExecutorService scheduledExecutorService = Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
-      Runnable parseRun = new ParsingStart();
-      scheduledExecutorService.scheduleWithFixedDelay(parseRun, 15L, 60L, TimeUnit.SECONDS);
+      messageToUser.info(AppStarter.class.getName(), "Initializing " +
+            ParsingStart.class.getName() + " with " + ConstantsFor.INITIAL_DELAY +
+            " seconds delay...", startTime);
+      scheduleStart();
+   }
+
+   private static void scheduleStart() {
+      ScheduledExecutorService scheduledExecutorService =
+            Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
+      Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes");
+      scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+            ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
    }
 }

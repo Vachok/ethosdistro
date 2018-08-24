@@ -9,3 +9,13 @@ out
 gen
 /.gradle/
 /docs/
+/src/main/java/ru/vachok/ethosdistro/class.txt
+/ethosdistro.srctrldb
+/ethosdistro.srctrlprj
+/ethosdistro.srctrlbm
+/answer.json
+/answer.html
+/ESender.properties
+/InitProperties.properties
+/chess.properties
+/regru.obj
