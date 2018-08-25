@@ -9,7 +9,7 @@ import ru.vachok.ethosdistro.parser.ParsingStart;
 
 public class AppStarterTest {
 
-   @Test (testName = "File Saver")
+   @Test (testName = "File Saver", enabled = false)
    public void testMain() {
       String urlAsString = "http://hous01.ethosdistro.com/?json=yes";
       ParsingStart parsingStart = new ParsingStart(urlAsString, null);

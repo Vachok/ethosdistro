@@ -46,9 +46,11 @@ public class ParseToFile implements Parsers {
    private String saveToFile() {
       File file = new File(fileName);
       try(InputStream inputStream = urlToParse.openStream();
-          OutputStream outputStream = new FileOutputStream(file)){
+          DataInputStream dataInputStream = new DataInputStream(inputStream);
+          OutputStream outputStream = new FileOutputStream(file);
+          DataOutputStream dataOutputStream = new DataOutputStream(outputStream)){
          while(inputStream.available() > 0){
-            outputStream.write(inputStream.read());
+            dataOutputStream.write(dataInputStream.read());
          }
          return file.getAbsolutePath() + " \nChange time: " + new Date(file.lastModified());
       }

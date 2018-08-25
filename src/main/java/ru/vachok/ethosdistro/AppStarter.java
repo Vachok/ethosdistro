@@ -5,6 +5,8 @@ import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.EmailsList;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.email.parse.DecoderEnc;
+import ru.vachok.messenger.email.parse.UTF8;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ public class AppStarter {
    private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
 
    private static MessageToUser messageToUser = new MessageCons();
+   private static DecoderEnc decoderEnc = new UTF8();
 
    private static long initialDelay = ConstantsFor.INITIAL_DELAY;
 
@@ -46,24 +49,28 @@ public class AppStarter {
    }
 
    private static void argsReader(String[] args) {
-      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm", Locale.forLanguageTag("RU"));
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MMM-dd hh:mm");
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
       logger.info("VERS 0.3b");
       String argString = Arrays.toString(args).replaceAll(", ", ":");
       logger.info(argString);
-      Map<String, String> argMap = new HashMap<>();
+
       args = argString.split("-");
       for(String argument : args){
          try{
             String key = argument.split(":")[0];
             String value = argument.split(":")[1];
-            if (key.equalsIgnoreCase("d")) delay = Long.parseLong(value);
-            if (key.equalsIgnoreCase("e")) new EmailsList(value).run();
-            argMap.put(key, value);
+
+            if (key.equalsIgnoreCase("d")) {
+               delay = Long.parseLong(value);
+            }
+            if (key.equalsIgnoreCase("e")) {
+               new EmailsList(value).run();
+            }
          }
          catch(Exception e){
-            logger.warning(new String("Пустой агрумент!".getBytes(), StandardCharsets.UTF_8));
-            continue;
+            logger.warning(decoderEnc.toAnotherEnc("Пустой агрумент!"));
          }
       }
       messageToUser.info(AppStarter.class.getName(), "Initializing " +
