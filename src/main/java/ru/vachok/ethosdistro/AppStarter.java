@@ -2,15 +2,21 @@ package ru.vachok.ethosdistro;
 
 
 import ru.vachok.ethosdistro.parser.ParsingStart;
+import ru.vachok.ethosdistro.util.EmailsList;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,21 +25,51 @@ import java.util.concurrent.TimeUnit;
  @since 23.08.2018 (15:34) */
 public class AppStarter {
 
+   private static final Long START_LONG = System.currentTimeMillis();
+
+   private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
+
+   private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
+
    private static MessageToUser messageToUser = new MessageCons();
 
-   private static final Long START_LONG = System.currentTimeMillis();
+   private static long initialDelay = ConstantsFor.INITIAL_DELAY;
+
+   private static long delay = ConstantsFor.DELAY;
 
    public static Long getStartLong() {
       return START_LONG;
    }
 
    public static void main(String[] args) {
-      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm",
-            Locale.forLanguageTag("RU"));
+      argsReader(args);
+   }
+
+   private static void argsReader(String[] args) {
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd hh:mm", Locale.forLanguageTag("RU"));
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
+      logger.info("VERS 0.3b");
+      String argString = Arrays.toString(args).replaceAll(", ", ":");
+      logger.info(argString);
+      Map<String, String> argMap = new HashMap<>();
+      args = argString.split("-");
+      for(String argument : args){
+         try{
+            String key = argument.split(":")[0];
+            String value = argument.split(":")[1];
+            if (key.equalsIgnoreCase("d")) delay = Long.parseLong(value);
+            if (key.equalsIgnoreCase("e")) new EmailsList(value).run();
+            argMap.put(key, value);
+         }
+         catch(Exception e){
+            logger.warning(new String("Пустой агрумент!".getBytes(), StandardCharsets.UTF_8));
+            continue;
+         }
+      }
       messageToUser.info(AppStarter.class.getName(), "Initializing " +
-            ParsingStart.class.getName() + " with " + ConstantsFor.INITIAL_DELAY +
+            ParsingStart.class.getName() + " with " + delay +
             " seconds delay...", startTime);
+
       scheduleStart();
    }
 
@@ -42,6 +78,6 @@ public class AppStarter {
             Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
       Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes");
       scheduledExecutorService.scheduleWithFixedDelay(parseRun,
-            ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+            initialDelay, delay, TimeUnit.SECONDS);
    }
 }

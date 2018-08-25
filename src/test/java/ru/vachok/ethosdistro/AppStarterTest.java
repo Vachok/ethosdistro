@@ -19,7 +19,7 @@ public class AppStarterTest {
       parseAsJson.run();
    }
 
-   @Test (testName = "String shower")
+   @Test (testName = "String shower", enabled = false)
    public void testShow() {
       String urlAsString = "http://hous01.ethosdistro.com/?json=yes";
       Parsers jsonAsUsualString = new ParseJsonAsUsualString();

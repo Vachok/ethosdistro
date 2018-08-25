@@ -47,9 +47,12 @@ public class ParsingStart implements Runnable {
    public void run() {
       URL url = getUrlFromStr();
       String s = "MESSAGE FROM " + this.getClass().getTypeName() + "\n\n\n" + parsers.startParsing(url);
-      if(!s.toLowerCase().contains("f9b07\":{\"condition\":\"mining\"")){
+      if(!s.contains(" ")){
+         LOGGER.log(Level.INFO, SOURCE_CLASS+" sending mail");
          ConstantsFor.RCPT.add("143500@gmail.com");
-         ConstantsFor.RCPT.add("pivovarov.kirill@gmail.com");
+      }else {
+         LOGGER.log(Level.WARNING, SOURCE_CLASS+" no sending mail");
+         ConstantsFor.RCPT.clear();
       }
       boolean sends = parsers.sendResult(s);
       LOGGER.log(Level.INFO, () -> "Start Parsing for " + url.toString() + sends + " send");
