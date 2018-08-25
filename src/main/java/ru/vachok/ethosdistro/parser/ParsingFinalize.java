@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
@@ -29,7 +30,7 @@ public class ParsingFinalize implements Callable<Boolean> {
    /**
     {@link }
     */
-   private static MessageToUser messageToUser = new MessageCons();
+   private static MessageToUser messageToUser = new DBLogger();
 
 
    @Override
@@ -75,7 +76,12 @@ public class ParsingFinalize implements Callable<Boolean> {
          parse = ( JSONObject ) parser.parse(s1);
 
          Object condition = parse.get("condition");
-         coList.add(condition);
+         if(condition.toString().equalsIgnoreCase("mining")){
+            coList.add(condition);
+         }else {
+            messageToUser.info(SOURCE_CLASS, "NO MINING IN", parse.toJSONString());
+            return false;
+         }
       }
       if(coList.size()==3){
          messageToUser.info(LocalDateTime.now().toString(),"condition = " , coList.toString()+"");

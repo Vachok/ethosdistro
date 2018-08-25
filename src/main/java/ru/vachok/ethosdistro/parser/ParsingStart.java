@@ -3,6 +3,7 @@ package ru.vachok.ethosdistro.parser;
 
 import jdk.internal.jline.internal.Nullable;
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.UTF8;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
@@ -28,7 +29,7 @@ public class ParsingStart implements Runnable {
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
    private Parsers parsers;
-   private static MessageToUser messageToUser = new MessageCons();
+   private static MessageToUser messageToUser = new DBLogger();
 
    private String urlAsString;
 
@@ -73,7 +74,7 @@ public class ParsingStart implements Runnable {
    private void sendRes(){
       File file = new File("answer.json");
       MessageToUser emailS = new ESender(ConstantsFor.RCPT);
-      System.out.println("ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size());
+      messageToUser.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
       if(new ParsingFinalize().call()) {
          messageToUser.info(file.getAbsolutePath(),new Date(file.lastModified())+"", file.getFreeSpace()+" free space");
       }

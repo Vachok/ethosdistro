@@ -23,6 +23,7 @@ public enum ConstantsFor {
 
    public static final List<String> RCPT = new ArrayList<>();
 
-   public static final String[] DEVICES = {"9cee2f","3d7d93", "6f9b07"};
+   public static final String[] DEVICES = {"9cee2f", "3d7d93", "6f9b07"};
+
    public static final String KIR_MAIL = "pivovarov.kirill@gmail.com";
 }

@@ -16,13 +16,11 @@ public class ParseJsonAsUsualString implements Parsers {
 
    private URL url;
 
-   private String resultAsString;
-
    @Override
    public String startParsing(URL url) {
       this.url = url;
       try{
-         this.resultAsString = getStr();
+         String resultAsString = getStr();
          return resultAsString;
       }
       catch(IOException e){
