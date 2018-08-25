@@ -1,21 +1,16 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import jdk.nashorn.internal.runtime.JSONFunctions;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.testng.annotations.Test;
+import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 public class ParsingFinalizeTest {
@@ -24,13 +19,14 @@ public class ParsingFinalizeTest {
 
    private static MessageToUser messageToUser = new MessageCons();
 
-   @Test (testName = "Make JSON")
-   public void jsonMaker() {
-      String jsonListString = jsonAsList().toString();
+   @Test
+   public void getCondit(){
+      System.out.println(Arrays.toString(ConstantsFor.DEVICES));
+      jsonAsList();
    }
 
    private List<String> jsonAsList() {
-      JSONObject parse = null;
+      JSONObject parse;
       File jsonFile = new File("answer.json");
       if(!jsonFile.exists()){
          messageToUser.errorAlert(SOURCE_CLASS, "readFile", jsonFile.getAbsolutePath() + " is " + false);
@@ -43,13 +39,12 @@ public class ParsingFinalizeTest {
              BufferedReader bufferedReader = new BufferedReader(reader)){
             while(bufferedReader.ready()){
                JSONParser parser = new JSONParser();
-               parse = (JSONObject)parser.parse(bufferedReader);
+               parse = ( JSONObject ) parser.parse(bufferedReader);
+               Object rigs =(JSONObject) parse.get("rigs");
+               checkCond(parse, rigs);
             }
-            Object condition = Objects.requireNonNull(parse).get("condition");
-            System.out.println("condition = " + condition);
-
          }
-         catch(IOException|ParseException e){
+         catch(IOException | ParseException e){
             messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(),
                   Arrays.stream(e.getStackTrace())
                         .sorted().toString());
@@ -57,5 +52,18 @@ public class ParsingFinalizeTest {
          return fileAsList;
       }
       throw new UnknownError("Cant find list...");
+   }
+
+   private boolean checkCond(JSONObject parse, Object rigs) throws ParseException {
+      for(String s:ConstantsFor.DEVICES){
+         Object o = (( JSONObject ) rigs).get(s);
+         String s1 = parse.toJSONString(( Map ) o);
+         JSONParser parser = new JSONParser();
+         parse = (JSONObject ) parser.parse(s1);
+
+         Object condition = parse.get("condition");
+         System.out.println(condition.toString());
+      }
+      return true;
    }
 }
