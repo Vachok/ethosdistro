@@ -1,15 +1,8 @@
 package ru.vachok.ethosdistro.parser;
-
-
-import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.email.ESender;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +23,6 @@ public class ParseJsonAsUsualString implements Parsers {
       this.url = url;
       try{
          this.resultAsString = getStr();
-         sendResult(resultAsString);
          return resultAsString;
       }
       catch(IOException e){
@@ -39,20 +31,7 @@ public class ParseJsonAsUsualString implements Parsers {
       }
    }
 
-   @Override
-   public boolean sendResult(String result) {
-      if(resultAsString==null || ConstantsFor.RCPT.size()==0){
-         LOGGER.log(Level.WARNING, "NO EMAIL  " + SOURCE_CLASS);
-         return false;
-      }
-      else{
-         MessageToUser messageToUser = new ESender(ConstantsFor.RCPT);
-         messageToUser.info(SOURCE_CLASS, LocalDateTime.now().toString(), resultAsString);
-         return true;
-      }
-   }
-
-   private String getStr() throws IOException {
+   private String getStr() throws IOException{
       StringBuilder bytesStr = new StringBuilder();
       URLConnection urlConnection = Objects.requireNonNull(url).openConnection();
       InputStream inputStream = urlConnection.getInputStream();

@@ -1,14 +1,9 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.email.ESender;
-
 import java.io.*;
 import java.net.URL;
 import java.util.Date;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -57,20 +52,6 @@ public class ParseToFile implements Parsers {
       catch(IOException e){
          LOGGER.throwing(SOURCE_CLASS, "getJSON", e);
          return e.getMessage();
-      }
-   }
-
-   @Override
-   public boolean sendResult(String result) {
-      this.fileName = result;
-      if(result==null || ConstantsFor.RCPT.size()==0){
-         LOGGER.log(Level.WARNING, "NO EMAIL! " + SOURCE_CLASS);
-         return false;
-      }
-      else{
-         MessageToUser messageToUser = new ESender(ConstantsFor.RCPT);
-         messageToUser.info(SOURCE_CLASS, "IN FILE", result);
-         return true;
       }
    }
 }

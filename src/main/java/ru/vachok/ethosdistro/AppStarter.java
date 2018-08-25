@@ -52,10 +52,10 @@ public class AppStarter {
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter
             .ofPattern("yyyy-MMM-dd hh:mm");
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
-      logger.info("VERS 0.3b");
-      String argString = Arrays.toString(args).replaceAll(", ", ":");
+      messageToUser.infoNoTitles("VERSION 0.4 |25.08.2018 (21:37)|");
+      String argString = Arrays.toString(args)
+            .replaceAll(", ", ":");
       logger.info(argString);
-
       args = argString.split("-");
       for(String argument : args){
          try{
@@ -66,7 +66,7 @@ public class AppStarter {
                delay = Long.parseLong(value);
             }
             if (key.equalsIgnoreCase("e")) {
-               new EmailsList(value).run();
+               mailAdd(value);
             }
          }
          catch(Exception e){
@@ -79,6 +79,16 @@ public class AppStarter {
 
       scheduleStart();
    }
+
+   private static void mailAdd(String value) {
+      ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+      String values[] = value.split(",");
+      for(String mailAddr:values){
+         ConstantsFor.RCPT.add(mailAddr.replaceAll("\\Q]\\E", ""));
+         logger.info("emails: "+ConstantsFor.RCPT.toString());
+      }
+   }
+
 
    private static void scheduleStart() {
       ScheduledExecutorService scheduledExecutorService =

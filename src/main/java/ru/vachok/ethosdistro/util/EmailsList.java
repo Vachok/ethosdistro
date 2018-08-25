@@ -16,7 +16,6 @@ public class EmailsList implements Runnable {
     Simple Name класса, для поиска настроек
     */
    private static final String SOURCE_CLASS = EmailsList.class.getSimpleName();
-   private static ExecutorService executorService;
    private static Logger logger = Logger.getLogger(SOURCE_CLASS);
 
    private String value;
@@ -27,16 +26,6 @@ public class EmailsList implements Runnable {
 
    @Override
    public void run() {
-      executorService = Executors.newSingleThreadExecutor();
-      Runnable r = this::mailListAdd;
-      executorService.execute(r);
+      throw new UnknownError();
    }
-   void mailListAdd(){
-      String values[] = value.split(",");
-      for(String mailAddr:values){
-         ConstantsFor.RCPT.add(mailAddr);
-         logger.info("emails: "+ConstantsFor.RCPT.toString());
-      }
-   }
-
 }

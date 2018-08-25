@@ -3,9 +3,16 @@ package ru.vachok.ethosdistro.parser;
 
 import jdk.internal.jline.internal.Nullable;
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.util.UTF8;
+import ru.vachok.messenger.MessageCons;
+import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.email.ESender;
+import sun.awt.geom.AreaOp;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +28,7 @@ public class ParsingStart implements Runnable {
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
    private Parsers parsers;
+   private static MessageToUser messageToUser = new MessageCons();
 
    private String urlAsString;
 
@@ -45,16 +53,10 @@ public class ParsingStart implements Runnable {
 
    @Override
    public void run() {
+      this.parsers = new ParseToFile();
       URL url = getUrlFromStr();
-      String s = "MESSAGE FROM " + this.getClass().getTypeName() + "\n\n\n" + parsers.startParsing(url);
-      if(false){
-         LOGGER.log(Level.INFO, SOURCE_CLASS+" sending mail");
-      }else {
-         LOGGER.log(Level.WARNING, SOURCE_CLASS+" no sending mail");
-         ConstantsFor.RCPT.clear();
-      }
-      boolean sends = parsers.sendResult(s);
-      LOGGER.log(Level.INFO, () -> "Start Parsing for " + url.toString() + sends + " send");
+      parsers.startParsing(url);
+      sendRes();
    }
 
    private URL getUrlFromStr() {
@@ -66,6 +68,20 @@ public class ParsingStart implements Runnable {
          LOGGER.throwing(SOURCE_CLASS, "getSite", e);
       }
       return url;
+   }
+
+   private void sendRes(){
+      File file = new File("answer.json");
+      MessageToUser emailS = new ESender(ConstantsFor.RCPT);
+      System.out.println("ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size());
+      if(new ParsingFinalize().call()) {
+         messageToUser.info(file.getAbsolutePath(),new Date(file.lastModified())+"", file.getFreeSpace()+" free space");
+      }
+      else {
+         emailS.errorAlert("ALARM!", "Condition not mining", new UTF8()
+               .fromString("Что-то идёт не так: ")+ urlAsString);
+         ConstantsFor.RCPT.clear();
+      }
    }
 
 }

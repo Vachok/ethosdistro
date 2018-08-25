@@ -9,6 +9,7 @@ import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,24 +66,26 @@ public class ParsingFinalize implements Callable<Boolean> {
    }
 
    private boolean checkCond(JSONObject parse, Object rigs) throws ParseException {
+      List<Object> coList = new ArrayList<>();
       for(String s : ConstantsFor.DEVICES){
          Object o = (( JSONObject ) rigs).get(s);
          String s1 = parse
                .toJSONString(( Map ) o);
          JSONParser parser = new JSONParser();
          parse = ( JSONObject ) parser.parse(s1);
-         List<Object> coList = new ArrayList<>();
+
          Object condition = parse.get("condition");
          coList.add(condition);
-         if(coList
-               .size()==3){
-            return true;
-         }
-         else{
-            return false;
-         }
       }
-      throw new UnknownError();
+      if(coList.size()==3){
+         messageToUser.info(LocalDateTime.now().toString(),"condition = " , coList.toString()+"");
+         return true;
+      }
+      else{
+         ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+         messageToUser.errorAlert(System.currentTimeMillis()+" time", "\ncondition = " , coList.toString()+"");
+         return false;
+      }
    }
 
 }

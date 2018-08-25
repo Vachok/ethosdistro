@@ -10,5 +10,4 @@ public interface Parsers {
 
    String startParsing(URL url);
 
-   boolean sendResult(String result);
 }
