@@ -1,12 +1,13 @@
 package ru.vachok.ethosdistro.parser;
 
+
 import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
+import ru.vachok.ethosdistro.util.TForfs;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
-import ru.vachok.messenger.email.parse.UTF8;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -63,6 +64,8 @@ public class ParsingStart implements Runnable {
       this.parsers = new ParseToFile();
       URL url = getUrlFromStr();
       parsers.startParsing(url);
+      String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
+      MESSAGE_TO_USER.info(SOURCE_CLASS, "email recep", s);
       sendRes(this.test);
    }
 
@@ -91,18 +94,19 @@ public class ParsingStart implements Runnable {
       log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
       if(call){
          MESSAGE_TO_USER.info(SOURCE_CLASS, file
-               .getFreeSpace() + " free space", new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
+                     .getFreeSpace() / ConstantsFor.MEGABYTE +
+                     " free space",
+               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
          log.info(SOURCE_CLASS, file
-               .getFreeSpace() + " free space", new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
+                     .getFreeSpace() / ConstantsFor.MEGABYTE +
+                     " free space",
+               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
          new AppStarter();
          Thread.currentThread().interrupt();
       }
       else {
-         emailS.errorAlert("ALARM!", "Condition not mining", new UTF8()
-               .toAnotherEnc("Что-то идёт не так: ")+ urlAsString);
-         log.errorAlert("ALARM!", "Condition not mining", new UTF8()
-               .toAnotherEnc("Что-то идёт не так: ")+ urlAsString);
-         new CheckOn().run();
+         emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
+         log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
          new AppStarter();
          Thread.currentThread().interrupt();
       }

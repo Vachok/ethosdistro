@@ -2,6 +2,7 @@ package ru.vachok.ethosdistro.util;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -21,7 +22,14 @@ public class TForfs {
    }
 
    public String toStringFromArray(StackTraceElement[] stackTrace) {
-      return Arrays.toString(stackTrace)
+      String sRet = Arrays.toString(stackTrace)
+            .replaceAll(", ", "\n");
+      sRet = sRet.replace("\\Q]\\E", "").replace("\\Q[\\E", "");
+      return sRet;
+   }
+
+   public String toStringFromArray(List<String> listString) {
+      return Arrays.toString(listString.toArray())
             .replaceAll(", ", "\n")
             .replace("\\Q]\\E", "")
             .replace("\\Q[\\E", "");

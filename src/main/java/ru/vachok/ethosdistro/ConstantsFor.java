@@ -19,7 +19,7 @@ public enum ConstantsFor {
 
    public static final long INITIAL_DELAY = 2L;
 
-   public static final long DELAY = 600L;
+   public static final long DELAY = 60L;
 
    public static final List<String> RCPT = new ArrayList<>();
 

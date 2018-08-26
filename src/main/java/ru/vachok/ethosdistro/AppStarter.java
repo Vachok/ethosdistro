@@ -40,7 +40,7 @@ public class AppStarter {
 
    private static long delay = ConstantsFor.DELAY;
 
-   private static boolean test;
+   private static boolean test = false;
 
    public static Long getStartLong() {
       return START_LONG;
@@ -55,9 +55,8 @@ public class AppStarter {
          argsReader(args);
       }
       else {
-         ConstantsFor.RCPT.add(ConstantsFor.MY_MAIL);
          ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-         MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", scheduleStart(false));
+         MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", scheduleStart(test));
       }
    }
 
@@ -66,7 +65,8 @@ public class AppStarter {
             .ofPattern("yyyy-MMM-dd hh:mm");
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
       MESSAGE_TO_USER.infoNoTitles("VERSION 0.4 |25.08.2018 (23:24)|");
-      String stringArgs = Arrays.toString(args).replaceAll(", ", ":");
+      String stringArgs = Arrays.toString(args)
+            .replaceAll(", ", ":");
       logger.info(stringArgs);
       args = stringArgs.split("-");
       for(String argument : args){
@@ -86,6 +86,7 @@ public class AppStarter {
                initialDelay = ConstantsFor.INITIAL_DELAY;
             }
             if(key.equalsIgnoreCase("t")){
+               ConstantsFor.RCPT.add(ConstantsFor.MY_MAIL);
                test = true;
                continue;
             }else {
