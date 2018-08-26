@@ -1,7 +1,6 @@
 package ru.vachok.ethosdistro.util;
 
 
-import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.mysqlandprops.DataConnectTo;
 import ru.vachok.mysqlandprops.RegRuMysql;
@@ -9,7 +8,7 @@ import ru.vachok.mysqlandprops.RegRuMysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.text.MessageFormat;
 import java.util.logging.Logger;
 
 
@@ -60,6 +59,10 @@ public class DBLogger implements MessageToUser {
    }
 
    private void sendLogs() {
+      String format = MessageFormat
+            .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
+      Logger logger = Logger.getLogger(SOURCE_CLASS);
+      logger.warning(format);
       String sql = "insert into ru_vachok_ethosdistro (classname, msgtype, msgvalue) values (?,?,?)";
       DataConnectTo dataConnectTo = new RegRuMysql();
       try(Connection connection = dataConnectTo.getDefaultConnection("u0466446_webapp");
@@ -69,8 +72,9 @@ public class DBLogger implements MessageToUser {
 
          preparedStatement.setString(3, logString);
          preparedStatement.executeUpdate();
+         logger.info("Send to DB is " + true);
       }catch(SQLException e){
-         Logger.getLogger(SOURCE_CLASS).throwing(SOURCE_CLASS, e.getMessage(), e);
+         logger.throwing(SOURCE_CLASS, e.getMessage(), e);
       }
    }
 }

@@ -6,7 +6,9 @@ import ru.vachok.messenger.MessageToUser;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 
 /**
@@ -23,7 +25,10 @@ public class FileLogger implements MessageToUser {
       makeFile(s,s1,s2);
    }
 
-   private void makeFile(String s, String s1, String s2) {
+   private static void makeFile(String s, String s1, String s2) {
+      String format = MessageFormat
+            .format("Writting to file: {0}\n{1}\n{2}", s, s1, s2);
+      Logger.getLogger(SOURCE_CLASS).warning(format);
       File file = new File("log.log");
       try{
       if(!file.exists()){
