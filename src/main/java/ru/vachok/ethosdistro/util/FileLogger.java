@@ -26,19 +26,7 @@ public class FileLogger implements MessageToUser {
    private void makeFile(String s, String s1, String s2) {
       File file = new File("log.log");
       try{
-         if(file.lastModified() < System.currentTimeMillis()- TimeUnit.HOURS.toMillis(1)){
-            FileUtils.forceDelete(file);
-         }
-      if(file.exists()){
-         System.out.println(file.getAbsolutePath());
-         FileUtils
-               .writeStringToFile(file, ("\n"+s+
-                                               " "+s1+
-                                               "\n"+s2+
-                                               "\n----------------------------------------------"),
-                     "UTF-8", true);
-      }
-      else{
+      if(!file.exists()){
          FileUtils.touch(file);
          FileUtils.writeStringToFile(file, ("\n"+s +
                                                   " " +
@@ -47,11 +35,20 @@ public class FileLogger implements MessageToUser {
                                                   s2 +
                                                   "\n----------------------------------------------"),
                "UTF-8", true);
+      }else if(file.lastModified() < System.currentTimeMillis()- TimeUnit.HOURS.toMillis(1)){
+            FileUtils.forceDelete(file);
+         }
+      else{
+         FileUtils
+               .writeStringToFile(file, ("\n"+s+
+                                               " "+s1+
+                                               "\n"+s2+
+                                               "\n----------------------------------------------"),
+                     "UTF-8", true);
       }
       }catch(IOException e){
          e.printStackTrace();
       }
-
    }
 
    @Override

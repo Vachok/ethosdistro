@@ -17,13 +17,15 @@ public enum ConstantsFor {
     */
    public static final int MEGABYTE = 1024 * 1024;
 
-   public static final long INITIAL_DELAY = 10L;
+   public static final long INITIAL_DELAY = 2L;
 
-   public static final long DELAY = 60L;
+   public static final long DELAY = 600L;
 
    public static final List<String> RCPT = new ArrayList<>();
 
    public static final String[] DEVICES = {"9cee2f", "3d7d93", "6f9b07"};
 
    public static final String KIR_MAIL = "pivovarov.kirill@gmail.com";
+
+   public static final String MY_MAIL = "143500@gmail.com";
 }

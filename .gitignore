@@ -20,4 +20,5 @@ gen
 /chess.properties
 /regru.obj
 /logs/
-/log.log
+*.log
+*.prn

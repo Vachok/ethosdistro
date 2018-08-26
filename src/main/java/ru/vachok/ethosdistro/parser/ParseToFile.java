@@ -1,6 +1,10 @@
 package ru.vachok.ethosdistro.parser;
 
 
+import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.messenger.MessageToUser;
+
 import java.io.*;
 import java.net.URL;
 import java.util.Date;
@@ -18,6 +22,7 @@ public class ParseToFile implements Parsers {
 
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
+   private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
    private URL urlToParse;
 
    private String fileName;
@@ -35,6 +40,7 @@ public class ParseToFile implements Parsers {
       this.urlToParse = urlToParse;
       String s = "Parsed url = " + urlToParse.toString() + "\nhere: " + saveToFile();
       this.fileName = s;
+      MESSAGE_TO_USER.info(SOURCE_CLASS, "startParsing", s);
       return s;
    }
 
@@ -51,6 +57,7 @@ public class ParseToFile implements Parsers {
       }
       catch(IOException e){
          LOGGER.throwing(SOURCE_CLASS, "getJSON", e);
+         MESSAGE_TO_USER.info(SOURCE_CLASS, "IOException", new TForfs().toStringFromArray(e.getStackTrace()));
          return e.getMessage();
       }
    }

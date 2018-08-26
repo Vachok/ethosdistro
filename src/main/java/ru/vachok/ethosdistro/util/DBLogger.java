@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 
 /**
@@ -21,15 +22,6 @@ public class DBLogger implements MessageToUser {
     */
    private static final String SOURCE_CLASS = DBLogger.class.getSimpleName();
 
-   /**
-    {@link }
-    */
-   private static MessageToUser messageToUser = new MessageCons();
-
-   private static DataConnectTo dataConnectTo = new RegRuMysql();
-
-
-
    private String logString;
 
    private String className;
@@ -38,10 +30,7 @@ public class DBLogger implements MessageToUser {
 
    @Override
    public void errorAlert(String s, String s1, String s2) {
-      this.className = s;
-      this.mistype = s1;
-      this.logString = s2;
-      sendLogs();
+      info(s,s1,s2);
    }
 
    @Override
@@ -62,18 +51,17 @@ public class DBLogger implements MessageToUser {
 
    @Override
    public void infoTimer(int i, String s) {
-      this.logString = s;
-      sendLogs();
+      throw new UnsupportedOperationException();
    }
 
    @Override
    public String confirm(String s, String s1, String s2) {
-      return null;
+      throw new UnsupportedOperationException();
    }
 
    private void sendLogs() {
-
       String sql = "insert into ru_vachok_ethosdistro (classname, msgtype, msgvalue) values (?,?,?)";
+      DataConnectTo dataConnectTo = new RegRuMysql();
       try(Connection connection = dataConnectTo.getDefaultConnection("u0466446_webapp");
           PreparedStatement preparedStatement = connection.prepareStatement(sql)){
          preparedStatement.setString(1, className);
@@ -82,8 +70,7 @@ public class DBLogger implements MessageToUser {
          preparedStatement.setString(3, logString);
          preparedStatement.executeUpdate();
       }catch(SQLException e){
-         messageToUser
-               .errorAlert(SOURCE_CLASS, e.getMessage(), Arrays.toString(e.getStackTrace()));
+         Logger.getLogger(SOURCE_CLASS).throwing(SOURCE_CLASS, e.getMessage(), e);
       }
    }
 }
