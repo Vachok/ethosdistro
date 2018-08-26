@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
-/**
+/**<h1>
+ {@link MessageToUser}, для записи файлов.</h1>
+
  @since 25.08.2018 (23:03) */
 public class FileLogger implements MessageToUser {
 
@@ -52,7 +54,7 @@ public class FileLogger implements MessageToUser {
                      "UTF-8", true);
       }
       }catch(IOException e){
-         e.printStackTrace();
+         Logger.getLogger(SOURCE_CLASS).throwing(SOURCE_CLASS, e.getMessage(), e);
       }
    }
 

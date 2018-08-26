@@ -1,7 +1,6 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
@@ -34,12 +33,23 @@ public class ParsingStart implements Runnable {
 
    private boolean test;
 
+   /**
+    <b>Конструктор</b>
+
+    @param urlAsString url как строка
+    */
    public ParsingStart(String urlAsString) {
       this.parsers = new ParseJsonAsUsualString();
       this.urlAsString = urlAsString;
       this.parsers = new ParseJsonAsUsualString();
    }
 
+   /**
+    Конструктор
+
+    @param urlAsString url как строка
+    @param fileName    файл, для записи (имя)
+    */
    public ParsingStart(String urlAsString, String fileName) {
       if(fileName==null){
          fileName = "answer.json";
@@ -48,11 +58,23 @@ public class ParsingStart implements Runnable {
       this.parsers = new ParseToFile(fileName);
    }
 
+   /**
+    Конструктор
+
+    @param parsers     чем парсим {@link Parsers}
+    @param urlAsString url как строка
+    */
    public ParsingStart(Parsers parsers, String urlAsString) {
       this.parsers = parsers;
       this.urlAsString = urlAsString;
    }
 
+   /**
+    Конструктор
+
+    @param s url как строка
+    @param test test - запуск с <i>обратным !</i> условием.
+    */
    public ParsingStart(String s, boolean test) {
       this.urlAsString = s;
       this.test = test;
@@ -101,13 +123,11 @@ public class ParsingStart implements Runnable {
                      .getFreeSpace() / ConstantsFor.MEGABYTE +
                      " free space",
                new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         new AppStarter();
          Thread.currentThread().interrupt();
       }
       else {
          emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
          log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         new AppStarter();
          Thread.currentThread().interrupt();
       }
    }

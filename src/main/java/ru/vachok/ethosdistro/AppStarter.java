@@ -6,8 +6,6 @@ import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForfs;
 import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.email.parse.DecoderEnc;
-import ru.vachok.messenger.email.parse.UTF8;
 
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
@@ -26,15 +24,19 @@ import java.util.logging.Logger;
  @since 23.08.2018 (15:34) */
 public class AppStarter {
 
+   /**
+    Засекаем время старта.
+    */
    private static final Long START_LONG = System.currentTimeMillis();
 
+   /**
+    Class Simple Name
+    */
    private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
 
    private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
 
    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
-
-   private static final DecoderEnc UTF_8 = new UTF8();
 
    private static long initialDelay = ConstantsFor.INITIAL_DELAY;
 
@@ -42,10 +44,22 @@ public class AppStarter {
 
    private static boolean test = false;
 
+   /**
+    {@link #START_LONG}
+
+    @return the start long
+    */
    public static Long getStartLong() {
       return START_LONG;
    }
 
+   /**<b>Старт.</b>
+    <p>
+    1. {@link TForfs#toStringFromArray(String[])}
+    2. {@link #argsReader(String[])}
+    3. {@link #mailAdd(String)}
+    @param args the input arguments
+    */
    public static void main(String[] args) {
       if(args.length>0) {
          MESSAGE_TO_USER
@@ -56,7 +70,7 @@ public class AppStarter {
       }
       else {
          ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-         MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", scheduleStart(test));
+         MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
       }
    }
 
@@ -64,7 +78,6 @@ public class AppStarter {
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter
             .ofPattern("yyyy-MMM-dd hh:mm");
       String startTime = dateTimeFormatter.format(LocalDateTime.now());
-      MESSAGE_TO_USER.infoNoTitles("VERSION 0.4 |25.08.2018 (23:24)|");
       String stringArgs = Arrays.toString(args)
             .replaceAll(", ", ":");
       logger.info(stringArgs);

@@ -4,7 +4,6 @@
 
 # IntelliJ project files
 .idea
-*.iml
 out
 gen
 /.gradle/
@@ -22,3 +21,5 @@ gen
 /logs/
 *.log
 *.prn
+build/
+src/test/resources/
