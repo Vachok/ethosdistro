@@ -1,11 +1,11 @@
 plugins {
-    id 'com.gradle.build-scan' version '1.13.4'
+    id 'com.gradle.build-scan' version '1.16'
     id 'java'
     id 'application'
     id 'idea'
 }
-group 'ru.vachok.kirya'
-version('0.1')
+group 'ru.vachok.ethosdistro'
+version('0.45')
 mainClassName = group + '.AppStarter'
 sourceCompatibility = 1.8
 sourceSets {
@@ -28,17 +28,12 @@ repositories {
 }
 dependencies {
     compile fileTree('lib\\')
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     // https://mvnrepository.com/artifact/commons-net/commons-net
     compile group: 'commons-net', name: 'commons-net', version: '3.6'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-jdbc-client
-    compile group: 'io.vertx', name: 'vertx-jdbc-client', version: '3.5.2'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-web
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.5.2'
-    // https://mvnrepository.com/artifact/io.vertx/vertx-web-client
-    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.5.2'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     // https://mvnrepository.com/artifact/org.testng/testng
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
@@ -49,23 +44,19 @@ buildScan {
     termsOfServiceUrl = 'https://gradle.com/terms-of-service'
     termsOfServiceAgree = 'yes'
 }
+
 jar {
     baseName = project.name
     version = project.version
     manifest {
         attributes(
                 'Main-Class': mainClassName,
-                'JavaFX-Version': 9,
                 'Class-Path': configurations.runtime.collect() { 'lib/' + it.name }.join('')
         )
     }
     from configurations.compile.collect() { it.isDirectory() ? it : zipTree(it) }
 }
+
 test {
     useTestNG()
-    minHeapSize = '256m'
-    maxHeapSize = '2048m'
-    jvmArgs '-XX:MaxPermSize=512m'
-    testLogging.showStandardStreams = false
-    failFast = false
 }

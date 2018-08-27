@@ -1,0 +1,59 @@
+אגד. 27, 2018 10:19:36 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+WARNING: Writting to file: AppStarter
+scheduleStart
+ru.vachok.ethosdistro.parser.ParsingStart@13deb50e
+אגד. 27, 2018 10:19:37 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = AppStarter
+Argument - none
+Mon Aug 27 10:19:36 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is false
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+RUN
+Mon Aug 27 10:19:38 GMT+03:00 2018
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Mon Aug 27 10:19:38 GMT+03:00 2018
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email recep
+[pivovarov.kirill@gmail.com]
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:38 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = 2018-08-27T10:19:38.816741
+condition = 
+[mining, mining, mining]
+אגד. 27, 2018 10:19:39 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:39 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+INFO
+ConstantsFor.RCPT.size() = 1
+Uptime = 0 started at Mon Aug 27 10:19:36 GMT+03:00 2018
+אגד. 27, 2018 10:19:39 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:39 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+WARNING: Writting to file: ParsingStart
+ConstantsFor.RCPT.size() = 
+1
+אגד. 27, 2018 10:19:39 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+52909 free space
+Mon Aug 27 10:19:38 GMT+03:00 2018
+C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
+אגד. 27, 2018 10:19:40 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 27, 2018 10:19:40 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+WARNING: Writting to file: ParsingStart
+52909 free space
+Mon Aug 27 10:19:38 GMT+03:00 2018
+C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
