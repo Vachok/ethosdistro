@@ -55,10 +55,11 @@ public class AppStarter {
 
    /**<b>Старт.</b>
     <p>
-    1. {@link TForfs#toStringFromArray(String[])}
-    2. {@link #argsReader(String[])}
-    3. {@link #mailAdd(String)}
-    @param args the input arguments
+    1. {@link #argsReader(String[])}
+    2. {@link #mailAdd(String)}
+    @param args параметры запуска приложения
+    @see ConstantsFor
+    @see TForfs
     */
    public static void main(String[] args) {
       if(args.length>0) {
@@ -134,6 +135,17 @@ public class AppStarter {
    }
 
 
+   /**
+    <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
+    Параметры по-умолчанию:
+    <p>
+    delay - 60 sec
+    <p>
+    init - 2 sec
+
+    @param test обращает условие срабатывания в противоположное
+    @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
+    */
    private static String scheduleStart(boolean test) {
       MessageToUser messageToUser = new FileLogger();
       ScheduledExecutorService scheduledExecutorService =
@@ -142,6 +154,6 @@ public class AppStarter {
       scheduledExecutorService.scheduleWithFixedDelay(parseRun,
             initialDelay, delay, TimeUnit.SECONDS);
       messageToUser.info(SOURCE_CLASS, "scheduleStart", parseRun.toString());
-      return "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", "+test+");";
+      return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is " + test;
    }
 }

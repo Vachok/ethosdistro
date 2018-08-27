@@ -1,6 +1,7 @@
 package ru.vachok.ethosdistro.parser;
 
 
+import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -21,16 +23,34 @@ import java.util.logging.Logger;
  @since 23.08.2018 (16:48) */
 public class ParsingStart implements Runnable {
 
+   /**
+    Class Simple Name
+    */
    private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
 
+   /**
+    {@link Logger}
+    */
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
-   private Parsers parsers;
-
+   /**
+    * {@link DBLogger}
+    */
    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
 
+   /**
+    * URL, как строка
+    */
    private final String urlAsString;
 
+   /**
+    * {@link Parsers}
+    */
+   private Parsers parsers;
+
+   /**
+    Параметр {@code -t on}
+    */
    private boolean test;
 
    /**
@@ -112,7 +132,8 @@ public class ParsingStart implements Runnable {
       File file = new File("answer.json");
       MessageToUser emailS = new ESender(ConstantsFor.RCPT);
       MessageToUser log = new FileLogger();
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = ", ConstantsFor.RCPT.size() + "");
+      MESSAGE_TO_USER.info(SOURCE_CLASS, "INFO", "ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size() + "\n" +
+            "Uptime = " + TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - AppStarter.getStartLong()) + " started at " + new Date(AppStarter.getStartLong()));
       log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
       if(call){
          MESSAGE_TO_USER.info(SOURCE_CLASS, file
