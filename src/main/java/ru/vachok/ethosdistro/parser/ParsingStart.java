@@ -3,6 +3,7 @@ package ru.vachok.ethosdistro.parser;
 
 import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForfs;
@@ -24,6 +25,21 @@ import java.util.logging.Logger;
 public class ParsingStart implements Runnable {
 
    /**
+    {@link Parsers}
+    */
+   private Parsers parsers;
+
+   /**
+    Параметр {@code -t on}
+    */
+   private boolean test;
+
+   /**
+    URL, как строка
+    */
+   private final String urlAsString;
+
+   /**
     Class Simple Name
     */
    private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
@@ -34,24 +50,11 @@ public class ParsingStart implements Runnable {
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
    /**
-    * {@link DBLogger}
+    {@link DBLogger}
     */
    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
 
-   /**
-    * URL, как строка
-    */
-   private final String urlAsString;
-
-   /**
-    * {@link Parsers}
-    */
-   private Parsers parsers;
-
-   /**
-    Параметр {@code -t on}
-    */
-   private boolean test;
+   /*Constru*/
 
    /**
     <b>Конструктор</b>
@@ -92,23 +95,32 @@ public class ParsingStart implements Runnable {
    /**
     Конструктор
 
-    @param s url как строка
+    @param s    url как строка
     @param test test - запуск с <i>обратным !</i> условием.
     */
    public ParsingStart(String s, boolean test) {
       this.urlAsString = s;
       this.test = test;
+      final ECheck eCheck = ECheck.getI();
+      eCheck.run();
    }
 
    @Override
    public void run() {
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "RUN", new Date().toString());
+      boolean work = ECheck.isShouldIWork();
+      MESSAGE_TO_USER.info(SOURCE_CLASS, work + " work", ECheck.offSender());
       this.parsers = new ParseToFile();
       URL url = getUrlFromStr();
       parsers.startParsing(url);
       String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
       MESSAGE_TO_USER.info(SOURCE_CLASS, "email recep", s);
-      sendRes(this.test);
+      if(work){
+         sendRes(this.test);
+      }
+      else{
+         MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, work + "work", ECheck.offSender());
+         Thread.currentThread().interrupt();
+      }
    }
 
    private URL getUrlFromStr() {
@@ -122,19 +134,25 @@ public class ParsingStart implements Runnable {
       return url;
    }
 
-   private void sendRes(boolean callTest){
+   private void sendRes(boolean callTest) {
       Boolean call;
       if(callTest){
          call = !new ParsingFinalize().call();
-      }else{
-         call= new ParsingFinalize().call();
+      }
+      else{
+         call = new ParsingFinalize().call();
       }
       File file = new File("answer.json");
       MessageToUser emailS = new ESender(ConstantsFor.RCPT);
       MessageToUser log = new FileLogger();
       MESSAGE_TO_USER.info(SOURCE_CLASS, "INFO", "ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size() + "\n" +
-            "Uptime = " + TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - AppStarter.getStartLong()) + " started at " + new Date(AppStarter.getStartLong()));
-      log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
+            "Uptime = "
+            + TimeUnit.MILLISECONDS
+            .toHours(System.currentTimeMillis() -
+                  AppStarter.getStartLong()) +
+            " started at " +
+            new Date(AppStarter.getStartLong()));
+      log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = ", ConstantsFor.RCPT.size() + "");
       if(call){
          MESSAGE_TO_USER.info(SOURCE_CLASS, file
                      .getFreeSpace() / ConstantsFor.MEGABYTE +
@@ -146,11 +164,12 @@ public class ParsingStart implements Runnable {
                new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
          Thread.currentThread().interrupt();
       }
-      else {
+      else{
          emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
          log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         Thread.currentThread().interrupt();
       }
+      MESSAGE_TO_USER.infoNoTitles(ECheck.getI().toString());
+      Thread.currentThread().interrupt();
    }
-
 }
+

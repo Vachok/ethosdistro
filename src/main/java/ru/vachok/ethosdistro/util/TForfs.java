@@ -1,6 +1,9 @@
 package ru.vachok.ethosdistro.util;
 
 
+import ru.vachok.messenger.MessageCons;
+import ru.vachok.messenger.MessageToUser;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -9,6 +12,8 @@ import java.util.regex.Pattern;
 /**<h1>Переделывает архивы в читаемые строчки</h1>
  @since 26.08.2018 (13:50) */
 public class TForfs {
+
+   private static final MessageToUser MESSAGE_TO_USER = new MessageCons();
 
    /**
     * Паттерн, для разбора и замены символов в стандарнтов выводе
@@ -45,6 +50,7 @@ public class TForfs {
       String sRet = Arrays.toString(stackTrace)
             .replaceAll(String.valueOf(S_COL), "\n");
       sRet = sRet.replace(BR_LEFT, "").replace(BR_RIGHT, "");
+      MESSAGE_TO_USER.infoNoTitles(sRet);
       return sRet;
    }
 
