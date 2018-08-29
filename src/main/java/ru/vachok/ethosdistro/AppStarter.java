@@ -29,9 +29,15 @@ public class AppStarter {
 
     private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
 
-    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
-
+    /**
+     {@link ConstantsFor#DELAY}
+     */
     private static long delay = ConstantsFor.DELAY;
+
+    /**
+     {@link DBLogger}
+     */
+    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
 
     private static boolean test = false;
 
@@ -59,7 +65,17 @@ public class AppStarter {
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
+//unstat
 
+    /*Private metsods*/
+
+    /**
+     <b>Парсер параметров запуска</b>
+     1. {@link #mailAdd(String)}
+     2. {@link #scheduleStart(boolean)}
+
+     @param args параметры запуска. Через {@code "-par} <i>val"</i>
+     */
     private static void argsReader(String[] args) {
         String stringArgs = Arrays.toString(args)
                 .replaceAll(ConstantsFor.AR_SEMI_PATTERN.pattern(), ":");
@@ -92,6 +108,22 @@ public class AppStarter {
         }
     }
 
+    private static void mailAdd(String value) {
+        ConstantsFor.RCPT.clear();
+        String[] values = value.split(",");
+        for(String mailAddr : values){
+            ConstantsFor.RCPT.add(mailAddr
+                    .replaceAll("\\Q]\\E", ""));
+            String s = ConstantsFor.RCPT.toString();
+            String format = MessageFormat.format("emails: {0}", s);
+            logger.info(format);
+        }
+    }
+
+    /**
+     @param test инвертор для правильного условия.
+     @return
+     */
     private static String scheduleStart(boolean test) {
         MessageToUser messageToUser = new FileLogger();
         ScheduledExecutorService scheduledExecutorService =
@@ -106,17 +138,4 @@ public class AppStarter {
         messageToUser.info(SOURCE_CLASS, "scheduleStart", parseRun.toString());
         return "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";
     }
-
-    private static void mailAdd(String value) {
-        ConstantsFor.RCPT.clear();
-        String[] values = value.split(",");
-        for(String mailAddr : values){
-            ConstantsFor.RCPT.add(mailAddr
-                    .replaceAll("\\Q]\\E", ""));
-            String s = ConstantsFor.RCPT.toString();
-            String format = MessageFormat.format("emails: {0}", s);
-            logger.info(format);
-        }
-    }
-//unstat
 }
