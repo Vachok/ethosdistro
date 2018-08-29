@@ -1,66 +1,82 @@
 package ru.vachok.ethosdistro.email;
 
 
-import ru.vachok.messenger.MessageCons;
+import org.junit.Assert;
+import ru.vachok.email.MessagesFromServer;
+import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.messenger.MessageToUser;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import javax.mail.Message;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 /**
  @since 28.08.2018 (21:42) */
-public class ECheck implements Runnable {
+public class ECheck {
 
-   private static boolean shouldIWork;
+    /**
+     {@link }
+     */
+    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
 
-   /**
-    {@link }
-    */
-   private static final MessageToUser MESSAGE_TO_USER = new MessageCons();
+    private static final ECheck IT_INST = new ECheck();
 
-   private static final ECheck IT_INST = new ECheck();
+    /**
+     Simple Name класса, для поиска настроек
+     */
+    private static final String SOURCE_CLASS = ECheck.class.getSimpleName();
 
-   private static final long STARTS = System.currentTimeMillis();
+    /**
+     <b>Наличие паузы отравки сообщений</b>
+     */
+    private static boolean shouldIWork;
 
-   /**
-    Simple Name класса, для поиска настроек
-    */
-   private static final String SOURCE_CLASS = ECheck.class.getSimpleName();
+    public static ECheck getI() {
+        return IT_INST;
+    }
 
-   public static ECheck getI() {
-      return IT_INST;
-   }
+    public static boolean isShouldIWork() {
+        scheduledChkMailbox();
+        return shouldIWork;
+    }
 
-   public static boolean isShouldIWork() {
-      return shouldIWork;
-   }
+    /**
+     <b>Планирование проверки почтового ящика</b>
+     */
+    private static int scheduledChkMailbox() {
+        ScheduledExecutorService executorService = Executors
+                .unconfigurableScheduledExecutorService(Executors
+                        .newSingleThreadScheduledExecutor());
+        Callable<Message[]> mailMessages = new MessagesFromServer();
+        String messageSubj = "";
+        try{
+            Message[] call = mailMessages.call();
+            for(Message message : call){
+                String s = message.getSubject();
+                if(s.toLowerCase().contains("mine:")) messageSubj = s.split(":")[1];
+            }
+        }
+        catch(Exception e){
+            Assert.assertNull(e.getMessage(), e);
+        }
+        boolean shouldIWork;
+        if(messageSubj==null){
+            shouldIWork = true;
+        }
+        if(messageSubj.equals("0")){ shouldIWork = false; }
+        else{ Integer.parseUnsignedInt(messageSubj); }
+        throw new RejectedExecutionException();
+    }
 
-   private static void setShouldIWork(boolean shouldIWork) {
-      ECheck.shouldIWork = shouldIWork;
-   }
-
-   /*PS Methods*/
-   public static String offSender() {
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "start = ", new Date(STARTS).toString());
-      chkMailbox();
-      String s = "shouldIWork = " +
-            shouldIWork + " and uptime is " +
-            TimeUnit.MILLISECONDS
-                  .toMinutes(System.currentTimeMillis() - STARTS) + " minutes";
-      MESSAGE_TO_USER.infoNoTitles(s);
-      return s;
-   }
+    private static void setShouldIWork() {
+        ECheck.shouldIWork = shouldIWork;
+    }
 //unstat
 
-   @Override
-   public void run() {
-      chkMailbox();
-   }
+    private static void offSender() {
 
-   private static void chkMailbox() {
-
-      setShouldIWork(true);
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "MAIL CHECKED", "shouldIWork is " + shouldIWork);
-   }
+    }
 }

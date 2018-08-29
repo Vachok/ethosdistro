@@ -3,6 +3,7 @@ package ru.vachok.ethosdistro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -28,4 +29,8 @@ public enum ConstantsFor {
    public static final String KIR_MAIL = "pivovarov.kirill@gmail.com";
 
    public static final String MY_MAIL = "143500@gmail.com";
+
+   public static final long START_TIME_IN_MILLIS = System.currentTimeMillis();
+
+   public static final Pattern AR_SEMI_PATTERN = Pattern.compile(", ");
 }

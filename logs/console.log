@@ -1,59 +1,296 @@
-рту. 27, 2018 10:19:36 ФЯ ru.vachok.ethosdistro.util.FileLogger makeFile
+рту. 29, 2018 4:01:00 ЯЯ ru.vachok.email.MessagesFromServer <init>
+INFO: ru.vachok.email.MessagesFromServer
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+рту. 29, 2018 4:01:02 ЯЯ ru.vachok.email.MessagesFromServer getInbox
+INFO: 1 inbox size
+рту. 29, 2018 4:01:02 ЯЯ ru.vachok.ethosdistro.util.FileLogger makeFile
 WARNING: Writting to file: AppStarter
 scheduleStart
-ru.vachok.ethosdistro.parser.ParsingStart@13deb50e
-рту. 27, 2018 10:19:37 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+ru.vachok.ethosdistro.parser.ParsingStart@10959ece
+рту. 29, 2018 4:01:02 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = AppStarter
 Argument - none
-Mon Aug 27 10:19:36 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is false
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = ParsingStart
-RUN
-Mon Aug 27 10:19:38 GMT+03:00 2018
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+Wed Aug 29 16:01:00 GMT+03:00 2018   Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", false);
+рту. 29, 2018 4:01:02 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:01:04 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
 startParsing
 Parsed url = http://hous01.ethosdistro.com/?json=yes
 here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
-Change time: Mon Aug 27 10:19:38 GMT+03:00 2018
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+Change time: Wed Aug 29 16:01:04 GMT+03:00 2018
+рту. 29, 2018 4:01:04 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:01:04 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
-email recep
+email RCPTs
 [pivovarov.kirill@gmail.com]
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:01:04 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:38 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = 2018-08-27T10:19:38.816741
-condition = 
-[mining, mining, mining]
-рту. 27, 2018 10:19:39 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:02:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:02:05 GMT+03:00 2018
+рту. 29, 2018 4:02:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:39 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:02:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
-INFO
-ConstantsFor.RCPT.size() = 1
-Uptime = 0 started at Mon Aug 27 10:19:36 GMT+03:00 2018
-рту. 27, 2018 10:19:39 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:02:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:39 ФЯ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: ParsingStart
-ConstantsFor.RCPT.size() = 
-1
-рту. 27, 2018 10:19:39 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+рту. 29, 2018 4:03:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:03:05 GMT+03:00 2018
+рту. 29, 2018 4:03:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:03:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
-52909 free space
-Mon Aug 27 10:19:38 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
-рту. 27, 2018 10:19:40 ФЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:03:05 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-рту. 27, 2018 10:19:40 ФЯ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: ParsingStart
-52909 free space
-Mon Aug 27 10:19:38 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
+рту. 29, 2018 4:04:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:04:06 GMT+03:00 2018
+рту. 29, 2018 4:04:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:04:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:04:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:05:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:05:06 GMT+03:00 2018
+рту. 29, 2018 4:05:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:05:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:05:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:06:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:06:06 GMT+03:00 2018
+рту. 29, 2018 4:06:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:06:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:06:06 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:07:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:07:07 GMT+03:00 2018
+рту. 29, 2018 4:07:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:07:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:07:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:08:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:08:07 GMT+03:00 2018
+рту. 29, 2018 4:08:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:08:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:08:07 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:09:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:09:08 GMT+03:00 2018
+рту. 29, 2018 4:09:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:09:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:09:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:10:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:10:08 GMT+03:00 2018
+рту. 29, 2018 4:10:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:10:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:10:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:11:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:11:08 GMT+03:00 2018
+рту. 29, 2018 4:11:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:11:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:11:08 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:12:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:12:09 GMT+03:00 2018
+рту. 29, 2018 4:12:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:12:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:12:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:13:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:13:09 GMT+03:00 2018
+рту. 29, 2018 4:13:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:13:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:13:09 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:14:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:14:09 GMT+03:00 2018
+рту. 29, 2018 4:14:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:14:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:14:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:15:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:15:10 GMT+03:00 2018
+рту. 29, 2018 4:15:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:15:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:15:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:16:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:16:10 GMT+03:00 2018
+рту. 29, 2018 4:16:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:16:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:16:10 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:17:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:17:11 GMT+03:00 2018
+рту. 29, 2018 4:17:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:17:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:17:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:18:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:18:11 GMT+03:00 2018
+рту. 29, 2018 4:18:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:18:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:18:11 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:19:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:19:12 GMT+03:00 2018
+рту. 29, 2018 4:19:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:19:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:19:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:20:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Wed Aug 29 16:20:12 GMT+03:00 2018
+рту. 29, 2018 4:20:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+рту. 29, 2018 4:20:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+email RCPTs
+[pivovarov.kirill@gmail.com]
+рту. 29, 2018 4:20:12 ЯЯ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
