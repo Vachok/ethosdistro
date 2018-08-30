@@ -1,10 +1,11 @@
 package ru.vachok.ethosdistro;
 
 
+import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 
 import java.text.MessageFormat;
@@ -23,6 +24,13 @@ import java.util.logging.Logger;
 public class AppStarter {
 
     /**
+     {@link ConstantsFor#DELAY}
+     */
+    private static long delay = ConstantsFor.DELAY;
+
+    private static boolean test = false;
+
+    /**
      Class Simple Name
      */
     private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
@@ -30,23 +38,16 @@ public class AppStarter {
     private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
 
     /**
-     {@link ConstantsFor#DELAY}
-     */
-    private static long delay = ConstantsFor.DELAY;
-
-    /**
      {@link DBLogger}
      */
     private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
-
-    private static boolean test = false;
 
     /*PS Methods*/
 
     /**
      <b>Старт.</b>
      <p>
-     1. {@link TForfs#toStringFromArray(String[])}
+     1. {@link TForms#toStringFromArray(String[])}
      2. {@link #argsReader(String[])}
      3. {@link #mailAdd(String)}
 
@@ -57,7 +58,7 @@ public class AppStarter {
             MESSAGE_TO_USER
                     .info(SOURCE_CLASS,
                             "Arguments",
-                            "Starting at: " + new Date() + "\n" + new TForfs().toStringFromArray(args));
+                            "Starting at: " + new Date() + "\n" + new TForms().toStringFromArray(args));
             argsReader(args);
         }
         else{
@@ -65,9 +66,6 @@ public class AppStarter {
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
-//unstat
-
-    /*Private metsods*/
 
     /**
      <b>Парсер параметров запуска</b>
@@ -108,24 +106,33 @@ public class AppStarter {
         }
     }
 
-    private static void mailAdd(String value) {
-        ConstantsFor.RCPT.clear();
-        String[] values = value.split(",");
-        for(String mailAddr : values){
-            ConstantsFor.RCPT.add(mailAddr
-                    .replaceAll("\\Q]\\E", ""));
-            String s = ConstantsFor.RCPT.toString();
-            String format = MessageFormat.format("emails: {0}", s);
-            logger.info(format);
-        }
-    }
-
     /**
      @param test инвертор для правильного условия.
-     @return
+     @return {@code "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";}
      */
     private static String scheduleStart(boolean test) {
         MessageToUser messageToUser = new FileLogger();
+        ECheck eCheck = ECheck.getI();
+        try{
+            int stopHours = ECheck.getStopHours();
+            logger.info(stopHours + " stopHours");
+            if(stopHours==-1){
+                delay = ConstantsFor.DELAY;
+            }
+            if(stopHours==0){
+                delay = ConstantsFor.DELAY / 2;
+            }
+            if(stopHours > 0){
+                delay = TimeUnit.HOURS.toSeconds(stopHours);
+            }
+            else{
+                delay = ConstantsFor.DELAY;
+            }
+        }
+        catch(ExceptionInInitializerError e){
+            MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, "ExceptionInInitializerError", e.getMessage() + "\n" +
+                    new TForms().toStringFromArray(e.getStackTrace()));
+        }
         ScheduledExecutorService scheduledExecutorService =
                 Executors
                         .unconfigurableScheduledExecutorService(Executors
@@ -138,4 +145,19 @@ public class AppStarter {
         messageToUser.info(SOURCE_CLASS, "scheduleStart", parseRun.toString());
         return "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";
     }
+
+    //unstat
+    private static void mailAdd(String value) {
+        ConstantsFor.RCPT.clear();
+        String[] values = value.split(",");
+        for(String mailAddr : values){
+            ConstantsFor.RCPT.add(mailAddr
+                    .replaceAll("\\Q]\\E", ""));
+            String s = ConstantsFor.RCPT.toString();
+            String format = MessageFormat.format("emails: {0}", s);
+            logger.info(format);
+        }
+    }
+
+    /*Private metsods*/
 }

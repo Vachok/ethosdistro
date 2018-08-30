@@ -1,18 +1,16 @@
 package ru.vachok.email;
 
 
+import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.email.Cleaner;
-import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.email.ESender;
 import ru.vachok.mysqlandprops.props.DBRegProperties;
 import ru.vachok.mysqlandprops.props.FileProps;
 import ru.vachok.mysqlandprops.props.InitProperties;
 
 import javax.mail.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,17 +24,15 @@ public class MessagesFromServer implements Callable<Message[]> {
 
     private static final String S_N_N_S = "%s%n%n%s";
 
-
     private boolean cleanMBox;
 
     public MessagesFromServer(boolean cleanMBox) {
         this.cleanMBox = cleanMBox;
-        MessageToUser messageToUser = new MessageCons();
+        MessageToUser messageToUser = new ESender(ConstantsFor.RCPT);
         messageToUser.info(SOURCE_CLASS, "cleanMBox is", cleanMBox + ".");
     }
 
     public MessagesFromServer() {
-        Logger.getLogger(SOURCE_CLASS).log(INFO, this.getClass().getTypeName());
     }
 
     @Override
@@ -50,12 +46,15 @@ public class MessagesFromServer implements Callable<Message[]> {
         }
         catch(MessagingException e){
 
-            Logger.getLogger(SOURCE_CLASS).log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays.toString(e.getStackTrace())));
+            Logger.
+                    getLogger(SOURCE_CLASS)
+                    .log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays
+                            .toString(e.getStackTrace())));
         }
         return messages;
     }
 
-    protected Folder getInbox() {
+    protected static Folder getInbox() {
         Properties mailProps = getSessionProps();
         Authenticator authenticator = new Authenticator() {
 
@@ -86,7 +85,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         throw new UnsupportedOperationException("Inbox not available :(");
     }
 
-    private Properties getSessionProps() {
+    private static Properties getSessionProps() {
         InitProperties initProperties = new DBRegProperties("mail-regru");
         Properties sessionProps = initProperties.getProps();
         sessionProps.setProperty("NewSessionStarted", new Date().toString());
@@ -94,8 +93,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         return sessionProps;
     }
 
-
-    private void saveProps(Properties sessionProps) {
+    private static void saveProps(Properties sessionProps) {
         InitProperties initProperties = new FileProps(SOURCE_CLASS);
         initProperties.setProps(sessionProps);
         initProperties.getProps();

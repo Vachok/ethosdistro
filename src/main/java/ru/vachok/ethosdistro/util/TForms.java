@@ -4,6 +4,8 @@ package ru.vachok.ethosdistro.util;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**<h1>Переделывает архивы в читаемые строчки</h1>
  @since 26.08.2018 (13:50) */
-public class TForfs {
+public class TForms {
 
    private static final MessageToUser MESSAGE_TO_USER = new MessageCons();
 
@@ -63,5 +65,18 @@ public class TForfs {
             .replaceAll(String.valueOf(S_COL), "\n")
             .replace(BR_RIGHT, "")
             .replace(BR_LEFT, "");
+   }
+
+   public String toStringFromArray(Message[] call) {
+      StringBuilder stringBuilder = new StringBuilder();
+      for(Message m : call){
+         try{
+            stringBuilder.append(m.getSentDate() + " subj: " + m.getSubject() + "\n");
+         }
+         catch(MessagingException e){
+            MESSAGE_TO_USER.errorAlert(this.getClass().getSimpleName(), e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+         }
+      }
+      return stringBuilder.toString();
    }
 }

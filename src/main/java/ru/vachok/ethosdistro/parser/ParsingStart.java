@@ -4,7 +4,7 @@ package ru.vachok.ethosdistro.parser;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 
@@ -21,11 +21,6 @@ import java.util.logging.Logger;
 
  @since 23.08.2018 (16:48) */
 public class ParsingStart implements Runnable {
-
-    /**
-     <b>Проверка наличия временной остановки</b>
-     */
-//    static boolean shouldIWork = ECheck.isShouldIWork();
 
     /**
      Class Simple Name
@@ -90,21 +85,17 @@ public class ParsingStart implements Runnable {
      3. Вывод сообщения через {@link #TO_USER_DATABASE} - {@link ConstantsFor#RCPT} <br>
      4. {@link #sendRes(boolean)} <br>
 
-     @see TForfs
+     @see TForms
      */
     @Override
     public void run() {
         this.parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
-        String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
+        String s = new TForms().toStringFromArray(ConstantsFor.RCPT);
         TO_USER_DATABASE.info(SOURCE_CLASS, "email RCPTs", s);
-//        if(shouldIWork){
-            sendRes(this.test);
-//        }
-//        else{
-//            Thread.currentThread().interrupt();
-//        }
+        LOGGER.info(SOURCE_CLASS + " sendRes start = " + true);
+        sendRes(this.test);
     }
 
     private URL getUrlFromStr() {
@@ -130,7 +121,7 @@ public class ParsingStart implements Runnable {
 
      @param callTest {@link #test}
      @see ParsingFinalize
-     @see TForfs
+     @see TForms
      */
     private void sendRes(boolean callTest) {
         Boolean call;
@@ -146,7 +137,7 @@ public class ParsingStart implements Runnable {
         fileLogger.info(SOURCE_CLASS, "ConstantsFor.RCPT",
                 "Mailing list (" +
                         ConstantsFor.RCPT.size() + "):\n" +
-                        new TForfs().toStringFromArray(ConstantsFor.RCPT));
+                        new TForms().toStringFromArray(ConstantsFor.RCPT));
         if(call){
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
