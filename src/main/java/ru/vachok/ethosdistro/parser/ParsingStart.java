@@ -2,7 +2,6 @@ package ru.vachok.ethosdistro.parser;
 
 
 import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForfs;
@@ -13,6 +12,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -25,7 +25,7 @@ public class ParsingStart implements Runnable {
     /**
      <b>Проверка наличия временной остановки</b>
      */
-    static boolean shouldIWork = ECheck.isShouldIWork();
+//    static boolean shouldIWork = ECheck.isShouldIWork();
 
     /**
      Class Simple Name
@@ -55,7 +55,7 @@ public class ParsingStart implements Runnable {
     /**
      Параметр {@code -t on}
      */
-    private boolean test;
+    private final boolean test;
 
     /*Constru*/
 
@@ -99,12 +99,12 @@ public class ParsingStart implements Runnable {
         parsers.startParsing(url);
         String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
         TO_USER_DATABASE.info(SOURCE_CLASS, "email RCPTs", s);
-        if(shouldIWork){
+//        if(shouldIWork){
             sendRes(this.test);
-        }
-        else{
-            Thread.currentThread().interrupt();
-        }
+//        }
+//        else{
+//            Thread.currentThread().interrupt();
+//        }
     }
 
     private URL getUrlFromStr() {
@@ -143,21 +143,28 @@ public class ParsingStart implements Runnable {
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
         MessageToUser fileLogger = new FileLogger();
-        fileLogger.info(SOURCE_CLASS, "ConstantsFor.RCPT", "Сообщение будет отправлено на этот список: " + ConstantsFor.RCPT.size() + "\n" + new TForfs().toStringFromArray(ConstantsFor.RCPT));
+        fileLogger.info(SOURCE_CLASS, "ConstantsFor.RCPT",
+                "Mailing list (" +
+                        ConstantsFor.RCPT.size() + "):\n" +
+                        new TForfs().toStringFromArray(ConstantsFor.RCPT));
         if(call){
-            String statisticsProg = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
-            String freeSpaseOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
+            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
+            String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
 
-            TO_USER_DATABASE.info(SOURCE_CLASS, freeSpaseOnDisk, statisticsProg);
-            fileLogger.info(SOURCE_CLASS, freeSpaseOnDisk, statisticsProg);
+            TO_USER_DATABASE.info(SOURCE_CLASS,
+                    "END (Uptime = " + ( float ) (System
+                                                          .currentTimeMillis() - ConstantsFor
+                            .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
+                    freeSpaceOnDisk + "\n" + statisticsProb);
+            fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
             Thread.currentThread().interrupt();
         }
         else{
             emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
             fileLogger.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
+            Thread.currentThread().interrupt();
         }
-        TO_USER_DATABASE.infoNoTitles(ECheck.getI().toString());
-        Thread.currentThread().interrupt();
+
     }
 }
 
