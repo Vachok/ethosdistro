@@ -3,6 +3,7 @@ package ru.vachok.ethosdistro.email;
 
 import ru.vachok.email.MessagesFromServer;
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
@@ -25,6 +26,11 @@ public class ECheck extends MessagesFromServer implements Serializable {
      {@link }
      */
     private static final transient MessageToUser MESSAGE_TO_USER = new DBLogger();
+
+    /**
+     {@link ConstantsFor#DELAY}
+     */
+    public static long delay = ConstantsFor.DELAY;
 
     /**
      <b>Наличие паузы отравки сообщений</b>
@@ -80,7 +86,58 @@ public class ECheck extends MessagesFromServer implements Serializable {
         }
     }
 
-    static boolean isShouldISend() {
+    /*PS Methods*/
+
+    /**
+     @param test инвертор для правильного условия.
+     @return {@code "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";}
+     */
+    public static String scheduleStart(boolean test) {
+        try{
+            int stopHours = getStopHours();
+            String msg = stopHours + " stopHours";
+            MESSAGE_TO_USER.infoNoTitles(msg);
+            if(stopHours==-1){
+                delay = ConstantsFor.DELAY;
+            }
+            if(stopHours==0){
+                delay = ConstantsFor.DELAY / 2;
+            }
+            if(stopHours > 0){
+                delay = TimeUnit.HOURS.toSeconds(stopHours);
+            }
+            else{
+                delay = ConstantsFor.DELAY;
+            }
+        }
+        catch(ExceptionInInitializerError e){
+        }
+        ScheduledExecutorService scheduledExecutorService =
+                Executors
+                        .unconfigurableScheduledExecutorService(Executors
+                                .newScheduledThreadPool(2));
+        Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", test);
+
+        getI();
+        if(isShouldISend() && getStopHours() > 0){
+            delay = getStopHours();
+            String msg = delay + " is delay";
+            MESSAGE_TO_USER.infoNoTitles(msg);
+        }
+        else{
+            delay = ConstantsFor.DELAY;
+            String msg = delay + " is delay";
+            MESSAGE_TO_USER.infoNoTitles(msg);
+        }
+        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+                ConstantsFor
+                        .INITIAL_DELAY, delay, TimeUnit
+                        .SECONDS);
+
+        return "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";
+    }
+
+    public static boolean isShouldISend() {
         scheduledChkMailbox();
         writeO();
         return IT_INST.shouldISend;
@@ -114,7 +171,6 @@ public class ECheck extends MessagesFromServer implements Serializable {
         }
     }
 
-    /*Private metsods*/
     /**
      <b>Планирование проверки почтового ящика</b>
      */
@@ -133,15 +189,15 @@ public class ECheck extends MessagesFromServer implements Serializable {
                 int i = message.getMessageNumber();
                 String s = message.getSubject();
                 MESSAGE_TO_USER.info("Mailbox", "Content:", s);
-                if(s.toLowerCase().contains("mine:")){
+                if(s.toLowerCase().toLowerCase().contains("mine:")){
                     messageSubj = s.split(":")[1];
                 }
                 IT_INST.stopHours = getStopHours(messageSubj);
                 Folder folder = getInbox();
                 Message delMSG = folder.getMessage(i);
                 delMSG.setFlag(Flags.Flag.DELETED, true);
-                writeO();
                 folder.close(true);
+                writeO();
             }
         }
         catch(Exception e){
@@ -159,5 +215,7 @@ public class ECheck extends MessagesFromServer implements Serializable {
             return 0;
         }
     }
+//unstat
+    /*Private metsods*/
 
 }

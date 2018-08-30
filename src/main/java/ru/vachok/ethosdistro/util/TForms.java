@@ -8,6 +8,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -79,4 +80,14 @@ public class TForms {
       }
       return stringBuilder.toString();
    }
+
+    public String toStringFromArray(Map<String, String> stringStringMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringStringMap.forEach((x, y) -> {
+            stringBuilder.append(x).append(" : ").append(y).append("\n");
+            stringBuilder.trimToSize();
+        });
+
+        return stringBuilder.toString();
+    }
 }

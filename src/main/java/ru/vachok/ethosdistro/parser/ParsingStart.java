@@ -69,11 +69,16 @@ public class ParsingStart implements Runnable {
     /**
      Конструктор
 
-     @param s    url как строка
+     @param urlAsString    url как строка
      @param test test - запуск с <i>обратным !</i> условием.
      */
-    public ParsingStart(String s, boolean test) {
-        this.urlAsString = s;
+    public ParsingStart(String urlAsString, boolean test) {
+        this.urlAsString = urlAsString;
+        this.test = test;
+    }
+
+    public ParsingStart(boolean test) {
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
         this.test = test;
     }
 
