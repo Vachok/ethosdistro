@@ -23,11 +23,6 @@ import java.util.logging.Logger;
 public class ParsingStart implements Runnable {
 
     /**
-     <b>Проверка наличия временной остановки</b>
-     */
-//    static boolean shouldIWork = ECheck.isShouldIWork();
-
-    /**
      Class Simple Name
      */
     private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
@@ -99,12 +94,8 @@ public class ParsingStart implements Runnable {
         parsers.startParsing(url);
         String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
         TO_USER_DATABASE.info(SOURCE_CLASS, "email RCPTs", s);
-//        if(shouldIWork){
-            sendRes(this.test);
-//        }
-//        else{
-//            Thread.currentThread().interrupt();
-//        }
+        LOGGER.info(SOURCE_CLASS + " sendRes start = " + true);
+        sendRes(this.test);
     }
 
     private URL getUrlFromStr() {

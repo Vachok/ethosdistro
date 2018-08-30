@@ -1,18 +1,16 @@
 package ru.vachok.email;
 
 
+import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.email.Cleaner;
-import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.email.ESender;
 import ru.vachok.mysqlandprops.props.DBRegProperties;
 import ru.vachok.mysqlandprops.props.FileProps;
 import ru.vachok.mysqlandprops.props.InitProperties;
 
 import javax.mail.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,17 +24,15 @@ public class MessagesFromServer implements Callable<Message[]> {
 
     private static final String S_N_N_S = "%s%n%n%s";
 
-
     private boolean cleanMBox;
 
     public MessagesFromServer(boolean cleanMBox) {
         this.cleanMBox = cleanMBox;
-        MessageToUser messageToUser = new MessageCons();
+        MessageToUser messageToUser = new ESender(ConstantsFor.RCPT);
         messageToUser.info(SOURCE_CLASS, "cleanMBox is", cleanMBox + ".");
     }
 
     public MessagesFromServer() {
-        Logger.getLogger(SOURCE_CLASS).log(INFO, this.getClass().getTypeName());
     }
 
     @Override

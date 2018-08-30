@@ -1,6 +1,7 @@
 package ru.vachok.ethosdistro;
 
 
+import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
@@ -126,6 +127,11 @@ public class AppStarter {
      */
     private static String scheduleStart(boolean test) {
         MessageToUser messageToUser = new FileLogger();
+        int stopHours = ECheck.getStopHours();
+        messageToUser.infoNoTitles("stopHours = " + stopHours);
+        if(stopHours==-1) delay = ConstantsFor.DELAY;
+        if(stopHours==0) delay = ConstantsFor.DELAY / 2;
+        if(stopHours > 0) delay = TimeUnit.HOURS.toSeconds(stopHours);
         ScheduledExecutorService scheduledExecutorService =
                 Executors
                         .unconfigurableScheduledExecutorService(Executors
