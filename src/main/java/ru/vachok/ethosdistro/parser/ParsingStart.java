@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  <h1>Запуск парсера</h1>
 
  @since 23.08.2018 (16:48) */
-public class ParsingStart implements Runnable {
+public class ParsingStart extends TimerTask {
 
     /**
      Class Simple Name
@@ -114,6 +115,7 @@ public class ParsingStart implements Runnable {
         return url;
     }
 
+    /*Private metsods*/
     /**
      <b>Отправить уведомление</b>
      <p>
@@ -132,7 +134,7 @@ public class ParsingStart implements Runnable {
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = !returnString.toLowerCase().contains("192");
+            call = !returnString.toLowerCase().contains("false");
         }
         else{
             call = returnString.contains("false");
@@ -145,20 +147,23 @@ public class ParsingStart implements Runnable {
                         ConstantsFor.RCPT.size() + "):\n" +
                         new TForms().toStringFromArray(ConstantsFor.RCPT));
         if(call){
-            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
+            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
+                    " last modified: " + new Date(file.lastModified());
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
-
             TO_USER_DATABASE.info(SOURCE_CLASS,
-                    "END (Uptime = " + ( float ) (System
-                                                          .currentTimeMillis() - ConstantsFor
+                    "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
                             .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
                     freeSpaceOnDisk + "\n" + statisticsProb);
             fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
             Thread.currentThread().interrupt();
         }
         else{
-            emailS.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
-            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
+            String subjectIP = returnString.split("~~")[0];
+            String bodyJSON = returnString.split("~~")[1];
+            emailS.errorAlert(subjectIP, "Mine~ALARM", bodyJSON +
+                    "   | NO MINING! " + urlAsString);
+            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
+                    "   | NO MINING! " + urlAsString);
             Thread.currentThread().interrupt();
         }
 

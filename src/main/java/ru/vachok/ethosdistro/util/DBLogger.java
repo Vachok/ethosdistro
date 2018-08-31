@@ -5,10 +5,12 @@ import ru.vachok.messenger.MessageToUser;
 import ru.vachok.mysqlandprops.DataConnectTo;
 import ru.vachok.mysqlandprops.RegRuMysql;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 
@@ -45,6 +47,7 @@ public class DBLogger implements MessageToUser {
       this.mistype = "INFO no titles";
       this.className = SOURCE_CLASS;
       this.logString = s;
+
       sendLogs();
    }
 
@@ -58,23 +61,27 @@ public class DBLogger implements MessageToUser {
       throw new UnsupportedOperationException();
    }
 
+   /*Private metsods*/
    private void sendLogs() {
       String format = MessageFormat
-            .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
+              .format("Sending to database (ru_vachok_ethosdistro) : {0} | {1} | {2}", className, mistype, logString);
       Logger logger = Logger.getLogger(SOURCE_CLASS);
+
       logger.warning(format);
       String sql = "insert into ru_vachok_ethosdistro (classname, msgtype, msgvalue) values (?,?,?)";
       DataConnectTo dataConnectTo = new RegRuMysql();
       try(Connection connection = dataConnectTo.getDefaultConnection("u0466446_webapp");
           PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+         logger.addHandler(new FileHandler(SOURCE_CLASS + ".log"));
          preparedStatement.setString(1, className);
          preparedStatement.setString(2, mistype);
 
          preparedStatement.setString(3, logString);
          preparedStatement.executeUpdate();
          logger.info("Send to DB is " + true);
-      }catch(SQLException e){
-         logger.throwing(SOURCE_CLASS, e.getMessage(), e);
+      }
+      catch(SQLException | IOException ignore){
+         //
       }
    }
 }

@@ -4,11 +4,15 @@ package ru.vachok.ethosdistro;
 import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.TForms;
+import ru.vachok.ethosdistro.util.WatchDogNorah;
 import ru.vachok.messenger.MessageToUser;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
@@ -22,6 +26,12 @@ public class AppStarter {
 
     private static boolean test = false;
 
+    private static Runnable goIt = () -> {
+        Runnable watchDog = new WatchDogNorah(test);
+        ScheduledExecutorService executorService = Executors
+                .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
+        executorService.scheduleWithFixedDelay(watchDog, ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+    };
 
     /**
      Class Simple Name
@@ -29,7 +39,6 @@ public class AppStarter {
     private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
 
     private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
-
 
     /**
      {@link DBLogger}
@@ -48,6 +57,13 @@ public class AppStarter {
      @param args the input arguments
      */
     public static void main(String[] args) {
+        Runnable goIt = () -> {
+            Runnable watchDog = new WatchDogNorah(test);
+            ScheduledExecutorService executorService = Executors
+                    .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
+            MESSAGE_TO_USER.info(SOURCE_CLASS, "2", executorService.hashCode() + " hash executor starting...");
+            executorService.scheduleWithFixedDelay(watchDog, ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+        };
         if(args.length > 0){
             MESSAGE_TO_USER
                     .info(SOURCE_CLASS,
@@ -56,8 +72,9 @@ public class AppStarter {
             argsReader(args);
         }
         else{
+            MESSAGE_TO_USER.info(SOURCE_CLASS, "1. Argument - none", new Date() + "   ");
             ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-            MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + ECheck.scheduleStart(test));
+            goIt.run();
         }
     }
 
@@ -69,6 +86,7 @@ public class AppStarter {
      @param args параметры запуска. Через {@code "-par} <i>val"</i>
      */
     private static void argsReader(String[] args) {
+        ECheck.getI();
         String stringArgs = Arrays.toString(args)
                 .replaceAll(ConstantsFor.AR_SEMI_PATTERN.pattern(), ":");
 
@@ -78,10 +96,7 @@ public class AppStarter {
                 String key = argument.split(":")[0];
                 String value = argument.split(":")[1];
                 if(key.equalsIgnoreCase("d")){
-                    ECheck.delay = Long.parseLong(value);
-                }
-                else{
-                    ECheck.delay = ConstantsFor.DELAY;
+                    ECheck.setDelay(Long.parseUnsignedLong(value));
                 }
                 if(key.equalsIgnoreCase("t")){
                     ConstantsFor.RCPT.add(ConstantsFor.MY_MAIL);
@@ -91,15 +106,16 @@ public class AppStarter {
                     mailAdd(value);
                 }
                 else{
-                    MESSAGE_TO_USER.infoNoTitles(ECheck.scheduleStart(test));
+                    MESSAGE_TO_USER.infoNoTitles("1." + SOURCE_CLASS + " - \nARGS: " + new TForms()
+                            .toStringFromArray(args));
+                    goIt.run();
                 }
             }
             catch(Exception e){
-                MESSAGE_TO_USER.info(SOURCE_CLASS, "Starting", "with args");
+                MESSAGE_TO_USER.info(SOURCE_CLASS, "1. Starting", "with args");
             }
         }
     }
-
     private static void mailAdd(String value) {
         ConstantsFor.RCPT.clear();
         String[] values = value.split(",");

@@ -22,6 +22,6 @@ gen
 *.log
 *.prn
 build/
-src/test/resources/
 /MessagesFromServer.properties
 /checker.obj
+/src/test/
