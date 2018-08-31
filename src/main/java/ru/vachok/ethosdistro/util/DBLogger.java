@@ -60,7 +60,7 @@ public class DBLogger implements MessageToUser {
 
    private void sendLogs() {
       String format = MessageFormat
-            .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
+              .format("Sending to database (ru_vachok_ethosdistro) : {0} | {1} | {2}", className, mistype, logString);
       Logger logger = Logger.getLogger(SOURCE_CLASS);
       logger.warning(format);
       String sql = "insert into ru_vachok_ethosdistro (classname, msgtype, msgvalue) values (?,?,?)";

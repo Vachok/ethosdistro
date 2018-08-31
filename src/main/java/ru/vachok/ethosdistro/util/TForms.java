@@ -4,6 +4,7 @@ package ru.vachok.ethosdistro.util;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.util.Arrays;
@@ -88,6 +89,14 @@ public class TForms {
             stringBuilder.trimToSize();
         });
 
+        return stringBuilder.toString();
+    }
+
+    public String toStringFromArray(Address[] from) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Address a : from){
+            stringBuilder.append(a.toString()).append("\n");
+        }
         return stringBuilder.toString();
     }
 }

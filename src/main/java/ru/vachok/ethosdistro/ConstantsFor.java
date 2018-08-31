@@ -27,7 +27,7 @@ public enum ConstantsFor {
    /**
     Задержка между проверками по-умолчанию
     */
-   public static final long DELAY = 90L;
+   public static final long DELAY = 30L;
 
    /**
     Список почтовых адресов

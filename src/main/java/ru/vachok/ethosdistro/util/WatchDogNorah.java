@@ -8,9 +8,9 @@ import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -20,21 +20,11 @@ public class WatchDogNorah implements Runnable {
     /**
      {@link }
      */
-    private MessageToUser messageToUser = new ESender(RCPTS);
+    private MessageToUser eSender = new ESender(RCPTS);
+
+    private MessageToUser local = new MessageCons();
 
     private boolean test;
-
-    private final Runnable goRun = () -> {
-        ScheduledExecutorService scheduledExecutorService = Executors
-                .newSingleThreadScheduledExecutor();
-        Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", test);
-        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
-                ConstantsFor.INITIAL_DELAY,
-                ECheck.delay,
-                TimeUnit.SECONDS);
-        scheduledExecutorService.schedule(parseRun, ConstantsFor.DELAY, TimeUnit.SECONDS);
-    };
-
 
     /**
      Simple Name класса, для поиска настроек
@@ -50,73 +40,69 @@ public class WatchDogNorah implements Runnable {
 
     @Override
     public void run() {
-        Map<Long, Long> schedulerGetDelayMap = schedulerGetDelay();
-        StringBuilder stringBuilder = new StringBuilder();
-        schedulerGetDelayMap.forEach((x, y) -> {
-            stringBuilder.append(x).append(" initDelay   ;   ").append(y).append(" delay");
-        });
-        if(ECheck.isShouldISend()){
-            messageToUser.info(SOURCE_CLASS,
-                    "run at " + new Date(), stringBuilder.toString());
-        }
-        else{
-            messageToUser.info(SOURCE_CLASS,
-                    ECheck.getStopHours() + " stophrs", new TForms().toStringFromArray(System.getenv()));
-        }
+        schedulerGetDelay();
+        local.info(SOURCE_CLASS, "7", " end");
     }
 
-    private Map<Long, Long> schedulerGetDelay() {
+    private void schedulerGetDelay() {
         ECheck.getI();
-        long delay = ConstantsFor.DELAY;
-        long initDelay = new Random().nextInt(( int ) ConstantsFor.DELAY / 3);
-        Map<Long, Long> map = new HashMap<>();
-        ThreadPoolExecutor.AbortPolicy abortPolicy = new ThreadPoolExecutor.AbortPolicy();
-        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        if(ECheck.isShouldISend()){
-            goRun.run();
+        long delay = TimeUnit.SECONDS.toMillis(ConstantsFor.DELAY);
+        Timer timer = new Timer("ParsingStart", true);
+        boolean b;
+
+        int stopHours = ECheck.getStopHours();
+
+        Properties properties = getProperties();
+        if(!properties.isEmpty()){
+            delay = ( long ) properties.get("delay");
+            timer.scheduleAtFixedRate(new ParsingStart(test), new Date(), TimeUnit.HOURS.toMillis(delay));
+        }
+        if(stopHours > 0){
+            b = ECheck.isShouldISend();
+            properties.put("send", b);
+            delay = TimeUnit.HOURS.toSeconds(stopHours);
+            properties.put("delay", delay);
+            properties.put("startstamp", System.currentTimeMillis());
+            setPropertiesToFile(properties);
+            timer.scheduleAtFixedRate(new ParsingStart(test), new Date(), TimeUnit.HOURS.toMillis(delay));
         }
         else{
-            if(ECheck.getStopHours() > 0){
-                Runnable command = new ParsingStart(test);
-                long l = TimeUnit.HOURS.toSeconds(ECheck.getStopHours());
-                scheduledExecutorService.scheduleWithFixedDelay(command,
-                        initDelay,
-                        l,
-                        TimeUnit.SECONDS);
-
-                if(!ECheck.isShouldISend()){
-                    abortPolicy.rejectedExecution(command, ( ThreadPoolExecutor ) scheduledExecutorService);
-                }
+            if(stopHours < 0){
+                timer.cancel();
+                timer.purge();
             }
             else{
-                if(ECheck.getStopHours()==-1){
-                    ECheck.getI();
-                    goRun.run();
-                }
-                else{
-                    map = new HashMap<>();
-                    map.put(initDelay, delay);
-                }
+                timer.scheduleAtFixedRate(new ParsingStart(test), new Date(), TimeUnit.SECONDS.toMillis(ConstantsFor.DELAY));
             }
         }
-        return map;
+
     }
 
-    /*Private metsods*/
-    private void checkFile() {
-        boolean b = ECheck.getI().isShouldISend();
-        RCPTS.add(ConstantsFor.MY_MAIL);
-        File ansJSON = new File("answer.json");
-        long l = System.currentTimeMillis() - ansJSON.lastModified();
-        if(l > TimeUnit.MINUTES.toMillis(5)){
-            messageToUser.errorAlert(ConstantsFor.APP_NAME + "." + SOURCE_CLASS,
-                    "ERROR. In Progress = " + b, new TForms().toStringFromArray(System.getenv()));
+    private Properties getProperties() {
+        File p = new File(SOURCE_CLASS + ".properties");
+        Properties properties = new Properties();
+        if(p.exists()){
+            try(InputStream inputStream = new FileInputStream(p)){
+                properties.load(inputStream);
+                return properties;
+            }
+            catch(IOException e){
+                eSender.errorAlert(SOURCE_CLASS + " properties", e.getMessage(),
+                        new TForms().toStringFromArray(e.getStackTrace()));
+                return new Properties();
+            }
         }
-        else{
-            this.messageToUser = new MessageCons();
-            messageToUser.info(ansJSON.getAbsolutePath(), "OK. In Progress = " + b,
-                    " last mod: " + l + "  msec (" + TimeUnit.MILLISECONDS.toMinutes(l) + " min) ago");
+        else{ return new Properties(); }
+    }
+
+    private void setPropertiesToFile(Properties properties) {
+        try(OutputStream outputStream = new FileOutputStream(SOURCE_CLASS + ".properties")){
+            properties.store(outputStream,
+                    TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() -
+                            ConstantsFor.START_TIME_IN_MILLIS) + " minutes work");
         }
-        ECheck.scheduleStart(test);
+        catch(IOException e){
+            local.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+        }
     }
 }

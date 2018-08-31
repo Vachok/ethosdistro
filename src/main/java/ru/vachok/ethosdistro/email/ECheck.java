@@ -3,7 +3,6 @@ package ru.vachok.ethosdistro.email;
 
 import ru.vachok.email.MessagesFromServer;
 import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
@@ -13,7 +12,7 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import java.io.*;
 import java.util.Date;
-import java.util.Random;
+import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
 
@@ -30,12 +29,12 @@ public class ECheck extends MessagesFromServer implements Serializable {
     /**
      {@link ConstantsFor#DELAY}
      */
-    public static long delay = ConstantsFor.DELAY;
+    private long delay = ConstantsFor.DELAY;
 
     /**
      <b>Наличие паузы отравки сообщений</b>
      */
-    private boolean shouldISend;
+    private boolean shouldISend = true;
 
     /**
      <b>Время, в часах, для приостановки отправки почты</b>
@@ -62,23 +61,13 @@ public class ECheck extends MessagesFromServer implements Serializable {
         return getItInst();
     }
 
-    private static ECheck getItInst() {
-        try(InputStream fileInput = new FileInputStream(objFile.getAbsolutePath());
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInput)){
-            ECheck o = ( ECheck ) objectInputStream.readObject();
-            return o;
-        }
-        catch(IOException | ClassNotFoundException e){
-            objFile.delete();
-            MESSAGE_TO_USER.errorAlert("OBJECT IN", new Date().toString(), e.getMessage() + "\n" +
-                    new TForms().toStringFromArray(e.getStackTrace()));
-        }
-        return new ECheck();
+    public static void setDelay(long delay) {
+        IT_INST.delay = delay;
     }
 
     public static int getStopHours() {
+        MESSAGE_TO_USER.info(SOURCE_CLASS, "4", "getStopHours");
         if(isShouldISend()){
-            writeO();
             return IT_INST.stopHours;
         }
         else{
@@ -88,59 +77,63 @@ public class ECheck extends MessagesFromServer implements Serializable {
 
     /*PS Methods*/
 
-    /**
-     @param test инвертор для правильного условия.
-     @return {@code "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";}
-     */
-    public static String scheduleStart(boolean test) {
-        try{
-            int stopHours = getStopHours();
-            String msg = stopHours + " stopHours";
-            MESSAGE_TO_USER.infoNoTitles(msg);
-            if(stopHours==-1){
-                delay = ConstantsFor.DELAY;
-            }
-            if(stopHours==0){
-                delay = ConstantsFor.DELAY / 2;
-            }
-            if(stopHours > 0){
-                delay = TimeUnit.HOURS.toSeconds(stopHours);
-            }
-            else{
-                delay = ConstantsFor.DELAY;
-            }
-        }
-        catch(ExceptionInInitializerError e){
-        }
-        ScheduledExecutorService scheduledExecutorService =
-                Executors
-                        .unconfigurableScheduledExecutorService(Executors
-                                .newScheduledThreadPool(2));
-        Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", test);
-
-        getI();
-        if(isShouldISend() && getStopHours() > 0){
-            delay = getStopHours();
-            String msg = delay + " is delay";
-            MESSAGE_TO_USER.infoNoTitles(msg);
-        }
-        else{
-            delay = ConstantsFor.DELAY;
-            String msg = delay + " is delay";
-            MESSAGE_TO_USER.infoNoTitles(msg);
-        }
-        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
-                ConstantsFor
-                        .INITIAL_DELAY, delay, TimeUnit
-                        .SECONDS);
-
-        return "Runnable parseRun = new ParsingStart(\"http://hous01.ethosdistro.com/?json=yes\", " + test + ");";
-    }
-
     public static boolean isShouldISend() {
+        MESSAGE_TO_USER.info(SOURCE_CLASS, "4.1", IT_INST.shouldISend + " should send");
         scheduledChkMailbox();
         writeO();
         return IT_INST.shouldISend;
+    }
+
+    /**
+     <b>Планирование проверки почтового ящика</b>
+     */
+    private static int scheduledChkMailbox() {
+        Runnable r = () -> MESSAGE_TO_USER.info(SOURCE_CLASS, "8", IT_INST.shouldISend + " send | " +
+                IT_INST.stopHours + " stop hours.");
+        MESSAGE_TO_USER.info(SOURCE_CLASS, "5", "Checking Mail");
+        Callable<Message[]> mailMessages = new MessagesFromServer();
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.unconfigurableScheduledExecutorService(Executors
+                        .newSingleThreadScheduledExecutor());
+        ScheduledFuture<Message[]> scheduledFuture = scheduledExecutorService
+                .schedule(mailMessages, ConstantsFor.INITIAL_DELAY + 5, TimeUnit.SECONDS);
+
+        String messageSubj = "~";
+        try{
+            MESSAGE_TO_USER.info(SOURCE_CLASS, "6", "Getting messages");
+            Message[] messages = scheduledFuture.get();
+            if(messages.length <= 0){ return 0; }
+            else for(Message message : messages){
+                int i = message.getMessageNumber();
+                String s = message.getSubject();
+                MESSAGE_TO_USER.info("Mailbox", "Content:", s);
+                if(s.toLowerCase().toLowerCase().contains("mine~")){ // если делить по : тогда пересекаешься со стандартными мэйлерами!
+                    messageSubj = s.split("ine".toLowerCase())[1];
+                    MESSAGE_TO_USER.info(SOURCE_CLASS, "7", "Got mail: " + new TForms().toStringFromArray(message.getFrom()));
+                    if(messageSubj.equals("~")){
+                        IT_INST.shouldISend = true;
+                        r.run();
+                        continue;
+                    }
+                }
+                IT_INST.stopHours = getStopHours(messageSubj);
+                Folder folder = getInbox();
+                Message delMSG = folder.getMessage(i);
+                delMSG.setFlag(Flags.Flag.DELETED, true);
+                folder.close(true);
+                r.run();
+                return IT_INST.stopHours;
+            }
+            r.run();
+            return IT_INST.stopHours;
+        }
+        catch(Exception e){
+            MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+            IT_INST.shouldISend = true;
+            r.run();
+        }
+        r.run();
+        return 0;
     }
 
     private static void writeO() {
@@ -158,61 +151,34 @@ public class ECheck extends MessagesFromServer implements Serializable {
     }
 
     private static int getStopHours(String messageSubj) {
-        if(messageSubj=="" || messageSubj==null){
+        if(Objects.equals(messageSubj, "~") || messageSubj==null){
             IT_INST.shouldISend = true;
-            return -1;
-        }
-        if(messageSubj.equals("0")){
-            IT_INST.shouldISend = false;
             return 0;
         }
+        if(messageSubj.equals("~0")){
+            IT_INST.shouldISend = false;
+            return -1;
+        }
         else{
-            return Integer.parseUnsignedInt(messageSubj);
+            IT_INST.shouldISend = true;
+            return Integer.parseUnsignedInt(messageSubj.replace("~", ""));
         }
     }
 
-    /**
-     <b>Планирование проверки почтового ящика</b>
-     */
-    private static int scheduledChkMailbox() {
-        Callable<Message[]> mailMessages = new MessagesFromServer();
-        ScheduledExecutorService scheduledExecutorService =
-                Executors.unconfigurableScheduledExecutorService(Executors
-                        .newSingleThreadScheduledExecutor());
-        int seed = ( int ) (ConstantsFor.DELAY / 3);
-        ScheduledFuture<Message[]> scheduledFuture = scheduledExecutorService
-                .schedule(mailMessages, new Random(seed).nextInt(), TimeUnit.SECONDS);
-        String messageSubj = "";
-        try{
-            Message[] messages = scheduledFuture.get();
-            for(Message message : messages){
-                int i = message.getMessageNumber();
-                String s = message.getSubject();
-                MESSAGE_TO_USER.info("Mailbox", "Content:", s);
-                if(s.toLowerCase().toLowerCase().contains("mine:")){
-                    messageSubj = s.split(":")[1];
-                }
-                IT_INST.stopHours = getStopHours(messageSubj);
-                Folder folder = getInbox();
-                Message delMSG = folder.getMessage(i);
-                delMSG.setFlag(Flags.Flag.DELETED, true);
-                folder.close(true);
-                writeO();
-            }
+    private static ECheck getItInst() {
+        try(InputStream fileInput = new FileInputStream(objFile.getAbsolutePath());
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInput)){
+            MESSAGE_TO_USER.info(SOURCE_CLASS, "3", fileInput.toString());
+            ECheck o = ( ECheck ) objectInputStream.readObject();
+            MESSAGE_TO_USER.info(SOURCE_CLASS, IT_INST.shouldISend + " should i send 3.5 ", IT_INST.stopHours + " stop hours\n" + IT_INST.delay + " delay");
+            return o;
         }
-        catch(Exception e){
-            MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms()
-                    .toStringFromArray(e.getStackTrace()));
-        }
-        if(IT_INST.stopHours > 0){
-            IT_INST.shouldISend = false;
-            writeO();
-            return IT_INST.stopHours;
-        }
-        else{
-            IT_INST.shouldISend = true;
-            writeO();
-            return 0;
+        catch(IOException | ClassNotFoundException e){
+            MESSAGE_TO_USER.errorAlert("OBJECT IN", new Date().toString(), e.getMessage() + "\n" +
+                    new TForms().toStringFromArray(e.getStackTrace()));
+            MESSAGE_TO_USER.info(SOURCE_CLASS, IT_INST.shouldISend + "",
+                    IT_INST.stopHours + " stop hours\n" + IT_INST.delay + " delay\n" + objFile.exists() + " exists " + objFile.getAbsolutePath());
+            return new ECheck();
         }
     }
 //unstat

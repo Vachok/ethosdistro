@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  <h1>Запуск парсера</h1>
 
  @since 23.08.2018 (16:48) */
-public class ParsingStart implements Runnable {
+public class ParsingStart extends TimerTask {
 
     /**
      Class Simple Name
@@ -156,7 +157,7 @@ public class ParsingStart implements Runnable {
             Thread.currentThread().interrupt();
         }
         else{
-            emailS.errorAlert("ALARM!", "Condition not mining", returnString +
+            emailS.errorAlert("ALARM!", "Mine~", returnString +
                     "   | NO MINING! " + urlAsString);
             fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
                     "   | NO MINING! " + urlAsString);

@@ -1,80 +1,25 @@
->>>>>
-message = [[java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
-java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191)
-ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:187)
-ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
-ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
-ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
-ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]]
-
-‡‚„. 31, 2018 10:23:00 ƒœ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = ECheck
-java.lang.NullPointerException
-[java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
-java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191)
-ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:187)
-ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
-ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
-ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
-ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]
-Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-
-
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:488)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2188)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2221)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2016)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:776)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:488)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
-	at com.mysql.jdbc.jdbc2.optional.MysqlDataSource.getConnection(MysqlDataSource.java:428)
-	at com.mysql.jdbc.jdbc2.optional.MysqlDataSource.getConnection(MysqlDataSource.java:136)
-	at com.mysql.jdbc.jdbc2.optional.MysqlDataSource.getConnection(MysqlDataSource.java:107)
-	at ru.vachok.mysqlandprops.DataConnectTo.getDefaultConnection(DataConnectTo.java:39)
-	at ru.vachok.ethosdistro.util.DBLogger.sendLogs(DBLogger.java:68)
-	at ru.vachok.ethosdistro.util.DBLogger.info(DBLogger.java:40)
-	at ru.vachok.ethosdistro.util.DBLogger.errorAlert(DBLogger.java:32)
-	at ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:204)
-	at ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
-	at ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
-	at ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
-	at ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)
-Caused by: java.net.SocketTimeoutException: connect timed out
-	at java.base/java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
-	at java.base/java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
-	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:400)
-	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:243)
-	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:225)
-	at java.base/java.net.PlainSocketImpl.connect(PlainSocketImpl.java:148)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:402)
-	at java.base/java.net.Socket.connect(Socket.java:591)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 24 more
-Exception in thread "main" java.lang.NullPointerException: 22.07.2018 (0:03)
-	at ru.vachok.mysqlandprops.DataConnectTo.getDefaultConnection(DataConnectTo.java:45)
-	at ru.vachok.ethosdistro.util.DBLogger.sendLogs(DBLogger.java:68)
-	at ru.vachok.ethosdistro.util.DBLogger.info(DBLogger.java:40)
-	at ru.vachok.ethosdistro.util.DBLogger.errorAlert(DBLogger.java:32)
-	at ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:204)
-	at ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
-	at ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
-	at ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
-	at ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)
+‡‚„. 31, 2018 5:30:29 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | Arguments | Starting at: Fri Aug 31 17:30:29 GMT+03:00 2018
+[-t
+on]
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | 3 | java.io.FileInputStream@534df152
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | true should i send 3.5  | 0 stop hours
+30 delay
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+‡‚„. 31, 2018 5:30:30 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | 1. Starting | with args
+‡‚„. 31, 2018 5:30:31 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+‡‚„. 31, 2018 5:30:31 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database (ru_vachok_ethosdistro) : DBLogger | INFO no titles | 1.AppStarter - 
+ARGS: [[
+t:on]]
+‡‚„. 31, 2018 5:30:31 œœ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
