@@ -130,11 +130,12 @@ public class ParsingStart implements Runnable {
      */
     private void sendRes(boolean callTest) {
         Boolean call;
+        String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = !new ParsingFinalize().call();
+            call = !returnString.toLowerCase().contains("192");
         }
         else{
-            call = new ParsingFinalize().call();
+            call = returnString.contains("false");
         }
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
@@ -156,8 +157,8 @@ public class ParsingStart implements Runnable {
             Thread.currentThread().interrupt();
         }
         else{
-            emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-            fileLogger.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
+            emailS.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
+            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
             Thread.currentThread().interrupt();
         }
 

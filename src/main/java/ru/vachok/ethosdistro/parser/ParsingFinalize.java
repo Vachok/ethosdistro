@@ -6,21 +6,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
-import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 
 /**
  @since 25.08.2018 (14:39) */
-public class ParsingFinalize implements Callable<Boolean> {
+public class ParsingFinalize implements Callable<String> {
 
    /**
     Simple Name класса, для поиска настроек
@@ -34,12 +30,12 @@ public class ParsingFinalize implements Callable<Boolean> {
 
 
    @Override
-   public Boolean call() {
+   public String call() {
 
       return jsonAsList();
    }
 
-   private boolean jsonAsList() {
+    private String jsonAsList() {
       JSONObject parse;
       File jsonFile = new File("answer.json");
       if(!jsonFile.exists()){
@@ -53,8 +49,9 @@ public class ParsingFinalize implements Callable<Boolean> {
             while(bufferedReader.ready()){
                JSONParser parser = new JSONParser();
                parse = ( JSONObject ) parser.parse(bufferedReader);
-               Object rigs = ( JSONObject ) parse.get("rigs");
-               return checkCond(parse, rigs);
+                Object rigs = parse.get("rigs");
+                String checkCond = checkCond(parse, rigs);
+                return checkCond;
             }
          }
          catch(IOException | ParseException e){
@@ -63,34 +60,37 @@ public class ParsingFinalize implements Callable<Boolean> {
                         .sorted().toString());
          }
       }
-      return false;
+        return "false";
    }
 
-   private boolean checkCond(JSONObject parse, Object rigs) throws ParseException {
+    private String checkCond(JSONObject parse, Object rigs) throws ParseException {
       List<Object> coList = new ArrayList<>();
       for(String s : ConstantsFor.DEVICES){
          Object o = (( JSONObject ) rigs).get(s);
-         String s1 = parse
+          String s1 = JSONObject
                .toJSONString(( Map ) o);
          JSONParser parser = new JSONParser();
          parse = ( JSONObject ) parser.parse(s1);
+
 
          Object condition = parse.get("condition");
          if(condition.toString().equalsIgnoreCase("mining")){
             coList.add(condition);
          }else {
-            messageToUser.info(SOURCE_CLASS, "NO MINING IN", parse.toJSONString());
-            return false;
+             String jsonString = parse.get("ip").toString();
+             messageToUser.info(SOURCE_CLASS, "NO MINING IN", jsonString);
+             return jsonString;
          }
       }
+        String s2 = coList.toString() + "";
       if(coList.size()==3){
-         messageToUser.info(LocalDateTime.now().toString(),"condition = " , coList.toString()+"");
-         return true;
+          messageToUser.info(LocalDateTime.now().toString(), "condition = ", s2);
+          return "false";
       }
       else{
          ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-         messageToUser.errorAlert(System.currentTimeMillis()+" time", "\ncondition = " , coList.toString()+"");
-         return false;
+          messageToUser.errorAlert(System.currentTimeMillis() + " time", "\ncondition = ", s2);
+          return "false";
       }
    }
 

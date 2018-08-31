@@ -1,121 +1,340 @@
 u0466446_properties
 retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.email.MessagesFromServer getInbox
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.email.MessagesFromServer getInbox
 INFO: 1 inbox size
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = Mailbox
 Content:
-mining:on
+Re: ALARM! Condition not mine:2
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
 >>>>>
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-message = [[java.base/java.io.ObjectOutputStream.defaultWriteObject(ObjectOutputStream.java:437)
+message = [[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+java.base/java.lang.Long.parseLong(Long.java:678)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]]
+
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ECheck
+For input string: " ALARM! Condition not mine"
+[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+java.base/java.lang.Long.parseLong(Long.java:678)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:97)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-ru.vachok.ethosdistro.email.ECheck.writeO(ECheck.java:102)
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:59)
-WARNING: Sending to database = Thu Aug 30 17:42:26 GMT+03:00 2018 error!
-ru.vachok.ethosdistro.AppStarter.scheduleStart(AppStarter.java:130)
-1535640146403 timestamp
-SYSTEM IS DOWN[java.base/java.io.ObjectOutputStream.defaultWriteObject(ObjectOutputStream.java:437)
-ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:66)]]
-ru.vachok.ethosdistro.email.ECheck.writeO(ECheck.java:102)
-
-ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:59)
-ru.vachok.ethosdistro.AppStarter.scheduleStart(AppStarter.java:130)
-ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:66)]
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = DBLogger
+INFO no titles
+0 stopHours
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: stopHours = -1
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.email.MessagesFromServer getInbox
+INFO: 1 inbox size
+אגד. 31, 2018 9:26:24 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = Mailbox
+Content:
+Re: ALARM! Condition not mine:2
+>>>>>
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+message = [[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+INFO: Send to DB is true
+java.base/java.lang.Long.parseLong(Long.java:678)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+WARNING: Sending to database = ECheck
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+For input string: " ALARM! Condition not mine"
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
+[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:122)
+java.base/java.lang.Long.parseLong(Long.java:678)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]]
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
 
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:122)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.email.MessagesFromServer getInbox
+INFO: 1 inbox size
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = Mailbox
+Content:
+Re: ALARM! Condition not mine:2
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+>>>>>
+INFO: Send to DB is true
+message = [[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+java.base/java.lang.Long.parseLong(Long.java:678)
+WARNING: Sending to database = ECheck
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
+For input string: " ALARM! Condition not mine"
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+[java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+java.base/java.lang.Long.parseLong(Long.java:678)
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:834)
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
+java.base/java.lang.Integer.parseUnsignedInt(Integer.java:928)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:170)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:122)
+ru.vachok.ethosdistro.email.ECheck.scheduledChkMailbox(ECheck.java:195)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]]
+ru.vachok.ethosdistro.email.ECheck.isShouldISend(ECheck.java:141)
 
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: AppStarter
-scheduleStart
-ru.vachok.ethosdistro.parser.ParsingStart@2b9627bc
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+ru.vachok.ethosdistro.email.ECheck.getStopHours(ECheck.java:80)
+ru.vachok.ethosdistro.email.ECheck.scheduleStart(ECheck.java:122)
+ru.vachok.ethosdistro.AppStarter.main(AppStarter.java:60)]
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.email.ECheck writeO
+INFO: C:\Users\ikudryashov\IdeaProjects\kirya\checker.obj
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = DBLogger
+INFO no titles
+90 is delay
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+אגד. 31, 2018 9:26:25 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = AppStarter
 Argument - none
-Thu Aug 30 17:42:24 GMT+03:00 2018   Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", false);
-אגד. 30, 2018 5:42:26 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+Fri Aug 31 09:26:21 GMT+03:00 2018   Runnable parseRun = new ParsingStart("http://hous01.ethosdistro.com/?json=yes", false);
+אגד. 31, 2018 9:26:26 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
 startParsing
 Parsed url = http://hous01.ethosdistro.com/?json=yes
 here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
-Change time: Thu Aug 30 17:42:28 GMT+03:00 2018
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+Change time: Fri Aug 31 09:26:30 GMT+03:00 2018
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
 email RCPTs
 [pivovarov.kirill@gmail.com]
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.parser.ParsingStart run
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.parser.ParsingStart run
 INFO: ParsingStart sendRes start = true
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = 2018-08-30T17:42:28.879341100
-condition = 
-[mining, mining, mining]
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingFinalize
+NO MINING IN
+192.168.0.102
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+אגד. 31, 2018 9:26:30 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
 WARNING: Writting to file: ParsingStart
 ConstantsFor.RCPT
 Mailing list (1):
 [pivovarov.kirill@gmail.com]
-אגד. 30, 2018 5:42:28 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = ParsingStart
-END (Uptime = 0.0012083333 hrs)
-55601 free space in Megabytes
-Thu Aug 30 17:42:28 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
-אגד. 30, 2018 5:42:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-אגד. 30, 2018 5:42:29 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: ParsingStart
-55601 free space in Megabytes
-Thu Aug 30 17:42:28 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+INFO >>>>> typeName = [AuthForChess], title = [PasswordAuthentication], s = [STARTS...]
+
+u0466446_properties
+retProps = {} con closed? true
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+u0466446_properties
+retProps = {pass=S15cQFO8kk50FKj, userName=bot@chess.vachok.ru} con closed? true
+INFO >>>>> typeName = [chess], title = [bot@chess.vachok.ru], s = [S15cQFO8kk50FKj]
+
+DEBUG: JavaMail version 1.5.6
+DEBUG: successfully loaded resource: /META-INF/javamail.default.providers
+DEBUG: Tables of loaded providers
+DEBUG: Providers Listed By Class Name: {com.sun.mail.smtp.SMTPSSLTransport=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], com.sun.mail.smtp.SMTPTransport=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle], com.sun.mail.imap.IMAPSSLStore=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], com.sun.mail.pop3.POP3SSLStore=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], com.sun.mail.imap.IMAPStore=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], com.sun.mail.pop3.POP3Store=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle]}
+DEBUG: Providers Listed By Protocol: {imaps=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], imap=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], smtps=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], pop3=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle], pop3s=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], smtp=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]}
+DEBUG: successfully loaded resource: /META-INF/javamail.default.address.map
+DEBUG: getProvider() returning javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]
+DEBUG SMTP: need username and password for authentication
+DEBUG SMTP: protocolConnect returning false, host=mail.chess.vachok.ru, user=IKudryashov, password=<null>
+DEBUG SMTP: useEhlo true, useAuth true
+DEBUG SMTP: trying to connect to host "mail.chess.vachok.ru", port 465, isSSL false
+220 server202.hosting.reg.ru ESMTP Exim 4.90_1 Fri, 31 Aug 2018 09:26:31 +0300
+DEBUG SMTP: connected to host "mail.chess.vachok.ru", port: 465
+
+EHLO NO0027.mshome.net
+250-server202.hosting.reg.ru Hello NO0027.mshome.net [91.210.86.35]
+250-SIZE 52428800
+250-8BITMIME
+250-PIPELINING
+250-AUTH LOGIN PLAIN
+250 HELP
+DEBUG SMTP: Found extension "SIZE", arg "52428800"
+DEBUG SMTP: Found extension "8BITMIME", arg ""
+DEBUG SMTP: Found extension "PIPELINING", arg ""
+DEBUG SMTP: Found extension "AUTH", arg "LOGIN PLAIN"
+DEBUG SMTP: Found extension "HELP", arg ""
+DEBUG SMTP: protocolConnect login, host=mail.chess.vachok.ru, user=bot@chess.vachok.ru, password=<non-null>
+DEBUG SMTP: Attempt to authenticate using mechanisms: LOGIN PLAIN DIGEST-MD5 NTLM XOAUTH2 
+DEBUG SMTP: Using mechanism LOGIN
+DEBUG SMTP: AUTH LOGIN command trace suppressed
+DEBUG SMTP: AUTH LOGIN succeeded
+DEBUG SMTP: use8bit false
+MAIL FROM:<bot@chess.vachok.ru>
+250 OK
+RCPT TO:<pivovarov.kirill@gmail.com>
+250 Accepted
+DEBUG SMTP: Verified Addresses
+DEBUG SMTP:   pivovarov.kirill@gmail.com
+DATA
+354 Enter message, ending with "." on a line by itself
+Date: Fri, 31 Aug 2018 09:26:30 +0300 (GMT+03:00)
+From: bot@chess.vachok.ru
+Reply-To: bot@chess.vachok.ru
+To: pivovarov.kirill@gmail.com
+Message-ID: <805003931.0.1535696790988@NO0027.mshome.net>
+Subject: ALARM! Condition not mining
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+192.168.0.102   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+.
+250 OK id=1fvct5-0001ll-3N
+אגד. 31, 2018 9:26:31 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+DEBUG SMTP: message successfully delivered to mail server
+QUIT
+221 server202.hosting.reg.ru closing connection
+WARNING: Writting to file: ALARM!
+Condition not mining
+192.168.0.102   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
 startParsing
 Parsed url = http://hous01.ethosdistro.com/?json=yes
 here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
-Change time: Thu Aug 30 17:43:29 GMT+03:00 2018
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+Change time: Fri Aug 31 09:28:01 GMT+03:00 2018
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
 email RCPTs
 [pivovarov.kirill@gmail.com]
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.parser.ParsingStart run
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.parser.ParsingStart run
 INFO: ParsingStart sendRes start = true
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = 2018-08-30T17:43:29.551830400
-condition = 
-[mining, mining, mining]
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingFinalize
+NO MINING IN
+192.168.0.102
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+אגד. 31, 2018 9:28:01 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
 WARNING: Writting to file: ParsingStart
 ConstantsFor.RCPT
 Mailing list (1):
 [pivovarov.kirill@gmail.com]
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database = ParsingStart
-END (Uptime = 0.0180575 hrs)
-55601 free space in Megabytes
-Thu Aug 30 17:43:29 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-אגד. 30, 2018 5:43:29 ֿֿ ru.vachok.ethosdistro.util.FileLogger makeFile
-WARNING: Writting to file: ParsingStart
-55601 free space in Megabytes
-Thu Aug 30 17:43:29 GMT+03:00 2018
-C:\Users\ikudryashov\IdeaProjects\kirya\answer.json
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+INFO >>>>> typeName = [AuthForChess], title = [PasswordAuthentication], s = [STARTS...]
+
+retProps = {} con closed? true
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+u0466446_properties
+retProps = {pass=S15cQFO8kk50FKj, userName=bot@chess.vachok.ru} con closed? true
+INFO >>>>> typeName = [chess], title = [bot@chess.vachok.ru], s = [S15cQFO8kk50FKj]
+
+DEBUG: JavaMail version 1.5.6
+DEBUG: successfully loaded resource: /META-INF/javamail.default.providers
+DEBUG: Tables of loaded providers
+DEBUG: Providers Listed By Class Name: {com.sun.mail.smtp.SMTPSSLTransport=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], com.sun.mail.smtp.SMTPTransport=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle], com.sun.mail.imap.IMAPSSLStore=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], com.sun.mail.pop3.POP3SSLStore=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], com.sun.mail.imap.IMAPStore=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], com.sun.mail.pop3.POP3Store=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle]}
+DEBUG: Providers Listed By Protocol: {imaps=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], imap=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], smtps=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], pop3=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle], pop3s=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], smtp=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]}
+DEBUG: successfully loaded resource: /META-INF/javamail.default.address.map
+DEBUG: getProvider() returning javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]
+DEBUG SMTP: need username and password for authentication
+DEBUG SMTP: protocolConnect returning false, host=mail.chess.vachok.ru, user=IKudryashov, password=<null>
+DEBUG SMTP: useEhlo true, useAuth true
+DEBUG SMTP: trying to connect to host "mail.chess.vachok.ru", port 465, isSSL false
+220 server202.hosting.reg.ru ESMTP Exim 4.90_1 Fri, 31 Aug 2018 09:28:01 +0300
+DEBUG SMTP: connected to host "mail.chess.vachok.ru", port: 465
+
+EHLO NO0027.mshome.net
+250-server202.hosting.reg.ru Hello NO0027.mshome.net [91.210.86.35]
+250-SIZE 52428800
+250-8BITMIME
+250-PIPELINING
+250-AUTH LOGIN PLAIN
+250 HELP
+DEBUG SMTP: Found extension "SIZE", arg "52428800"
+DEBUG SMTP: Found extension "8BITMIME", arg ""
+DEBUG SMTP: Found extension "PIPELINING", arg ""
+DEBUG SMTP: Found extension "AUTH", arg "LOGIN PLAIN"
+DEBUG SMTP: Found extension "HELP", arg ""
+DEBUG SMTP: protocolConnect login, host=mail.chess.vachok.ru, user=bot@chess.vachok.ru, password=<non-null>
+DEBUG SMTP: Attempt to authenticate using mechanisms: LOGIN PLAIN DIGEST-MD5 NTLM XOAUTH2 
+DEBUG SMTP: Using mechanism LOGIN
+DEBUG SMTP: AUTH LOGIN command trace suppressed
+DEBUG SMTP: AUTH LOGIN succeeded
+DEBUG SMTP: use8bit false
+MAIL FROM:<bot@chess.vachok.ru>
+250 OK
+RCPT TO:<pivovarov.kirill@gmail.com>
+250 Accepted
+DEBUG SMTP: Verified Addresses
+DEBUG SMTP:   pivovarov.kirill@gmail.com
+DATA
+אגד. 31, 2018 9:28:02 ִֿ ru.vachok.ethosdistro.util.FileLogger makeFile
+WARNING: Writting to file: ALARM!
+Condition not mining
+192.168.0.102   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+354 Enter message, ending with "." on a line by itself
+Date: Fri, 31 Aug 2018 09:28:01 +0300 (GMT+03:00)
+From: bot@chess.vachok.ru
+Reply-To: bot@chess.vachok.ru
+To: pivovarov.kirill@gmail.com
+Message-ID: <1960736675.1.1535696881896@NO0027.mshome.net>
+Subject: ALARM! Condition not mining
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+192.168.0.102   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+.
+250 OK id=1fvcuX-0003B7-W8
+DEBUG SMTP: message successfully delivered to mail server
+QUIT
+221 server202.hosting.reg.ru closing connection
