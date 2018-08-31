@@ -11,7 +11,7 @@ import ru.vachok.messenger.MessageToUser;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 
 
 /**
@@ -93,5 +93,4 @@ public class ParsingFinalize implements Callable<String> {
           return "false";
       }
    }
-
 }

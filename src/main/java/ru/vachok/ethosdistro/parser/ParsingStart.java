@@ -132,7 +132,7 @@ public class ParsingStart implements Runnable {
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = !returnString.toLowerCase().contains("192");
+            call = !returnString.toLowerCase().contains("false");
         }
         else{
             call = returnString.contains("false");
@@ -145,20 +145,21 @@ public class ParsingStart implements Runnable {
                         ConstantsFor.RCPT.size() + "):\n" +
                         new TForms().toStringFromArray(ConstantsFor.RCPT));
         if(call){
-            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
+            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
+                    " last modified: " + new Date(file.lastModified());
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
-
             TO_USER_DATABASE.info(SOURCE_CLASS,
-                    "END (Uptime = " + ( float ) (System
-                                                          .currentTimeMillis() - ConstantsFor
+                    "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
                             .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
                     freeSpaceOnDisk + "\n" + statisticsProb);
             fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
             Thread.currentThread().interrupt();
         }
         else{
-            emailS.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
-            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString + "   | NO MINING! " + urlAsString);
+            emailS.errorAlert("ALARM!", "Condition not mining", returnString +
+                    "   | NO MINING! " + urlAsString);
+            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
+                    "   | NO MINING! " + urlAsString);
             Thread.currentThread().interrupt();
         }
 
