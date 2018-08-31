@@ -46,12 +46,15 @@ public class MessagesFromServer implements Callable<Message[]> {
         }
         catch(MessagingException e){
 
-            Logger.getLogger(SOURCE_CLASS).log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays.toString(e.getStackTrace())));
+            Logger.
+                    getLogger(SOURCE_CLASS)
+                    .log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays
+                            .toString(e.getStackTrace())));
         }
         return messages;
     }
 
-    protected Folder getInbox() {
+    protected static Folder getInbox() {
         Properties mailProps = getSessionProps();
         Authenticator authenticator = new Authenticator() {
 
@@ -82,7 +85,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         throw new UnsupportedOperationException("Inbox not available :(");
     }
 
-    private Properties getSessionProps() {
+    private static Properties getSessionProps() {
         InitProperties initProperties = new DBRegProperties("mail-regru");
         Properties sessionProps = initProperties.getProps();
         sessionProps.setProperty("NewSessionStarted", new Date().toString());
@@ -90,8 +93,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         return sessionProps;
     }
 
-
-    private void saveProps(Properties sessionProps) {
+    private static void saveProps(Properties sessionProps) {
         InitProperties initProperties = new FileProps(SOURCE_CLASS);
         initProperties.setProps(sessionProps);
         initProperties.getProps();

@@ -4,7 +4,7 @@ package ru.vachok.ethosdistro.parser;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 
@@ -69,11 +69,16 @@ public class ParsingStart implements Runnable {
     /**
      Конструктор
 
-     @param s    url как строка
+     @param urlAsString    url как строка
      @param test test - запуск с <i>обратным !</i> условием.
      */
-    public ParsingStart(String s, boolean test) {
-        this.urlAsString = s;
+    public ParsingStart(String urlAsString, boolean test) {
+        this.urlAsString = urlAsString;
+        this.test = test;
+    }
+
+    public ParsingStart(boolean test) {
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
         this.test = test;
     }
 
@@ -85,14 +90,14 @@ public class ParsingStart implements Runnable {
      3. Вывод сообщения через {@link #TO_USER_DATABASE} - {@link ConstantsFor#RCPT} <br>
      4. {@link #sendRes(boolean)} <br>
 
-     @see TForfs
+     @see TForms
      */
     @Override
     public void run() {
         this.parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
-        String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
+        String s = new TForms().toStringFromArray(ConstantsFor.RCPT);
         TO_USER_DATABASE.info(SOURCE_CLASS, "email RCPTs", s);
         LOGGER.info(SOURCE_CLASS + " sendRes start = " + true);
         sendRes(this.test);
@@ -121,7 +126,7 @@ public class ParsingStart implements Runnable {
 
      @param callTest {@link #test}
      @see ParsingFinalize
-     @see TForfs
+     @see TForms
      */
     private void sendRes(boolean callTest) {
         Boolean call;
@@ -137,7 +142,7 @@ public class ParsingStart implements Runnable {
         fileLogger.info(SOURCE_CLASS, "ConstantsFor.RCPT",
                 "Mailing list (" +
                         ConstantsFor.RCPT.size() + "):\n" +
-                        new TForfs().toStringFromArray(ConstantsFor.RCPT));
+                        new TForms().toStringFromArray(ConstantsFor.RCPT));
         if(call){
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath();
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";

@@ -18,15 +18,16 @@ public enum ConstantsFor {
     */
    public static final int MEGABYTE = 1024 * 1024;
 
+   /*Fields*/
    /**
     Время первоначального простоя
     */
-   public static final long INITIAL_DELAY = 2L;
+   public static final long INITIAL_DELAY = 4L;
 
    /**
     Задержка между проверками по-умолчанию
     */
-   public static final long DELAY = 60L;
+   public static final long DELAY = 90L;
 
    /**
     Список почтовых адресов
@@ -57,4 +58,8 @@ public enum ConstantsFor {
     * Паттерн для {@code array.tostring}
     */
    public static final Pattern AR_SEMI_PATTERN = Pattern.compile(", ");
+
+   public static final String APP_NAME = ConstantsFor.class.getPackage().getName();
+
+   public static final String URL_AS_STRING = "http://hous01.ethosdistro.com/?json=yes";
 }

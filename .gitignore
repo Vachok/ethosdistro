@@ -24,3 +24,4 @@ gen
 build/
 src/test/resources/
 /MessagesFromServer.properties
+/checker.obj

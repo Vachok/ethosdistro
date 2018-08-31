@@ -3,12 +3,10 @@ package ru.vachok.ethosdistro.email;
 
 import ru.vachok.email.MessagesFromServer;
 import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import javax.mail.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.RejectedExecutionException;
@@ -20,6 +18,8 @@ import static java.util.logging.Level.INFO;
 /**
  @since 29.08.2018 (16:33) */
 public class Cleaner extends MessagesFromServer {
+
+    private Message message;
 
     private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
 
@@ -34,15 +34,28 @@ public class Cleaner extends MessagesFromServer {
      */
     private String delMe = "";
 
+    /*Constru*/
     /**
      <h2>Конструктор с уточнением по-удалению.</h2>
 
-     @param delMe что требуется удалить.
+     @param subjectMessage что требуется удалить.
      */
-    public Cleaner(String delMe) {
-        this.delMe = delMe;
+    public Cleaner(String subjectMessage) {
+        this.delMe = subjectMessage;
+        Folder folder = MessagesFromServer.getInbox();
+        try{
+            folder.close(true);
+        }
+        catch(MessagingException e){
+            MESSAGE_TO_USER
+                    .errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+        }
     }
 
+    public Cleaner(Message message) {
+
+        this.message = message;
+    }
     /**
      <h2>Конструктор умолч.</h2>
      */
@@ -50,6 +63,7 @@ public class Cleaner extends MessagesFromServer {
     }
 
 
+    /*Private metsods*/
     /**
      <h2>Работа</h2>{@link #cleanMBox}
 
@@ -73,7 +87,8 @@ public class Cleaner extends MessagesFromServer {
                 message.setFlag(Flags.Flag.DELETED, true);
             }
         }
-        Logger.getLogger(ru.vachok.ethosdistro.email.Cleaner.class.getSimpleName()).log(INFO, inbox.getMessageCount() + " inbox size");
+        Logger.getLogger(Cleaner.class.getSimpleName())
+                .log(INFO, inbox.getMessageCount() + " inbox size");
         inbox.close(true);
         return mailMes;
     }
