@@ -1,8 +1,14 @@
 package ru.vachok.ethosdistro;
 
 
+import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.email.ESender;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 
@@ -62,4 +68,13 @@ public enum ConstantsFor {
    public static final String APP_NAME = ConstantsFor.class.getPackage().getName();
 
    public static final String URL_AS_STRING = "http://hous01.ethosdistro.com/?json=yes";
+
+    public static BiConsumer<Integer, String> sendMailAndDB = (x, y) -> {
+        List<String> rcpt = new ArrayList<>();
+        rcpt.add(ConstantsFor.MY_MAIL);
+        MessageToUser[] messagesToUser = {new ESender(rcpt), new DBLogger("ru_vachok_ethosdistro_tests")};
+        for(MessageToUser messageToUser : messagesToUser){
+            messageToUser.info(new Date() + "", x + " x", y + " y");
+        }
+    };
 }

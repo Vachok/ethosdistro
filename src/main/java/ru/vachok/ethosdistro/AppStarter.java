@@ -26,7 +26,7 @@ public class AppStarter {
 
     private static boolean test = false;
 
-    private static Runnable goIt = () -> {
+    private static final Runnable goIt = () -> {
         Runnable watchDog = new WatchDogNorah(test);
         ScheduledExecutorService executorService = Executors
                 .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
@@ -62,7 +62,8 @@ public class AppStarter {
             ScheduledExecutorService executorService = Executors
                     .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
             MESSAGE_TO_USER.info(SOURCE_CLASS, "2", executorService.hashCode() + " hash executor starting...");
-            executorService.scheduleWithFixedDelay(watchDog, ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+            executorService.scheduleWithFixedDelay(watchDog,
+                    ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
         };
         if(args.length > 0){
             MESSAGE_TO_USER

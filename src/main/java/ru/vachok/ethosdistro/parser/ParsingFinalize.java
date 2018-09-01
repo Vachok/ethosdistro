@@ -6,12 +6,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.TForfs;
 import ru.vachok.messenger.MessageToUser;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
 
 
 /**
@@ -26,7 +27,9 @@ public class ParsingFinalize implements Callable<String> {
    /**
     {@link }
     */
-   private static MessageToUser messageToUser = new DBLogger();
+   private static final MessageToUser messageToUser = new DBLogger();
+
+    private static final String falseString = "false";
 
 
    @Override
@@ -60,7 +63,8 @@ public class ParsingFinalize implements Callable<String> {
                         .sorted().toString());
          }
       }
-        return "false";
+
+        return falseString;
    }
 
     private String checkCond(JSONObject parse, Object rigs) throws ParseException {
@@ -72,25 +76,25 @@ public class ParsingFinalize implements Callable<String> {
          JSONParser parser = new JSONParser();
          parse = ( JSONObject ) parser.parse(s1);
 
-
          Object condition = parse.get("condition");
+          Object ip = parse.get("ip");
          if(condition.toString().equalsIgnoreCase("mining")){
             coList.add(condition);
+             return condition + "~~" + parse.toJSONString();
          }else {
-             String jsonString = parse.get("ip").toString();
-             messageToUser.info(SOURCE_CLASS, "NO MINING IN", jsonString);
-             return jsonString;
+            messageToUser.info(SOURCE_CLASS, "NO MINING IN", parse.toJSONString());
+             return ip.toString() + "~~" + parse.toJSONString();
          }
       }
-        String s2 = coList.toString() + "";
       if(coList.size()==3){
-          messageToUser.info(LocalDateTime.now().toString(), "condition = ", s2);
-          return "false";
+         messageToUser.info(LocalDateTime.now().toString(),"condition = " , coList.toString()+"");
+          return LocalDateTime.now().toString() + "\ncondition = " + "\n" + new TForfs().toStringFromArray(coList);
       }
       else{
          ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-          messageToUser.errorAlert(System.currentTimeMillis() + " time", "\ncondition = ", s2);
-          return "false";
+         messageToUser.errorAlert(System.currentTimeMillis()+" time", "\ncondition = " , coList.toString()+"");
+          return falseString;
       }
    }
+
 }

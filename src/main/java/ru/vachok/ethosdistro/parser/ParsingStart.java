@@ -134,10 +134,10 @@ public class ParsingStart extends TimerTask {
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = !returnString.toLowerCase().contains("false");
+            call = returnString.toLowerCase().contains("false");
         }
         else{
-            call = returnString.contains("false");
+            call = !returnString.contains("false");
         }
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
