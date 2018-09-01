@@ -26,11 +26,16 @@ public class AppStarter {
 
     private static boolean test = false;
 
+    private static long delayInSec;
+
     private static final Runnable goIt = () -> {
-        Runnable watchDog = new WatchDogNorah(test);
+        Runnable watchDog = new WatchDogNorah(test, delayInSec);
         ScheduledExecutorService executorService = Executors
                 .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
-        executorService.scheduleWithFixedDelay(watchDog, ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+        executorService.scheduleWithFixedDelay(watchDog,
+                ConstantsFor.INITIAL_DELAY,
+                ConstantsFor.DELAY_IN_SECONDS,
+                TimeUnit.SECONDS);
     };
 
     /**
@@ -63,7 +68,7 @@ public class AppStarter {
                     .unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
             MESSAGE_TO_USER.info(SOURCE_CLASS, "2", executorService.hashCode() + " hash executor starting...");
             executorService.scheduleWithFixedDelay(watchDog,
-                    ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY, TimeUnit.SECONDS);
+                    ConstantsFor.INITIAL_DELAY, ConstantsFor.DELAY_IN_SECONDS, TimeUnit.SECONDS);
         };
         if(args.length > 0){
             MESSAGE_TO_USER
@@ -79,7 +84,6 @@ public class AppStarter {
         }
     }
 
-    /*Private metsods*/
     /**
      <b>Парсер параметров запуска</b>
      1. {@link #mailAdd(String)}
@@ -107,6 +111,9 @@ public class AppStarter {
                 if(key.equalsIgnoreCase("e")){
                     mailAdd(value);
                 }
+                if(key.equalsIgnoreCase("d")){
+                    delayInSec = Long.parseLong(value);
+                }
                 else{
                     MESSAGE_TO_USER.infoNoTitles("1." + SOURCE_CLASS + " - \nARGS: " + new TForms()
                             .toStringFromArray(args));
@@ -118,6 +125,8 @@ public class AppStarter {
             }
         }
     }
+
+    /*Private metsods*/
     private static void mailAdd(String value) {
         ConstantsFor.RCPT.clear();
         String[] values = value.split(",");

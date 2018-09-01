@@ -26,9 +26,9 @@ public class ECheck extends MessagesFromServer implements Serializable {
     private static final transient MessageToUser MESSAGE_TO_USER = new DBLogger();
 
     /**
-     {@link ConstantsFor#DELAY}
+     {@link ConstantsFor#DELAY_IN_SECONDS}
      */
-    private long delay = ConstantsFor.DELAY;
+    private long delay;
 
     /**
      <b>Наличие паузы отравки сообщений</b>

@@ -16,6 +16,11 @@ import java.util.concurrent.TimeUnit;
  @since 30.08.2018 (21:29) */
 public class WatchDogNorah implements Runnable {
 
+
+    private long delayIsSec;
+
+    /*Constru*/
+
     /**
      {@link }
      */
@@ -32,21 +37,32 @@ public class WatchDogNorah implements Runnable {
 
     private static final List<String> RCPTS = new ArrayList<>();
 
-    /*Constru*/
+    public WatchDogNorah(boolean test, long delayInSec) {
+        this.test = test;
+        this.delayIsSec = delayInSec;
+    }
     public WatchDogNorah(boolean test) {
+        this.delayIsSec = ConstantsFor.DELAY_IN_SECONDS;
         this.test = test;
     }
 
     @Override
     public void run() {
-        schedulerGetDelay();
-        local.info(SOURCE_CLASS, "7", " end");
+        if(!test){
+            schedulerGetDelay();
+        }
+        else{
+            MessageToUser[] messagesToUser = {eSender, local};
+            for(MessageToUser m : messagesToUser){
+                m.info(SOURCE_CLASS, delayIsSec + " delay sec.", test + " test");
+            }
+        }
+
     }
 
-    /*Private metsods*/
     private void schedulerGetDelay() {
         ECheck.getI();
-        long delay = TimeUnit.SECONDS.toMillis(ConstantsFor.DELAY);
+        long delayMillis = delayIsSec = TimeUnit.SECONDS.toMillis(delayIsSec);
         Timer timer = new Timer("ParsingStart");
         Map<String, Integer> sendOrHow = ECheck.isShouldISend();
         int stopHours = sendOrHow.get("hrs");
@@ -57,13 +73,13 @@ public class WatchDogNorah implements Runnable {
         }
         Properties properties = getProperties();
         if(!properties.isEmpty()){
-            delay = ( long ) properties.get("delay");
+            delayMillis = ( long ) properties.get("delayMillis");
 
         }
         if(stopHours > 0){
             properties.put("send", b);
-            delay = TimeUnit.HOURS.toSeconds(stopHours);
-            properties.setProperty("delay", delay + "");
+
+            properties.setProperty("delayMillis", delayMillis + "");
             properties.setProperty("startstamp", System.currentTimeMillis() + "");
             setPropertiesToFile(properties);
 
@@ -74,10 +90,11 @@ public class WatchDogNorah implements Runnable {
                 timer.purge();
             }
             else{
-                local.info(SOURCE_CLASS, "9", delay + " delay");
+                local.info(SOURCE_CLASS, "9", delayMillis + " delayMillis");
             }
         }
     }
+    /*Private metsods*/
 
     private Properties getProperties() {
         File p = new File(SOURCE_CLASS + ".properties");
