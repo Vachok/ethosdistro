@@ -26,7 +26,7 @@ public class AppStarter {
 
     private static long initialDelay = ConstantsFor.INITIAL_DELAY;
 
-    private static long delay = ConstantsFor.DELAY;
+    private static long delay = ConstantsFor.DELAY_IN_SECONDS;
 
     private static boolean test = false;
 
@@ -77,57 +77,7 @@ public class AppStarter {
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
-
-    private static void argsReader(String[] args) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-                .ofPattern("yyyy-MMM-dd hh:mm");
-        String startTime = dateTimeFormatter.format(LocalDateTime.now());
-        String stringArgs = Arrays.toString(args)
-                .replaceAll(", ", ":");
-        logger.info(stringArgs);
-        args = stringArgs.split("-");
-        for(String argument : args){
-            try{
-                String key = argument.split(":")[0];
-                String value = argument.split(":")[1];
-                if(key.equalsIgnoreCase("d")){
-                    delay = Long.parseLong(value);
-                    continue;
-                }
-                else{
-                    delay = ConstantsFor.DELAY;
-                }
-                if(key.equalsIgnoreCase("i")){
-                    initialDelay = Long.parseLong(value);
-                    continue;
-                }
-                else{
-                    initialDelay = ConstantsFor.INITIAL_DELAY;
-                }
-                if(key.equalsIgnoreCase("t")){
-                    ConstantsFor.RCPT.add(ConstantsFor.MY_MAIL);
-                    test = true;
-                    continue;
-                }
-                else{
-                    test = false;
-                }
-                if(key.equalsIgnoreCase("e")){
-                    mailAdd(value);
-                }
-                else{
-                    MESSAGE_TO_USER.infoNoTitles(scheduleStart(test));
-                }
-            }
-            catch(Exception e){
-                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
-            }
-
-        }
-        MESSAGE_TO_USER.info(AppStarter.class.getName(), startTime, "Initializing " +
-                ParsingStart.class.getName() + " with " + delay +
-                " seconds delay..." + scheduleStart(test));
-    }
+//unstat
 
     /**
      <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
@@ -163,5 +113,56 @@ public class AppStarter {
             logger.info(format);
         }
     }
-//unstat
+
+    /*Private metsods*/
+    private static void argsReader(String[] args) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+                .ofPattern("yyyy-MMM-dd hh:mm");
+        String startTime = dateTimeFormatter.format(LocalDateTime.now());
+        String stringArgs = Arrays.toString(args)
+                .replaceAll(", ", ":");
+        logger.info(stringArgs);
+        args = stringArgs.split("-");
+        for(String argument : args){
+            try{
+                String key = argument.split(":")[0];
+                String value = argument.split(":")[1];
+                if(key.equalsIgnoreCase("d")){
+                    delay = Long.parseLong(value);
+                    continue;
+                }
+                else{
+                    delay = ConstantsFor.DELAY_IN_SECONDS;
+                }
+                if(key.equalsIgnoreCase("i")){
+                    initialDelay = Long.parseLong(value);
+                    continue;
+                }
+                else{
+                    initialDelay = ConstantsFor.INITIAL_DELAY;
+                }
+                if(key.equalsIgnoreCase("t")){
+                    ConstantsFor.RCPT.add(ConstantsFor.MY_MAIL);
+                    test = true;
+                    continue;
+                }
+                else{
+                    test = false;
+                }
+                if(key.equalsIgnoreCase("e")){
+                    mailAdd(value);
+                }
+                else{
+                    MESSAGE_TO_USER.infoNoTitles(scheduleStart(test));
+                }
+            }
+            catch(Exception e){
+                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+            }
+
+        }
+        MESSAGE_TO_USER.info(AppStarter.class.getName(), startTime, "Initializing " +
+                ParsingStart.class.getName() + " with " + delay +
+                " seconds delay..." + scheduleStart(test));
+    }
 }
