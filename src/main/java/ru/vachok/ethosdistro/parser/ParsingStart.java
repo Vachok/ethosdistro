@@ -55,7 +55,16 @@ public class ParsingStart implements Runnable {
     private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
 
-    /*Constru*/
+    private URL getUrlFromStr() {
+        URL url = null;
+        try{
+            url = new URL(urlAsString);
+        }
+        catch(MalformedURLException e){
+            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+        }
+        return url;
+    }
     public ParsingStart(boolean test) {
         this.test = test;
         this.urlAsString = ConstantsFor.URL_AS_STRING;
@@ -70,28 +79,18 @@ public class ParsingStart implements Runnable {
         sendRes(this.test);
     }
 
-    private URL getUrlFromStr() {
-        URL url = null;
-        try{
-            url = new URL(urlAsString);
-        }
-        catch(MalformedURLException e){
-            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
-        }
-        return url;
-    }
-
+    /*Constru*/
     /*Private metsods*/
     private void sendRes(boolean callTest) {
-        ConstantsFor.RCPT.clear();
-        ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+        String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
+                .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = returnString.equalsIgnoreCase("false");
+            call = !returnString.equalsIgnoreCase("false");
         }
         else{
-            call = !returnString.equalsIgnoreCase("false");
+            call = returnString.equalsIgnoreCase("false");
         }
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
@@ -102,21 +101,19 @@ public class ParsingStart implements Runnable {
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
                     " last modified: " + new Date(file.lastModified());
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
-            TO_USER_DATABASE.info(SOURCE_CLASS,
-                    "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
-                            .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
-                    freeSpaceOnDisk + "\n" + statisticsProb);
+            TO_USER_DATABASE.info(SOURCE_CLASS, upTime, freeSpaceOnDisk + "\n" + statisticsProb);
             fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
         }
         else{
             String[] split = returnString.split("~~");
             String subjectIP = split[0];
             String bodyJSON = split[1];
-            emailS.errorAlert(subjectIP, "Mine~ALARM", new TForms().replaceChars(bodyJSON, ",", "\n") +
+            new TForms().fromArray(ConstantsFor.RCPT);
+            emailS.errorAlert(subjectIP, "Mine~ALARM",
+                    new TForms().replaceChars(bodyJSON, ",", "\n") +
                     "   | NO MINING! " + urlAsString);
-            fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
+            TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining", returnString +
                     "   | NO MINING! " + urlAsString);
-
         }
     }
 

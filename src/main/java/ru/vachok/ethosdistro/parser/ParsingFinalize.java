@@ -40,6 +40,7 @@ public class ParsingFinalize implements Callable<String> {
         return jsonAsList();
     }
 
+    /*Private metsods*/
     private String jsonAsList() {
         JSONObject parse;
         File jsonFile = new File("answer.json");
@@ -59,7 +60,7 @@ public class ParsingFinalize implements Callable<String> {
                 }
             }
             catch(IOException | ParseException e){
-                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
             }
         }
 
@@ -68,6 +69,7 @@ public class ParsingFinalize implements Callable<String> {
 
     private String checkCond(JSONObject parse, Object rigs) throws ParseException {
         List<Object> coList = new ArrayList<>();
+        boolean itOk;
         for(String s : ConstantsFor.DEVICES){
             Object o = (( JSONObject ) rigs).get(s);
             String s1 = JSONObject
@@ -78,21 +80,22 @@ public class ParsingFinalize implements Callable<String> {
             Object condition = parse.get("condition");
             Object ip = parse.get("ip");
             if(condition.toString().equalsIgnoreCase("mining")){
-                coList.add(condition);
-                return condition + "~~" + parse.toJSONString();
+                coList.add(ip + " ~~ " + condition);
             }
             else{
                 messageToUser.info(SOURCE_CLASS, "NO MINING IN", parse.toJSONString());
-                return ip.toString() + "~~" + parse.toJSONString();
+                return ip + "~~" + parse.toJSONString();
             }
         }
-        if(coList.size()==3){
-            messageToUser.info(LocalDateTime.now().toString(), "condition = ", coList.toString() + "");
-            return LocalDateTime.now().toString() + "\ncondition = " + "\n" + new TForms().toStringFromArray(coList);
+        itOk = coList.size()==3;
+        if(itOk){
+            messageToUser.info(LocalDateTime.now()
+                    .toString(), "condition = ", coList.toString());
+            return falseString;
         }
         else{
-            messageToUser.errorAlert(System.currentTimeMillis() + " time", "\ncondition = ",
-                    new TForms().toStringFromArray(coList));
+            messageToUser.errorAlert(System
+                    .currentTimeMillis() + " time", "\ncondition = ", parse.toJSONString());
             return falseString;
         }
     }

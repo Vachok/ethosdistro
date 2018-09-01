@@ -70,10 +70,11 @@ public class AppStarter {
             MESSAGE_TO_USER
                     .info(SOURCE_CLASS,
                             "Arguments",
-                            "Starting at: " + new Date() + "\n" + new TForms().toStringFromArray(args));
+                            "Starting at: " + new Date() + "\n" + new TForms().fromArray(args));
             argsReader(args);
         }
         else{
+            ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
@@ -120,7 +121,7 @@ public class AppStarter {
                 }
             }
             catch(Exception e){
-                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
             }
 
         }

@@ -82,7 +82,7 @@ public enum ConstantsFor {
             return pc;
         }
         catch(UnknownHostException e){
-            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
+            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
             return "NO NAME";
         }
 

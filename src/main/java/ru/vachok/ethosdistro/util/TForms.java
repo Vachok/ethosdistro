@@ -19,7 +19,7 @@ public class TForms {
      @param stringsArray простой массив строк
      @return строки для вывода
      */
-    public String toStringFromArray(String[] stringsArray) {
+    public String fromArray(String[] stringsArray) {
         for(String s : stringsArray){
             stringBuilder.append(s).append("\n").trimToSize();
         }
@@ -30,7 +30,7 @@ public class TForms {
      @param stackTrace стэк ошибок
      @return строки для вывода
      */
-    public String toStringFromArray(StackTraceElement[] stackTrace) {
+    public String fromArray(StackTraceElement[] stackTrace) {
         for(StackTraceElement stackTraceElement : stackTrace){
             String sTrE = stackTraceElement.toString();
             if(sTrE.toLowerCase().contains("ru.")){
@@ -41,14 +41,21 @@ public class TForms {
         return stringBuilder.toString();
     }
 
-    public String toStringFromArray(List<?> coList) {
+    public String collist(List<?> coList) {
         for(Object o : coList){
             stringBuilder.append(o.toString()).append("\n");
         }
-        return stringBuilder.toString();
+        return "~~" + stringBuilder.toString();
     }
 
     public String replaceChars(String stringToRepl, String replaceThis, String replacement) {
         return stringToRepl.replaceAll(replaceThis, replacement);
+    }
+
+    public String fromArray(List<String> stringList) {
+        for(String s : stringList){
+            stringBuilder.append(s).append("\n");
+        }
+        return stringBuilder.toString();
     }
 }
