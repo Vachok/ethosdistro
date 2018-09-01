@@ -3,7 +3,6 @@ package ru.vachok.ethosdistro.util;
 
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.email.ECheck;
-import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
@@ -59,7 +58,7 @@ public class WatchDogNorah implements Runnable {
         Properties properties = getProperties();
         if(!properties.isEmpty()){
             delay = ( long ) properties.get("delay");
-            timer.scheduleAtFixedRate(new ParsingStart(test), new Date(), TimeUnit.HOURS.toMillis(delay));
+
         }
         if(stopHours > 0){
             properties.put("send", b);
@@ -67,7 +66,7 @@ public class WatchDogNorah implements Runnable {
             properties.setProperty("delay", delay + "");
             properties.setProperty("startstamp", System.currentTimeMillis() + "");
             setPropertiesToFile(properties);
-            timer.scheduleAtFixedRate(new ParsingStart(test), new Date(), TimeUnit.HOURS.toMillis(delay));
+
         }
         else{
             if(stopHours < 0 || !b){
@@ -75,8 +74,6 @@ public class WatchDogNorah implements Runnable {
                 timer.purge();
             }
             else{
-                timer.scheduleAtFixedRate(new ParsingStart(test), new Date(),
-                        TimeUnit.SECONDS.toMillis(ConstantsFor.DELAY));
                 local.info(SOURCE_CLASS, "9", delay + " delay");
             }
         }

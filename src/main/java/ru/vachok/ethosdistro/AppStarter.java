@@ -79,6 +79,7 @@ public class AppStarter {
         }
     }
 
+    /*Private metsods*/
     /**
      <b>Парсер параметров запуска</b>
      1. {@link #mailAdd(String)}
@@ -89,7 +90,7 @@ public class AppStarter {
     private static void argsReader(String[] args) {
         ECheck.getI();
         String stringArgs = Arrays.toString(args)
-                .replaceAll(ConstantsFor.AR_SEMI_PATTERN.pattern(), ":");
+                .replaceAll(", ", ":");
 
         args = stringArgs.split("-");
         for(String argument : args){
