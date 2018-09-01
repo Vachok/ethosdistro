@@ -91,7 +91,6 @@ public class ParsingFinalize implements Callable<String> {
             return LocalDateTime.now().toString() + "\ncondition = " + "\n" + new TForms().toStringFromArray(coList);
         }
         else{
-            ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
             messageToUser.errorAlert(System.currentTimeMillis() + " time", "\ncondition = ",
                     new TForms().toStringFromArray(coList));
             return falseString;

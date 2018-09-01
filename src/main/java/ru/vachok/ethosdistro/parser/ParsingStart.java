@@ -67,8 +67,6 @@ public class ParsingStart implements Runnable {
         this.parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
-        String s = new TForms().toStringFromArray(ConstantsFor.RCPT);
-        TO_USER_DATABASE.info(SOURCE_CLASS, "email recep", s);
         sendRes(this.test);
     }
 
@@ -83,7 +81,10 @@ public class ParsingStart implements Runnable {
         return url;
     }
 
+    /*Private metsods*/
     private void sendRes(boolean callTest) {
+        ConstantsFor.RCPT.clear();
+        ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
@@ -95,7 +96,8 @@ public class ParsingStart implements Runnable {
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
         MessageToUser log = new FileLogger();
-        log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = ", ConstantsFor.RCPT.size() + "");
+        log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() ", ConstantsFor.RCPT.size() + " address");
+        TO_USER_DATABASE.infoNoTitles(ConstantsFor.RCPT.toString());
         if(call){
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
                     " last modified: " + new Date(file.lastModified());
@@ -114,6 +116,7 @@ public class ParsingStart implements Runnable {
                     "   | NO MINING! " + urlAsString);
             fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
                     "   | NO MINING! " + urlAsString);
+
         }
     }
 
