@@ -23,3 +23,7 @@ gen
 *.prn
 build/
 src/test/resources/
+DBLogger.l*
+MessagesFromServer.properties
+checker.obj
+src/test/java/
