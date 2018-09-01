@@ -1,7 +1,6 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
@@ -23,7 +22,9 @@ import java.util.logging.Logger;
  @since 23.08.2018 (16:48) */
 public class ParsingStart implements Runnable {
 
-   /**
+    private final MessageToUser fileLogger = new FileLogger();
+
+    /**
     Class Simple Name
     */
    private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
@@ -36,7 +37,7 @@ public class ParsingStart implements Runnable {
    /**
     * {@link DBLogger}
     */
-   private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
+   private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
    /**
     * URL, как строка
@@ -102,12 +103,12 @@ public class ParsingStart implements Runnable {
 
    @Override
    public void run() {
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "RUN", new Date().toString());
+       TO_USER_DATABASE.info(SOURCE_CLASS, "RUN", new Date().toString());
       this.parsers = new ParseToFile();
       URL url = getUrlFromStr();
       parsers.startParsing(url);
       String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "email recep", s);
+       TO_USER_DATABASE.info(SOURCE_CLASS, "email recep", s);
       sendRes(this.test);
    }
 
@@ -124,32 +125,35 @@ public class ParsingStart implements Runnable {
 
    private void sendRes(boolean callTest){
       Boolean call;
+       String returnString = new ParsingFinalize().call();
       if(callTest){
-         call = !new ParsingFinalize().call();
+          call = returnString.equalsIgnoreCase("false");
       }else{
-         call= new ParsingFinalize().call();
+          call = !returnString.equalsIgnoreCase("false");
       }
       File file = new File("answer.json");
       MessageToUser emailS = new ESender(ConstantsFor.RCPT);
       MessageToUser log = new FileLogger();
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "INFO", "ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size() + "\n" +
-            "Uptime = " + TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - AppStarter.getStartLong()) + " started at " + new Date(AppStarter.getStartLong()));
       log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
       if(call){
-         MESSAGE_TO_USER.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         log.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         Thread.currentThread().interrupt();
+          String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
+                  " last modified: " + new Date(file.lastModified());
+          String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
+          TO_USER_DATABASE.info(SOURCE_CLASS,
+                  "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
+                          .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
+                  freeSpaceOnDisk + "\n" + statisticsProb);
+          fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
+          Thread.currentThread().interrupt();
       }
       else {
-         emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         Thread.currentThread().interrupt();
+          String subjectIP = returnString.split("~~")[0];
+          String bodyJSON = returnString.split("~~")[1];
+          emailS.errorAlert(subjectIP, "Mine~ALARM", bodyJSON +
+                  "   | NO MINING! " + urlAsString);
+          fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
+                  "   | NO MINING! " + urlAsString);
+          Thread.currentThread().interrupt();
       }
    }
 
