@@ -58,7 +58,7 @@ public class ParseToFile implements Parsers {
       }
       catch(IOException e){
          LOGGER.throwing(SOURCE_CLASS, "getJSON", e);
-         MESSAGE_TO_USER.info(SOURCE_CLASS, "IOException", new TForms().toStringFromArray(e.getStackTrace()));
+         MESSAGE_TO_USER.info(SOURCE_CLASS, "IOException", new TForms().fromArray(e.getStackTrace()));
          return e.getMessage();
       }
    }
