@@ -1,16 +1,15 @@
 package ru.vachok.ethosdistro.util;
 
 
+import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.mysqlandprops.DataConnectTo;
 import ru.vachok.mysqlandprops.RegRuMysql;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 
@@ -36,8 +35,14 @@ public class DBLogger implements MessageToUser {
         this.dbName = dbName;
     }
 
+    /**
+     По-умолчанию имя таблицы ={@code ru_vachok_ethosdistro}
+     */
     public DBLogger() {
-
+        final String pcName = ConstantsFor.PC_NAME;
+        if(pcName.equalsIgnoreCase("home")){
+            dbName = "ru_vachok_ethosdistro_tests";
+        }
     }
 
     @Override
@@ -50,7 +55,12 @@ public class DBLogger implements MessageToUser {
         this.className = s;
         this.mistype = s1;
         this.logString = s2;
-        sendLogs();
+        try{
+            sendLogs();
+        }
+        catch(Exception ignore){
+            //
+        }
     }
 
     @Override
@@ -58,8 +68,12 @@ public class DBLogger implements MessageToUser {
         this.mistype = "INFO no titles";
         this.className = SOURCE_CLASS;
         this.logString = s;
-
-        sendLogs();
+        try{
+            sendLogs();
+        }
+        catch(Exception ignore){
+            //
+        }
     }
 
     @Override
@@ -74,15 +88,13 @@ public class DBLogger implements MessageToUser {
 
     private void sendLogs() {
         String format = MessageFormat
-                .format("Sending to database (ru_vachok_ethosdistro) : {0} | {1} | {2}", className, mistype, logString);
+                .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
         Logger logger = Logger.getLogger(SOURCE_CLASS);
-
         logger.warning(format);
         String sql = String.format("insert into %s (classname, msgtype, msgvalue) values (?,?,?)", dbName);
         DataConnectTo dataConnectTo = new RegRuMysql();
         try(Connection connection = dataConnectTo.getDefaultConnection("u0466446_webapp");
             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-            logger.addHandler(new FileHandler(SOURCE_CLASS + ".log"));
             preparedStatement.setString(1, className);
             preparedStatement.setString(2, mistype);
 
@@ -90,9 +102,8 @@ public class DBLogger implements MessageToUser {
             preparedStatement.executeUpdate();
             logger.info("Send to DB is " + true);
         }
-        catch(SQLException | IOException ignore){
+        catch(SQLException ignore){
             //
         }
     }
-    /*Private metsods*/
 }

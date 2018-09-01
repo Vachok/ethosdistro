@@ -12,7 +12,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -21,7 +20,24 @@ import java.util.logging.Logger;
  <h1>Запуск парсера</h1>
 
  @since 23.08.2018 (16:48) */
-public class ParsingStart extends TimerTask {
+public class ParsingStart implements Runnable {
+
+    /**
+     {@link Parsers}
+     */
+    private Parsers parsers;
+
+    /**
+     Параметр {@code -t on}
+     */
+    private final boolean test;
+
+    private final MessageToUser fileLogger = new FileLogger();
+
+    /**
+     URL, как строка
+     */
+    private final String urlAsString;
 
     /**
      Class Simple Name
@@ -38,69 +54,21 @@ public class ParsingStart extends TimerTask {
      */
     private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
-    /**
-     URL, как строка
-     */
-    private final String urlAsString;
-
-    /**
-     {@link Parsers}
-     */
-    private Parsers parsers;
-
-    /**
-     Параметр {@code -t on}
-     */
-    private final boolean test;
 
     /*Constru*/
-
-    /**
-     Конструктор
-
-     @param parsers     чем парсим {@link Parsers}
-     @param urlAsString url как строка
-     */
-    public ParsingStart(Parsers parsers, String urlAsString) {
-        this.parsers = parsers;
-        this.urlAsString = urlAsString;
-        test = false;
-    }
-
-    /**
-     Конструктор
-
-     @param urlAsString    url как строка
-     @param test test - запуск с <i>обратным !</i> условием.
-     */
-    public ParsingStart(String urlAsString, boolean test) {
-        this.urlAsString = urlAsString;
-        this.test = test;
-    }
-
     public ParsingStart(boolean test) {
-        this.urlAsString = ConstantsFor.URL_AS_STRING;
         this.test = test;
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
     }
 
-    /**
-     <b>Старт парсинга</b>
-     <p>
-     1. Создание инстанции {@link ParseToFile} <br>
-     2. Создание answer.json {@link Parsers#startParsing(URL)} <br>
-     3. Вывод сообщения через {@link #TO_USER_DATABASE} - {@link ConstantsFor#RCPT} <br>
-     4. {@link #sendRes(boolean)} <br>
-
-     @see TForms
-     */
     @Override
     public void run() {
+        TO_USER_DATABASE.info(SOURCE_CLASS, "RUN", new Date().toString());
         this.parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
         String s = new TForms().toStringFromArray(ConstantsFor.RCPT);
-        TO_USER_DATABASE.info(SOURCE_CLASS, "email RCPTs", s);
-        LOGGER.info(SOURCE_CLASS + " sendRes start = " + true);
+        TO_USER_DATABASE.info(SOURCE_CLASS, "email recep", s);
         sendRes(this.test);
     }
 
@@ -110,42 +78,24 @@ public class ParsingStart extends TimerTask {
             url = new URL(urlAsString);
         }
         catch(MalformedURLException e){
-            LOGGER.throwing(SOURCE_CLASS, "getSite", e);
+            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().toStringFromArray(e.getStackTrace()));
         }
         return url;
     }
 
-    /*Private metsods*/
-    /**
-     <b>Отправить уведомление</b>
-     <p>
-     Если {@link #test} правда. Проверить {@link ParsingFinalize#call()} и инвертировать его выдачу. <i>(ложь-на-правда; правда-на-ложь)</i><br>
-     Если нет - продолжить с уловием {@link ParsingFinalize#call()}.
-     <p>
-     {@code MessageToUser emailS = new ESender(ConstantsFor.RCPT);} - опреденение способа отправки e-mail сообщения.<br>
-     Если условия удовлетворяют ({@link ParsingFinalize#call()} = <b>true</b>, записать через {@link MessageToUser} 2 лога: в базу (<i>server202.reg</i>) и файл (<i>log.log</i>) <br>
-     Если нет - отравить уведомнение списку {@link ConstantsFor#RCPT}
-
-     @param callTest {@link #test}
-     @see ParsingFinalize
-     @see TForms
-     */
     private void sendRes(boolean callTest) {
         Boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
-            call = returnString.toLowerCase().contains("false");
+            call = returnString.equalsIgnoreCase("false");
         }
         else{
-            call = !returnString.contains("false");
+            call = !returnString.equalsIgnoreCase("false");
         }
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
-        MessageToUser fileLogger = new FileLogger();
-        fileLogger.info(SOURCE_CLASS, "ConstantsFor.RCPT",
-                "Mailing list (" +
-                        ConstantsFor.RCPT.size() + "):\n" +
-                        new TForms().toStringFromArray(ConstantsFor.RCPT));
+        MessageToUser log = new FileLogger();
+        log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = ", ConstantsFor.RCPT.size() + "");
         if(call){
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
                     " last modified: " + new Date(file.lastModified());
@@ -155,18 +105,16 @@ public class ParsingStart extends TimerTask {
                             .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)",
                     freeSpaceOnDisk + "\n" + statisticsProb);
             fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
-            Thread.currentThread().interrupt();
         }
         else{
-            String subjectIP = returnString.split("~~")[0];
-            String bodyJSON = returnString.split("~~")[1];
-            emailS.errorAlert(subjectIP, "Mine~ALARM", bodyJSON +
+            String[] split = returnString.split("~~");
+            String subjectIP = split[0];
+            String bodyJSON = split[1];
+            emailS.errorAlert(subjectIP, "Mine~ALARM", new TForms().replaceChars(bodyJSON, ",", "\n") +
                     "   | NO MINING! " + urlAsString);
             fileLogger.errorAlert("ALARM!", "Condition not mining", returnString +
                     "   | NO MINING! " + urlAsString);
-            Thread.currentThread().interrupt();
         }
-
     }
-}
 
+}

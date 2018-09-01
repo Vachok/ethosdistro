@@ -4,7 +4,6 @@
 
 # IntelliJ project files
 .idea
-*.iml
 out
 gen
 /.gradle/
@@ -23,6 +22,8 @@ gen
 *.log
 *.prn
 build/
-/MessagesFromServer.properties
-/checker.obj
-/src/test/
+src/test/resources/
+DBLogger.l*
+MessagesFromServer.properties
+checker.obj
+src/test/java/
