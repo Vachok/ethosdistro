@@ -58,4 +58,11 @@ public class TForms {
         }
         return stringBuilder.toString();
     }
+
+    public String toStringFromArray(StackTraceElement[] stackTrace) {
+        for(StackTraceElement e : stackTrace){
+            stringBuilder.append(e.toString()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }

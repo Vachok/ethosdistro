@@ -2,7 +2,6 @@ package ru.vachok.email;
 
 
 import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.ethosdistro.email.Cleaner;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 import ru.vachok.mysqlandprops.props.DBRegProperties;
@@ -14,8 +13,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static java.util.logging.Level.INFO;
 
 
 public class MessagesFromServer implements Callable<Message[]> {
@@ -76,7 +73,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         try{
             inBox = Objects.requireNonNull(store).getFolder("Inbox");
             inBox.open(Folder.READ_WRITE);
-            Logger.getLogger(Cleaner.class.getSimpleName()).log(INFO, inBox.getMessageCount() + " inbox size");
+
             return inBox;
         }
         catch(MessagingException e){

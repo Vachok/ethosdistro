@@ -11,10 +11,7 @@ import javax.mail.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
@@ -75,7 +72,6 @@ public class MessagesFromServer implements Callable<Message[]> {
         try{
             inBox = Objects.requireNonNull(store).getFolder("Inbox");
             inBox.open(Folder.READ_WRITE);
-            Logger.getLogger(ru.vachok.ethosdistro.email.Cleaner.class.getSimpleName()).log(INFO, inBox.getMessageCount() + " inbox size");
             return inBox;
         }
         catch(MessagingException e){
@@ -100,6 +96,7 @@ public class MessagesFromServer implements Callable<Message[]> {
         initProperties.setProps(sessionProps);
     }
 
+    /*END FOR CLASS*/
     public static class Cleaner extends MessagesFromServer {
 
         /**
@@ -146,7 +143,7 @@ public class MessagesFromServer implements Callable<Message[]> {
                 }
                 else{ if(new File(fileName).exists() && new File(fileName).length() > 10) message.setFlag(Flags.Flag.DELETED, true); }
             }
-            Logger.getLogger(ru.vachok.ethosdistro.email.Cleaner.class.getSimpleName()).log(INFO, inbox.getMessageCount() + " inbox size");
+
             inbox.close(true);
             return mailMes;
         }
