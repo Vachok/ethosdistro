@@ -7,7 +7,6 @@ import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -102,18 +101,6 @@ public class AppStarter {
         return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
     }
 
-    private static void mailAdd(String value) {
-        ConstantsFor.RCPT.clear();
-        String[] values = value.split(",");
-        for(String mailAddr : values){
-            ConstantsFor.RCPT.add(mailAddr
-                    .replaceAll("\\Q]\\E", ""));
-            String s = ConstantsFor.RCPT.toString();
-            String format = MessageFormat
-                    .format("emails: {0}", s);
-            logger.info(format);
-        }
-    }
 
     /*Private metsods*/
     private static void argsReader(String[] args) {
@@ -130,10 +117,6 @@ public class AppStarter {
                 String value = argument.split(":")[1];
                 if(key.equalsIgnoreCase("d")){
                     delay = Long.parseLong(value);
-                    continue;
-                }
-                else{
-                    delay = ConstantsFor.DELAY_IN_SECONDS;
                 }
                 if(key.equalsIgnoreCase("i")){
                     initialDelay = Long.parseLong(value);
@@ -151,7 +134,7 @@ public class AppStarter {
                     test = false;
                 }
                 if(key.equalsIgnoreCase("e")){
-                    mailAdd(value);
+                    ConstantsFor.RCPT.add(value);
                 }
                 else{
                     MESSAGE_TO_USER.infoNoTitles(scheduleStart(test));

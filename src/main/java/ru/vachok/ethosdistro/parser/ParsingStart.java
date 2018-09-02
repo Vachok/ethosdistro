@@ -84,7 +84,7 @@ public class ParsingStart implements Runnable {
     private void sendRes(boolean callTest) {
         String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
                 .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
-        Boolean call;
+        boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
             call = !returnString.equalsIgnoreCase("false");
@@ -108,6 +108,9 @@ public class ParsingStart implements Runnable {
             String[] split = returnString.split("~~");
             String subjectIP = split[0];
             String bodyJSON = split[1];
+            if(ConstantsFor.RCPT.isEmpty()){
+                ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+            }
             new TForms().fromArray(ConstantsFor.RCPT);
             emailS.errorAlert(subjectIP, "Mine~ALARM",
                     new TForms().replaceChars(bodyJSON, ",", "\n") +
