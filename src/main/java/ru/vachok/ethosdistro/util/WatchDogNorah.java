@@ -3,8 +3,9 @@ package ru.vachok.ethosdistro.util;
 
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.email.ECheck;
-import ru.vachok.messenger.MessageCons;
+import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.MessagesNull;
 import ru.vachok.messenger.email.ESender;
 
 import java.io.*;
@@ -19,14 +20,14 @@ public class WatchDogNorah implements Runnable {
 
     private long delayIsSec;
 
-    /*Constru*/
+    private final MessageToUser local = new MessagesNull();
 
     /**
      {@link }
      */
     private final MessageToUser eSender = new ESender(RCPTS);
 
-    private final MessageToUser local = new MessageCons();
+    /*Constru*/
 
     private final boolean test;
 
@@ -42,55 +43,36 @@ public class WatchDogNorah implements Runnable {
         this.delayIsSec = delayInSec;
     }
     public WatchDogNorah(boolean test) {
-        this.delayIsSec = ConstantsFor.DELAY_IN_SECONDS;
         this.test = test;
     }
-
     @Override
     public void run() {
-        if(!test){
-            schedulerGetDelay();
-        }
-        else{
-            MessageToUser[] messagesToUser = {eSender, local};
-            for(MessageToUser m : messagesToUser){
-                m.info(SOURCE_CLASS, delayIsSec + " delay sec.", test + " test");
-            }
-        }
-
+        schedulerGetDelay();
     }
 
     private void schedulerGetDelay() {
         ECheck.getI();
-        long delayMillis = delayIsSec = TimeUnit.SECONDS.toMillis(delayIsSec);
+        int stopHours = ECheck.getStopHours();
         Timer timer = new Timer("ParsingStart");
-        Map<String, Integer> sendOrHow = ECheck.isShouldISend();
-        int stopHours = sendOrHow.get("hrs");
-        Integer s = sendOrHow.get("boolean");
-        boolean b = true;
-        if(s==0){
-            b = false;
-        }
-        Properties properties = getProperties();
-        if(!properties.isEmpty()){
-            delayMillis = ( long ) properties.get("delayMillis");
-
-        }
-        if(stopHours > 0){
-            properties.put("send", b);
-
-            properties.setProperty("delayMillis", delayMillis + "");
-            properties.setProperty("startstamp", System.currentTimeMillis() + "");
-            setPropertiesToFile(properties);
-
+        boolean launchOrFalse = ECheck.getShould();
+        if(launchOrFalse){
+            timer.cancel();
+            timer.schedule(
+                    new ParsingStart(test),
+                    new Date(),
+                    TimeUnit.HOURS.toMillis(stopHours));
         }
         else{
-            if(stopHours < 0 || !b){
+            if(stopHours==0){
+                System.out.println("launchOrFalse = " + launchOrFalse + "\n" + 0 + " stophours");
                 timer.cancel();
                 timer.purge();
             }
             else{
-                local.info(SOURCE_CLASS, "9", delayMillis + " delayMillis");
+                timer.schedule(
+                        new ParsingStart(test),
+                        new Date(),
+                        TimeUnit.SECONDS.toMillis(ConstantsFor.DELAY_IN_SECONDS - 50));
             }
         }
     }

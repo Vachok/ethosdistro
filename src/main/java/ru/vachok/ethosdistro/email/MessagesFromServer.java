@@ -1,7 +1,9 @@
-package ru.vachok.email;
+package ru.vachok.ethosdistro.email;
 
 
 import ru.vachok.ethosdistro.ConstantsFor;
+import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 import ru.vachok.mysqlandprops.props.DBRegProperties;
@@ -9,10 +11,10 @@ import ru.vachok.mysqlandprops.props.FileProps;
 import ru.vachok.mysqlandprops.props.InitProperties;
 
 import javax.mail.*;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class MessagesFromServer implements Callable<Message[]> {
@@ -20,6 +22,8 @@ public class MessagesFromServer implements Callable<Message[]> {
     private static final String SOURCE_CLASS = MessagesFromServer.class.getSimpleName();
 
     private static final String S_N_N_S = "%s%n%n%s";
+
+    private static final MessageToUser messageToUser = new DBLogger();
 
     private boolean cleanMBox;
 
@@ -32,6 +36,10 @@ public class MessagesFromServer implements Callable<Message[]> {
     public MessagesFromServer() {
     }
 
+    /**
+     The action to be performed by this timer task.
+     */
+
     @Override
     public Message[] call() {
         Message[] messages = new Message[0];
@@ -42,11 +50,7 @@ public class MessagesFromServer implements Callable<Message[]> {
             messages = getInbox().getMessages();
         }
         catch(MessagingException e){
-
-            Logger.
-                    getLogger(SOURCE_CLASS)
-                    .log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays
-                            .toString(e.getStackTrace())));
+            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
         return messages;
     }
@@ -64,22 +68,24 @@ public class MessagesFromServer implements Callable<Message[]> {
         Store store = null;
         try{
             store = chkSess.getStore();
-            store.connect(mailProps.getProperty("host"), mailProps.getProperty("user"), mailProps.getProperty("password"));
+            store.connect(
+                    mailProps.getProperty("host"),
+                    mailProps.getProperty("user"),
+                    mailProps.getProperty("password"));
         }
         catch(MessagingException e){
-            Logger.getLogger(SOURCE_CLASS).log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays.toString(e.getStackTrace())));
+            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
-        Folder inBox = null;
-        try{
-            inBox = Objects.requireNonNull(store).getFolder("Inbox");
-            inBox.open(Folder.READ_WRITE);
 
+        try{
+            Folder inBox = Objects.requireNonNull(store).getFolder("Inbox");
+            inBox.open(Folder.READ_WRITE);
             return inBox;
         }
         catch(MessagingException e){
-            Logger.getLogger(SOURCE_CLASS).log(Level.WARNING, String.format(S_N_N_S, e.getMessage(), Arrays.toString(e.getStackTrace())));
+            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
-        throw new UnsupportedOperationException("Inbox not available :(");
+        throw new UnsupportedOperationException("Inbox not available or empty :(");
     }
 
     private static Properties getSessionProps() {

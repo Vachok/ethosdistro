@@ -3,8 +3,8 @@ package ru.vachok.ethosdistro;
 
 import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.DBLogger;
-import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
+import ru.vachok.ethosdistro.util.WatchDogNorah;
 import ru.vachok.messenger.MessageToUser;
 
 import java.time.LocalDateTime;
@@ -65,6 +65,7 @@ public class AppStarter {
      @see TForms
      */
     public static void main(String[] args) {
+
         if(args.length > 0){
             MESSAGE_TO_USER
                     .info(SOURCE_CLASS,
@@ -77,7 +78,6 @@ public class AppStarter {
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
-//unstat
 
     /**
      <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
@@ -91,15 +91,14 @@ public class AppStarter {
      @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
      */
     private static String scheduleStart(boolean test) {
-        MessageToUser messageToUser = new FileLogger();
         ScheduledExecutorService scheduledExecutorService =
                 Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
         Runnable parseRun = new ParsingStart(test);
-        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+        scheduledExecutorService.scheduleWithFixedDelay(new WatchDogNorah(test),
                 initialDelay, delay, TimeUnit.SECONDS);
-
         return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
     }
+//unstat
 
 
     /*Private metsods*/
