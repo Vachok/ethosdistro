@@ -58,7 +58,6 @@ public class AppStarter {
      <b>Старт.</b>
      <p>
      1. {@link #argsReader(String[])}
-     2. {@link #mailAdd(String)}
 
      @param args параметры запуска приложения
      @see ConstantsFor
@@ -78,29 +77,6 @@ public class AppStarter {
         }
     }
 //unstat
-
-    /**
-     <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
-     Параметры по-умолчанию:
-     <p>
-     delay - 60 sec
-     <p>
-     init - 2 sec
-
-     @param test обращает условие срабатывания в противоположное
-     @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
-     */
-    private static String scheduleStart(boolean test) {
-        MessageToUser messageToUser = new FileLogger();
-        ScheduledExecutorService scheduledExecutorService =
-                Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
-        Runnable parseRun = new ParsingStart(test);
-        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
-                initialDelay, delay, TimeUnit.SECONDS);
-
-        return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
-    }
-
 
     /*Private metsods*/
     private static void argsReader(String[] args) {
@@ -134,7 +110,9 @@ public class AppStarter {
                     test = false;
                 }
                 if(key.equalsIgnoreCase("e")){
-                    ConstantsFor.RCPT.add(value);
+                    ConstantsFor.RCPT.add(value
+                            .replaceAll("\\Q[\\E", "").replaceAll("\\Q]\\E", ""));
+
                 }
                 else{
                     MESSAGE_TO_USER.infoNoTitles(scheduleStart(test));
@@ -148,5 +126,27 @@ public class AppStarter {
         MESSAGE_TO_USER.info(AppStarter.class.getName(), startTime, "Initializing " +
                 ParsingStart.class.getName() + " with " + delay +
                 " seconds delay..." + scheduleStart(test));
+    }
+
+    /**
+     <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
+     Параметры по-умолчанию:
+     <p>
+     delay - 70 sec
+     <p>
+     init - 2 sec
+
+     @param test обращает условие срабатывания в противоположное
+     @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
+     */
+    private static String scheduleStart(boolean test) {
+        MessageToUser messageToUser = new FileLogger();
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
+        Runnable parseRun = new ParsingStart(test);
+        scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+                initialDelay, delay, TimeUnit.SECONDS);
+
+        return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
     }
 }
