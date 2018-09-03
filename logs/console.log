@@ -1,25 +1,14 @@
-авг. 31, 2018 5:30:29 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | Arguments | Starting at: Fri Aug 31 17:30:29 GMT+03:00 2018
-[-t
-on]
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+сент. 03, 2018 5:25:20 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = AppStarter
+Argument - none
+Mon Sep 03 17:25:20 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is false
+сент. 03, 2018 5:25:21 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | 3 | java.io.FileInputStream@534df152
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | true should i send 3.5  | 0 stop hours
-30 delay
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-авг. 31, 2018 5:30:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | 1. Starting | with args
-авг. 31, 2018 5:30:31 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-авг. 31, 2018 5:30:31 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : DBLogger | INFO no titles | 1.AppStarter - 
-ARGS: [[
-t:on]]
-авг. 31, 2018 5:30:31 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+сент. 03, 2018 5:27:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ParsingStart
+RUN
+Mon Sep 03 17:27:30 GMT+03:00 2018
+сент. 03, 2018 5:27:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true

@@ -65,7 +65,10 @@ public enum ConstantsFor {
 
     public static final String URL_AS_STRING = "http://hous01.ethosdistro.com/?json=yes";
 
-    public static BiConsumer<String, String> sendMailAndDB = (x, y) -> {
+    /**
+     <b>Оправить сообщение одновременно в почту и базу</b>
+     */
+    public static final BiConsumer<String, String> SEND_MAIL_AND_DB = (x, y) -> {
         List<String> rcpt = new ArrayList<>();
         rcpt.add(ConstantsFor.MY_MAIL);
         MessageToUser[] messagesToUser = {new ESender(rcpt), new DBLogger("ru_vachok_ethosdistro_tests")};
@@ -74,15 +77,20 @@ public enum ConstantsFor {
         }
     };
 
+    /**
+     <b>Узнать имя локального ПК</b>
+     */
     public static final String PC_NAME = getPCName();
 
+    /**
+     @return {@link #PC_NAME}
+     */
     private static String getPCName() {
         try{
-            String pc = InetAddress.getLocalHost().getHostName();
-            return pc;
+            return InetAddress.getLocalHost().getHostName();
         }
         catch(UnknownHostException e){
-            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+            ConstantsFor.SEND_MAIL_AND_DB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
             return "NO NAME";
         }
 

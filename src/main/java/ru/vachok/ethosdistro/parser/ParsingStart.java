@@ -62,7 +62,7 @@ public class ParsingStart extends TimerTask implements Runnable {
             url = new URL(urlAsString);
         }
         catch(MalformedURLException e){
-            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+            ConstantsFor.SEND_MAIL_AND_DB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
         return url;
     }

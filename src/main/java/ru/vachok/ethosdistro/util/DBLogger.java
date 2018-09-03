@@ -1,6 +1,7 @@
 package ru.vachok.ethosdistro.util;
 
 
+import com.mysql.jdbc.CommunicationsException;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.mysqlandprops.DataConnectTo;
@@ -40,7 +41,7 @@ public class DBLogger implements MessageToUser {
      */
     public DBLogger() {
         final String pcName = ConstantsFor.PC_NAME;
-        if(pcName.equalsIgnoreCase("home")){
+        if(pcName.equalsIgnoreCase("home") || pcName.toLowerCase().contains("no0027")){
             dbName = "ru_vachok_ethosdistro_tests";
         }
     }
@@ -58,7 +59,7 @@ public class DBLogger implements MessageToUser {
         try{
             sendLogs();
         }
-        catch(Exception ignore){
+        catch(CommunicationsException ignore){
             //
         }
     }
@@ -71,7 +72,7 @@ public class DBLogger implements MessageToUser {
         try{
             sendLogs();
         }
-        catch(Exception ignore){
+        catch(CommunicationsException ignore){
             //
         }
     }

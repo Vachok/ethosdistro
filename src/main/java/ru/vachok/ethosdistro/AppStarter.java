@@ -58,14 +58,12 @@ public class AppStarter {
      <b>Старт.</b>
      <p>
      1. {@link #argsReader(String[])}
-     2. {@link #mailAdd(String)}
 
      @param args параметры запуска приложения
      @see ConstantsFor
      @see TForms
      */
     public static void main(String[] args) {
-
         if(args.length > 0){
             MESSAGE_TO_USER
                     .info(SOURCE_CLASS,
@@ -78,28 +76,6 @@ public class AppStarter {
             MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
         }
     }
-
-    /**
-     <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
-     Параметры по-умолчанию:
-     <p>
-     delay - 60 sec
-     <p>
-     init - 2 sec
-
-     @param test обращает условие срабатывания в противоположное
-     @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
-     */
-    private static String scheduleStart(boolean test) {
-        ScheduledExecutorService scheduledExecutorService =
-                Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
-        Runnable parseRun = new ParsingStart(test);
-        scheduledExecutorService.scheduleWithFixedDelay(new WatchDogNorah(test),
-                initialDelay, delay, TimeUnit.SECONDS);
-        return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
-    }
-//unstat
-
 
     /*Private metsods*/
     private static void argsReader(String[] args) {
@@ -140,12 +116,40 @@ public class AppStarter {
                 }
             }
             catch(Exception e){
-                ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+                ConstantsFor.SEND_MAIL_AND_DB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
             }
 
         }
         MESSAGE_TO_USER.info(AppStarter.class.getName(), startTime, "Initializing " +
                 ParsingStart.class.getName() + " with " + delay +
                 " seconds delay..." + scheduleStart(test));
+    }
+//unstat
+
+    /**
+     <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
+     Параметры по-умолчанию:
+     <p>
+     delay - 60 sec
+     <p>
+     init - 2 sec
+
+     @param test обращает условие срабатывания в противоположное
+     @return {@code "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/?json=yes Test is "+test;) }
+     */
+    private static String scheduleStart(boolean test) {
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
+        /*= new ParsingStart(test);*/
+        try{
+            Runnable parseRun = new WatchDogNorah(test);
+            scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+                    initialDelay, delay, TimeUnit.SECONDS);
+
+        }
+        catch(Exception e){
+            logger.warning(e.getMessage());
+        }
+        return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
     }
 }

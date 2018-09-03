@@ -4,12 +4,13 @@ package ru.vachok.ethosdistro.util;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.email.ECheck;
 import ru.vachok.ethosdistro.parser.ParsingStart;
+import ru.vachok.messenger.MessageCons;
 import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.MessagesNull;
 import ru.vachok.messenger.email.ESender;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -20,7 +21,7 @@ public class WatchDogNorah implements Runnable {
 
     private long delayIsSec;
 
-    private final MessageToUser local = new MessagesNull();
+    private static final Timer timer = new Timer("ParsingStart");
 
     /**
      {@link }
@@ -36,6 +37,7 @@ public class WatchDogNorah implements Runnable {
      */
     private static final String SOURCE_CLASS = WatchDogNorah.class.getSimpleName();
 
+    private final MessageToUser local = new MessageCons();
     private static final List<String> RCPTS = new ArrayList<>();
 
     public WatchDogNorah(boolean test, long delayInSec) {
@@ -45,28 +47,33 @@ public class WatchDogNorah implements Runnable {
     public WatchDogNorah(boolean test) {
         this.test = test;
     }
+
     @Override
     public void run() {
-        schedulerGetDelay();
+        try{
+            schedulerGetDelay();
+        }
+        catch(RejectedExecutionException e){
+            local.errorAlert(SOURCE_CLASS, e.getMessage(), "Check mail only. No parse miners");
+            timer.cancel();
+        }
     }
 
-    private void schedulerGetDelay() {
-        ECheck.getI();
-        int stopHours = ECheck.getStopHours();
-        Timer timer = new Timer("ParsingStart");
+    private void schedulerGetDelay() throws RejectedExecutionException {
         boolean launchOrFalse = ECheck.getShould();
-        if(launchOrFalse){
+        int stopHours = ECheck.getStopHours();
+        if(launchOrFalse && stopHours > 0){
             timer.cancel();
             timer.schedule(
                     new ParsingStart(test),
                     new Date(),
-                    TimeUnit.HOURS.toMillis(stopHours));
+                    TimeUnit.MINUTES.toMillis(stopHours));
         }
         else{
             if(stopHours==0){
-                System.out.println("launchOrFalse = " + launchOrFalse + "\n" + 0 + " stophours");
-                timer.cancel();
-                timer.purge();
+                local.infoNoTitles("EXECUTION STOP!");
+                Thread.currentThread().interrupt();
+                throw new RejectedExecutionException();
             }
             else{
                 timer.schedule(
