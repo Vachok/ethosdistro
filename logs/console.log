@@ -1,25 +1,27 @@
-àâã. 31, 2018 5:30:29 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | Arguments | Starting at: Fri Aug 31 17:30:29 GMT+03:00 2018
-[-t
-on]
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
+ñåíò. 03, 2018 3:08:41 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = AppStarter
+Argument - none
+Mon Sep 03 15:08:41 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is false
+ñåíò. 03, 2018 3:08:41 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | 3 | java.io.FileInputStream@534df152
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : ECheck | true should i send 3.5  | 0 stop hours
-30 delay
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-àâã. 31, 2018 5:30:30 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : AppStarter | 1. Starting | with args
-àâã. 31, 2018 5:30:31 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
-àâã. 31, 2018 5:30:31 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-WARNING: Sending to database (ru_vachok_ethosdistro) : DBLogger | INFO no titles | 1.AppStarter - 
-ARGS: [[
-t:on]]
-àâã. 31, 2018 5:30:31 ÏÏ ru.vachok.ethosdistro.util.DBLogger sendLogs
-INFO: Send to DB is true
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+>>>>>
+message = [EXECUTION STOP!]
+
+ERROR >>>>> title = [WatchDogNorah], head = [null], message = [Check mail only. No parse miners]
+
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+>>>>>
+message = [EXECUTION STOP!]
+
+ERROR >>>>> title = [WatchDogNorah], head = [null], message = [Check mail only. No parse miners]
+
+u0466446_properties
+retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
+>>>>>
+message = [EXECUTION STOP!]
+
+ERROR >>>>> title = [WatchDogNorah], head = [null], message = [Check mail only. No parse miners]
+
