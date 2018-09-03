@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
  @since 28.08.2018 (21:42) */
 public class ECheck extends MessagesFromServer implements Serializable {
 
+    /*Fields*/
     /**
      {@link DBLogger}
      */
@@ -37,43 +38,40 @@ public class ECheck extends MessagesFromServer implements Serializable {
     private static final String SENTDATE = "sentdate";
 
     /**
-     <b>Наличие паузы отравки сообщений</b>
+     <b>Следящий за почтой класс</b>
      */
-    private boolean shouldOrFalse = true;
+    private static final ECheck IT_INST = new ECheck();
+
+    /**
+     Simple Name класса, для поиска настроек
+     */
+    private static final transient String SOURCE_CLASS = ECheck.class.getSimpleName();
 
     /**
      Property-name для properties
      */
     private static final String STOP_MINUTES = "stopMinutes";
 
-    private static final long serialVersionUID = 1984L;
-
-    /**
-     Simple Name класса, для поиска настроек
-     */
-    private static final String SOURCE_CLASS = ECheck.class.getSimpleName();
-
-    /**
-     <b>Следящий за почтой класс</b>
-     */
-    private static final ECheck IT_INST = getItInst();
+    private static final transient InitProperties initProperties = new FileProps(SOURCE_CLASS);
 
     /**
      <b>checker.obj</b> файл.
      */
     private static final File objFile = new File("checker.obj");
 
+    private static final long serialVersionUID = 1984L;
+
+    private static transient Properties properties = new Properties();
+
+    /**
+     <b>Наличие паузы отравки сообщений</b>
+     */
+    private boolean shouldOrFalse = true;
+
     /**
      <b>Время, в минутах, для приостановки отправки почты</b>
      */
     private int stopMinutes;
-
-    /**
-     {@link FileProps}
-     */
-    private static transient InitProperties initProperties = new FileProps(SOURCE_CLASS);
-
-    private static transient Properties properties = new Properties();
 
     /**
      <b>Публичный {@code int}, определяющий время задержки почтового отправителя.</b>
@@ -86,14 +84,17 @@ public class ECheck extends MessagesFromServer implements Serializable {
      */
     public static int getStopHours() {
         properties = initProperties.getProps();
+        long curTime = System.currentTimeMillis();
         int mailChk;
         try{
             mailChk = firstMBCheck();
             long sentDateLong = Long.parseLong(properties.getProperty(SENTDATE));
-            if(System.currentTimeMillis() > sentDateLong){
-                return -1;
+            boolean startParse = curTime > sentDateLong;
+            if(startParse){
+                return 0;
             }
             else{
+                MESSAGE_TO_USER.info(SOURCE_CLASS, "Left", mailChk + " minutes to Start");
                 return mailChk;
             }
         }
@@ -103,7 +104,7 @@ public class ECheck extends MessagesFromServer implements Serializable {
             properties.setProperty(SENTDATE, System.currentTimeMillis() + "");
             initProperties.setProps(properties);
             MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
-            return -1;
+            return 0;
         }
     }
 
@@ -117,16 +118,19 @@ public class ECheck extends MessagesFromServer implements Serializable {
      <i>В другом</i> случае отдаёт {@link #secondMBCheck(Folder, Message[])}
      */
     private static int firstMBCheck() throws MessagingException {
+        initProperties.getProps();
         Folder folder = getInbox();
         Message[] messages = folder.getMessages();
-        if(messages.length <= 0 && !properties.isEmpty()){
-            try{
-                IT_INST.stopMinutes = Integer.parseInt(properties.getProperty(STOP_MINUTES));
-            }
-            catch(NumberFormatException e){
-                return -1;
-            }
-            return IT_INST.stopMinutes;
+        if(messages.length <= 0){
+            long timeToStart = Long.parseLong(properties.getProperty(SENTDATE));
+            long l = timeToStart - System.currentTimeMillis();
+            l = TimeUnit.MILLISECONDS.toMinutes(l);
+            IT_INST.shouldOrFalse = true;
+            properties.setProperty(OR_FALSE, "1");
+            properties.setProperty(STOP_MINUTES, l + "");
+            initProperties.setProps(properties);
+            return ( int ) l;
+
         }
         else{
             return secondMBCheck(folder, messages);
@@ -146,55 +150,37 @@ public class ECheck extends MessagesFromServer implements Serializable {
                     message.getSentDate());
             initProperties.setProps(properties);
             writeO();
-            return -1;
+            return 0;
         }
         else{
             IT_INST.shouldOrFalse = false;
             String stopHRSString;
             try{
                 stopHRSString = split[1];
-                Long timeToPause = Long.valueOf(stopHRSString);
-                if(timeToPause==0) return zeroMine(message.getSentDate().getTime());
-                properties.setProperty(SENTDATE, System.currentTimeMillis() + timeToPause + "");
+                int timeToPause = Integer.parseInt(stopHRSString);
+                message.setFlag(Flags.Flag.DELETED, true);
+                if(timeToPause==0){
+                    long pauseFor = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1);
+                    properties.setProperty(SENTDATE, pauseFor + "");
+                    properties.setProperty(STOP_MINUTES, TimeUnit.MILLISECONDS
+                            .toMinutes(pauseFor - System.currentTimeMillis()) + "");
+                    message.setFlag(Flags.Flag.DELETED, true);
+                    folder.close(true);
+                    return -1;
+                }
+                properties.setProperty(SENTDATE, System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(timeToPause)
+                        + "");
                 properties.setProperty(STOP_MINUTES, stopHRSString + "");
                 properties.setProperty(OR_FALSE, "0");
                 initProperties.setProps(properties);
+                folder.close(true);
+                return timeToPause;
             }
             catch(ArrayIndexOutOfBoundsException e){
+                IT_INST.shouldOrFalse = true;
                 return badSplitCheck(message, folder);
             }
-            int stopHRSInt = Integer.parseInt(stopHRSString);
-
         }
-        return -1;
-    }
-
-    private static void writeO() {
-        try(OutputStream fileOutputStream = new FileOutputStream(objFile);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
-            objectOutputStream.writeObject(IT_INST);
-            properties.setProperty("uptime",
-                    ( float ) (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - ConstantsFor.START_TIME_IN_MILLIS) / 60) + "");
-            properties.setProperty(STOP_MINUTES, IT_INST.stopMinutes + "");
-            if(IT_INST.shouldOrFalse){ properties.setProperty(OR_FALSE, "1"); }
-            else{ properties.setProperty(OR_FALSE, "0"); }
-            initProperties.setProps(properties);
-        }
-        catch(IOException e){
-            MESSAGE_TO_USER.errorAlert(new Date().toString() + " error!",
-                    System.currentTimeMillis() +
-                            " timestamp", "SYSTEM IS DOWN" + e.getMessage() + "\n" +
-                            new TForms().toStringFromArray(e.getStackTrace()));
-        }
-    }
-
-    private static int zeroMine(long time) {                                                                         // Если Mine~0
-        IT_INST.shouldOrFalse = false;
-        time = time + TimeUnit.DAYS.toMillis(1);
-        properties.setProperty(SENTDATE, time + "");
-        properties.setProperty(OR_FALSE, "0");
-        initProperties.setProps(properties);
-        return 0;
     }
 
     private static Message messageSubjectCheck(Message[] messages) throws MessagingException {
@@ -211,17 +197,49 @@ public class ECheck extends MessagesFromServer implements Serializable {
         throw new MessagingException("No messages");
     }
 
+    private static void writeO() {
+        try(OutputStream fileOutputStream = new FileOutputStream(objFile);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
+            objectOutputStream.writeObject(IT_INST);
+            properties.setProperty("uptime",
+                    ( float ) (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - ConstantsFor.START_TIME_IN_MILLIS) / 60) + "");
+            properties.setProperty(STOP_MINUTES, IT_INST.stopMinutes + "");
+            if(IT_INST.shouldOrFalse){
+                properties.setProperty(OR_FALSE, "1");
+            }
+            else{
+                properties.setProperty(OR_FALSE, "0");
+            }
+            initProperties.setProps(properties);
+        }
+        catch(IOException e){
+            MESSAGE_TO_USER.errorAlert(new Date().toString() + " error!",
+                    System.currentTimeMillis() +
+                            " timestamp", "SYSTEM IS DOWN" + e.getMessage() + "\n" +
+                            new TForms().toStringFromArray(e.getStackTrace()));
+        }
+    }
+
     private static int badSplitCheck(Message message, Folder folder) throws MessagingException {
         message.setFlag(Flags.Flag.DELETED, true);
         IT_INST.shouldOrFalse = true;
-        IT_INST.stopMinutes = -1;
-        properties.setProperty(STOP_MINUTES, "-1");
-        checkTimeToStart(-1, message, folder, message.getReceivedDate());
+        IT_INST.stopMinutes = 0;
+        properties.setProperty(STOP_MINUTES, "0");
         properties.setProperty(OR_FALSE, "1");
         initProperties.setProps(properties);
-        return -1;
+        return 0;
     }
 
+    public static boolean getShould() {
+        initProperties.getProps();
+        String sOf = properties.getProperty(OR_FALSE);
+        if(sOf.equalsIgnoreCase("0")){
+            IT_INST.shouldOrFalse = false;
+        }
+        return IT_INST.shouldOrFalse;
+    }
+
+    /*Private metsods*/
     private static int checkTimeToStart(int stopHRSInt, Message message, Folder folder, Date receivedDate) {
         try{
             if(receivedDate!=null){
@@ -233,10 +251,9 @@ public class ECheck extends MessagesFromServer implements Serializable {
                     properties.setProperty(STOP_MINUTES, stopHRSInt + "");
                     properties.setProperty(OR_FALSE, "0");
                     initProperties.setProps(properties);
-                    return 0;
+                    return -1;
                 }
             }
-            if(stopHRSInt==0){ return 0; }
             else{
                 message.setFlag(Flags.Flag.DELETED, true);
                 IT_INST.shouldOrFalse = true;
@@ -244,7 +261,7 @@ public class ECheck extends MessagesFromServer implements Serializable {
                 properties.setProperty(OR_FALSE, "1");
                 folder.close(true);
                 initProperties.setProps(properties);
-                return -1;
+                return 0;
             }
         }
         catch(MessagingException e){
@@ -252,36 +269,10 @@ public class ECheck extends MessagesFromServer implements Serializable {
             properties.setProperty(OR_FALSE, "1");
             properties.setProperty(STOP_MINUTES, "-1");
             initProperties.setProps(properties);
-            return -1;
         }
+        return 0;
     }
-
-    public static boolean getShould() {
-        return IT_INST.shouldOrFalse;
-    }
-
-    private static ECheck getItInst() {
-        if(objFile!=null){
-            try(InputStream fileInput = new FileInputStream(objFile);
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInput)){
-                initProperties.getProps();
-                if(!properties.isEmpty()){
-                    IT_INST.stopMinutes = Integer.parseInt(properties.getProperty(STOP_MINUTES));
-                }
-                MESSAGE_TO_USER.info(SOURCE_CLASS, "3", fileInput.toString());
-                ECheck o = ( ECheck ) objectInputStream.readObject();
-                return o;
-            }
-            catch(IOException | ClassNotFoundException e){
-                MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
-            }
-        }
-        return new ECheck();
-    }
-
-    /*Private metsods*/
 //unstat
-
     private static void getTimeWaiting(Date sentDate, Folder folder, Message message) {
         long dateLong = sentDate.getTime();
         if(System.currentTimeMillis() > dateLong){

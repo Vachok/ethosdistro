@@ -87,7 +87,8 @@ public class DBLogger implements MessageToUser {
         throw new UnsupportedOperationException();
     }
 
-    private void sendLogs() {
+    /*Private metsods*/
+    private void sendLogs() throws CommunicationsException {
         String format = MessageFormat
                 .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
         Logger logger = Logger.getLogger(SOURCE_CLASS);

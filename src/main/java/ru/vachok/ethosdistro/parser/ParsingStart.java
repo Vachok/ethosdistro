@@ -71,20 +71,19 @@ public class ParsingStart extends TimerTask implements Runnable {
         this.urlAsString = ConstantsFor.URL_AS_STRING;
     }
 
+    /*Constru*/
     @Override
     public void run() {
-        TO_USER_DATABASE.info(SOURCE_CLASS, "RUN", new Date().toString());
+        String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
+                .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
+        TO_USER_DATABASE.info(SOURCE_CLASS, "RUNTIME - " + upTime, "NOW TIME: " + new Date().toString());
         this.parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
         sendRes(this.test);
     }
-
-    /*Constru*/
     /*Private metsods*/
     private void sendRes(boolean callTest) {
-        String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
-                .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
         boolean call;
         String returnString = new ParsingFinalize().call();
         if(callTest){
@@ -102,7 +101,6 @@ public class ParsingStart extends TimerTask implements Runnable {
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
                     " last modified: " + new Date(file.lastModified());
             String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
-            TO_USER_DATABASE.info(SOURCE_CLASS, upTime, freeSpaceOnDisk + "\n" + statisticsProb);
             fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
         }
         else{

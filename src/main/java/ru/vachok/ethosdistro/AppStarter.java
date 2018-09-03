@@ -140,10 +140,9 @@ public class AppStarter {
     private static String scheduleStart(boolean test) {
         ScheduledExecutorService scheduledExecutorService =
                 Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
-        /*= new ParsingStart(test);*/
         try{
-            Runnable parseRun = new WatchDogNorah(test);
-            scheduledExecutorService.scheduleWithFixedDelay(parseRun,
+            Runnable WDRun = new WatchDogNorah(test);
+            scheduledExecutorService.scheduleWithFixedDelay(WDRun,
                     initialDelay, delay, TimeUnit.SECONDS);
 
         }

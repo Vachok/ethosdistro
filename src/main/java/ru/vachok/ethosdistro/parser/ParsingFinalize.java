@@ -31,7 +31,8 @@ public class ParsingFinalize implements Callable<String> {
      */
     private static final MessageToUser messageToUser = new DBLogger();
 
-    private static final String falseString = "false";
+    /*Fields*/
+    private static final String FALSE_STRING = "false";
 
 
     @Override
@@ -64,7 +65,7 @@ public class ParsingFinalize implements Callable<String> {
             }
         }
 
-        return falseString;
+        return FALSE_STRING;
     }
 
     private String checkCond(JSONObject parse, Object rigs) throws ParseException {
@@ -91,12 +92,12 @@ public class ParsingFinalize implements Callable<String> {
         if(itOk){
             messageToUser.info(LocalDateTime.now()
                     .toString(), "condition = ", coList.toString());
-            return falseString;
+            return FALSE_STRING;
         }
         else{
             messageToUser.errorAlert(System
                     .currentTimeMillis() + " time", "\ncondition = ", parse.toJSONString());
-            return falseString;
+            return FALSE_STRING;
         }
     }
 
