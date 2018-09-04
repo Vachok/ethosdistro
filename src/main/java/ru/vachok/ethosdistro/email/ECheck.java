@@ -91,7 +91,10 @@ public class ECheck extends MessagesFromServer implements Serializable {
         int mailChk;
         try{
             mailChk = firstMBCheck();
-            MESSAGE_TO_USER.info(SOURCE_CLASS, new Date(Long.parseLong(properties.getProperty(SENTDATE))).toString(), mailChk + " minutes to Start");
+            MESSAGE_TO_USER.info(
+                    SOURCE_CLASS,
+                    new Date(Long.parseLong(properties.getProperty(SENTDATE))).toString(),
+                    mailChk + " minutes to Start");
             return mailChk;
         }
         catch(MessagingException | NumberFormatException e){
