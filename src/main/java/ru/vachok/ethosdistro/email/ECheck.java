@@ -206,20 +206,7 @@ public class ECheck extends MessagesFromServer implements Serializable {
             }
         }
     }
-
-    private static Message messageSubjectCheck(Message[] messages) throws MessagingException {
-        for(Message m : messages){
-            try{
-                if(m.getSubject().toLowerCase().contains("mine~")){
-                    return m;
-                }
-            }
-            catch(MessagingException ignore){
-                //
-            }
-        }
-        throw new MessagingException("No valid messages");
-    }
+    /*Private metsods*/
 
     private static void writeO() {
         try(OutputStream fileOutputStream = new FileOutputStream(OBJ_FILE);
@@ -260,5 +247,18 @@ public class ECheck extends MessagesFromServer implements Serializable {
             FILE_PROPS.setProps(properties);
         }
     }
-    /*Private metsods*/
+
+    private static Message messageSubjectCheck(Message[] messages) throws MessagingException {
+        for(Message m : messages){
+            try{
+                if(m.getSubject().toLowerCase().contains("mine~")){
+                    return m;
+                }
+            }
+            catch(MessagingException e){
+                e.printStackTrace(); //fixme 04.09.2018 (21:51)
+            }
+        }
+        throw new MessagingException("No valid messages");
+    }
 }
