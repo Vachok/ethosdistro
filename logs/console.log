@@ -1,14 +1,140 @@
-сент. 03, 2018 5:25:20 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+сент. 04, 2018 4:54:10 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = AppStarter
 Argument - none
-Mon Sep 03 17:25:20 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is false
-сент. 03, 2018 5:25:21 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+Tue Sep 04 16:54:10 GMT+03:00 2018   Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is false
+сент. 04, 2018 4:54:11 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true
 u0466446_properties
 retProps = {charset=UTF-8, password=S15cQFO8kk50FKj, mail.debug=false, mail.transport.protocol=smtp, host=mail.chess.vachok.ru, mail.store.protocol=pop3s, From=bot@chess.vachok.ru, ssl=true, user=bot@chess.vachok.ru, mail.smtp.auth=true, mail.smtp.host=mail.chess.vachok.ru} con closed? true
-сент. 03, 2018 5:27:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = Check mail.
+You have 0 messages
+Tue Sep 04 16:54:15 GMT+03:00 2018
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ECheck
+Tue Sep 04 15:59:44 GMT+03:00 2018
+-54 minutes to Start
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = DBLogger
+INFO no titles
+Starting mine parser with 45 of seconds. Last SENT DATE change = -54 minutes
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = WatchDogNorah
+parsing scheduled at 
+Tue Oct 16 08:54:14 GMT+03:00 2018
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 WARNING: Sending to database = ParsingStart
-RUN
-Mon Sep 03 17:27:30 GMT+03:00 2018
-сент. 03, 2018 5:27:30 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+RUNTIME - END (Uptime = 0.0014783334 hrs)
+NOW TIME: Tue Sep 04 16:54:15 GMT+03:00 2018
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:15 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ru.vachok.ethosdistro.parser.ParseToFile
+startParsing
+Parsed url = http://hous01.ethosdistro.com/?json=yes
+here: C:\Users\ikudryashov\IdeaProjects\kirya\answer.json 
+Change time: Tue Sep 04 16:54:16 GMT+03:00 2018
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = 2018-09-04T16:54:16.143390800
+condition = 
+[192.168.0.102 ~~ mining, 192.168.1.34 ~~ mining, 192.168.1.35 ~~ mining]
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.FileLogger makeFile
+WARNING: Writing to file: ParsingStart
+ConstantsFor.RCPT.size() 
+1 address
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = DBLogger
+INFO no titles
+[pivovarov.kirill@gmail.com]
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+INFO: Send to DB is true
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+INFO >>>>> typeName = [AuthForChess], title = [PasswordAuthentication], s = [STARTS...]
+
+u0466446_properties
+retProps = {} con closed? true
+u0466446_properties
+retProps = {charset=UTF-8, host=mail.chess.vachok.ru, From=bot@chess.vachok.ru, ssl=true} con closed? true
+u0466446_properties
+retProps = {pass=S15cQFO8kk50FKj, userName=bot@chess.vachok.ru} con closed? true
+INFO >>>>> typeName = [chess], title = [bot@chess.vachok.ru], s = [S15cQFO8kk50FKj]
+
+DEBUG: JavaMail version 1.5.6
+DEBUG: successfully loaded resource: /META-INF/javamail.default.providers
+DEBUG: Tables of loaded providers
+DEBUG: Providers Listed By Class Name: {com.sun.mail.smtp.SMTPSSLTransport=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], com.sun.mail.smtp.SMTPTransport=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle], com.sun.mail.imap.IMAPSSLStore=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], com.sun.mail.pop3.POP3SSLStore=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], com.sun.mail.imap.IMAPStore=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], com.sun.mail.pop3.POP3Store=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle]}
+DEBUG: Providers Listed By Protocol: {imaps=javax.mail.Provider[STORE,imaps,com.sun.mail.imap.IMAPSSLStore,Oracle], imap=javax.mail.Provider[STORE,imap,com.sun.mail.imap.IMAPStore,Oracle], smtps=javax.mail.Provider[TRANSPORT,smtps,com.sun.mail.smtp.SMTPSSLTransport,Oracle], pop3=javax.mail.Provider[STORE,pop3,com.sun.mail.pop3.POP3Store,Oracle], pop3s=javax.mail.Provider[STORE,pop3s,com.sun.mail.pop3.POP3SSLStore,Oracle], smtp=javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]}
+DEBUG: successfully loaded resource: /META-INF/javamail.default.address.map
+DEBUG: getProvider() returning javax.mail.Provider[TRANSPORT,smtp,com.sun.mail.smtp.SMTPTransport,Oracle]
+DEBUG SMTP: need username and password for authentication
+DEBUG SMTP: protocolConnect returning false, host=mail.chess.vachok.ru, user=IKudryashov, password=<null>
+DEBUG SMTP: useEhlo true, useAuth true
+DEBUG SMTP: trying to connect to host "mail.chess.vachok.ru", port 465, isSSL false
+220 server202.hosting.reg.ru ESMTP Exim 4.90_1 Tue, 04 Sep 2018 16:54:16 +0300
+DEBUG SMTP: connected to host "mail.chess.vachok.ru", port: 465
+
+EHLO NO0027.mshome.net
+250-server202.hosting.reg.ru Hello NO0027.mshome.net [91.210.86.35]
+250-SIZE 52428800
+250-8BITMIME
+250-PIPELINING
+250-AUTH LOGIN PLAIN
+250 HELP
+DEBUG SMTP: Found extension "SIZE", arg "52428800"
+DEBUG SMTP: Found extension "8BITMIME", arg ""
+DEBUG SMTP: Found extension "PIPELINING", arg ""
+DEBUG SMTP: Found extension "AUTH", arg "LOGIN PLAIN"
+DEBUG SMTP: Found extension "HELP", arg ""
+DEBUG SMTP: protocolConnect login, host=mail.chess.vachok.ru, user=bot@chess.vachok.ru, password=<non-null>
+DEBUG SMTP: Attempt to authenticate using mechanisms: LOGIN PLAIN DIGEST-MD5 NTLM XOAUTH2 
+DEBUG SMTP: Using mechanism LOGIN
+DEBUG SMTP: AUTH LOGIN command trace suppressed
+DEBUG SMTP: AUTH LOGIN succeeded
+DEBUG SMTP: use8bit false
+MAIL FROM:<bot@chess.vachok.ru>
+250 OK
+RCPT TO:<pivovarov.kirill@gmail.com>
+250 Accepted
+DEBUG SMTP: Verified Addresses
+DEBUG SMTP:   pivovarov.kirill@gmail.com
+DATA
+354 Enter message, ending with "." on a line by itself
+Date: Tue, 4 Sep 2018 16:54:16 +0300 (GMT+03:00)
+From: bot@chess.vachok.ru
+Reply-To: bot@chess.vachok.ru
+To: pivovarov.kirill@gmail.com
+Message-ID: <316852340.0.1536069256637@NO0027.mshome.net>
+Subject: false Mine~ALARM
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+NO INFO   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+.
+250 OK id=1fxBma-000AF4-PX
+DEBUG SMTP: message successfully delivered to mail server
+QUIT
+221 server202.hosting.reg.ru closing connection
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
+WARNING: Sending to database = ALARM!
+Condition not mining
+ЙА ПРОГРАММО! 
+ЕСЛ?? Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ:
+mine~0 - выключит меня на 24 часа
+mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...
+mine~ - приведёт меня в чувство в течении пары минут!)false   | NO MINING! http://hous01.ethosdistro.com/?json=yes
+сент. 04, 2018 4:54:16 ПП ru.vachok.ethosdistro.util.DBLogger sendLogs
 INFO: Send to DB is true

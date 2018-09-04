@@ -6,55 +6,68 @@ import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.MessagesNull;
 import ru.vachok.messenger.email.ESender;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 
 /**
  <h1>Запуск парсера</h1>
 
  @since 23.08.2018 (16:48) */
-public class ParsingStart extends TimerTask implements Runnable {
+public class ParsingStart extends TimerTask {
 
     /**
      {@link Parsers}
      */
     private Parsers parsers;
 
+    private final MessageToUser fileLogger = new MessagesNull();
+
     /**
      Параметр {@code -t on}
      */
-    private final boolean test;
-
-    private final MessageToUser fileLogger = new FileLogger();
+    private boolean test;
 
     /**
      URL, как строка
      */
-    private final String urlAsString;
+    private String urlAsString;
 
     /**
      Class Simple Name
      */
     private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
 
-    /**
-     {@link Logger}
-     */
-    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
+    public ParsingStart(boolean isTest) {
+        super();
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
+        this.test = isTest;
+    }
+
+    @Override
+    public boolean cancel() {
+        Thread.currentThread().interrupt();
+        return super.cancel();
+    }
 
     /**
      {@link DBLogger}
      */
     private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
+    @Override
+    public long scheduledExecutionTime() {
+//       long elapTime = System.currentTimeMillis() - ConstantsFor.START_TIME_IN_MILLIS;
+        return super.scheduledExecutionTime();
+    }
 
     private URL getUrlFromStr() {
         URL url = null;
@@ -65,10 +78,6 @@ public class ParsingStart extends TimerTask implements Runnable {
             ConstantsFor.SEND_MAIL_AND_DB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
         return url;
-    }
-    public ParsingStart(boolean test) {
-        this.test = test;
-        this.urlAsString = ConstantsFor.URL_AS_STRING;
     }
 
     /*Constru*/
@@ -83,15 +92,11 @@ public class ParsingStart extends TimerTask implements Runnable {
         sendRes(this.test);
     }
     /*Private metsods*/
-    private void sendRes(boolean callTest) {
-        boolean call;
+    private void sendRes(boolean testOn) {
         String returnString = new ParsingFinalize().call();
-        if(callTest){
-            call = !returnString.equalsIgnoreCase("false");
-        }
-        else{
-            call = returnString.equalsIgnoreCase("false");
-        }
+        boolean call = false;
+        if(!returnString.equalsIgnoreCase("false")) call = true;
+        if(testOn) call = !call;
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
         MessageToUser log = new FileLogger();
@@ -106,7 +111,13 @@ public class ParsingStart extends TimerTask implements Runnable {
         else{
             String[] split = returnString.split("~~");
             String subjectIP = split[0];
-            String bodyJSON = split[1];
+            String bodyJSON;
+            try{
+                bodyJSON = split[1];
+            }
+            catch(ArrayIndexOutOfBoundsException e){
+                bodyJSON = "NO INFO";
+            }
             if(ConstantsFor.RCPT.isEmpty()){
                 ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
             }
@@ -114,8 +125,13 @@ public class ParsingStart extends TimerTask implements Runnable {
             emailS.errorAlert(subjectIP, "Mine~ALARM",
                     new TForms().replaceChars(bodyJSON, ",", "\n") +
                     "   | NO MINING! " + urlAsString);
-            TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining", returnString +
-                    "   | NO MINING! " + urlAsString);
+            TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining",
+                    new String(("ЙА ПРОГРАММО! \n" +
+                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА, БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
+                                        "mine~0 - выключит меня на 24 часа\n" +
+                                        "mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
+                                        "mine~ - приведёт меня в чувство в течении пары минут!)").getBytes(), StandardCharsets.UTF_8) +
+                            returnString + "   | NO MINING! " + urlAsString);
         }
     }
 
