@@ -141,9 +141,8 @@ public class AppStarter {
         ScheduledExecutorService scheduledExecutorService =
                 Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
         try{
-            Runnable WDRun = new WatchDogNorah(test);
-            scheduledExecutorService.scheduleWithFixedDelay(WDRun,
-                    initialDelay, delay, TimeUnit.SECONDS);
+            Runnable watchDogNorahIsCheckingMail = new WatchDogNorah(test);
+            scheduledExecutorService.scheduleWithFixedDelay(watchDogNorahIsCheckingMail, initialDelay, delay, TimeUnit.SECONDS);
 
         }
         catch(Exception e){

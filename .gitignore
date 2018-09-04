@@ -27,4 +27,5 @@ DBLogger.l*
 MessagesFromServer.properties
 checker.obj
 src/test/java/
-/ECheck.properties
+ECheck.propertie
+WatchDogNorah.properties

@@ -36,7 +36,7 @@ public enum ConstantsFor {
     /**
      Задержка между проверками по-умолчанию
      */
-    public static final long DELAY_IN_SECONDS = 16L;
+    public static final long DELAY_IN_SECONDS = 90L;
 
     /**
      Список почтовых адресов
