@@ -27,34 +27,36 @@ public class FileLogger implements MessageToUser {
       makeFile(s,s1,s2);
    }
 
+   /*Private metsods*/
    private static void makeFile(String s, String s1, String s2) {
       String format = MessageFormat
-            .format("Writting to file: {0}\n{1}\n{2}", s, s1, s2);
+              .format("Writing to file: {0}\n{1}\n{2}", s, s1, s2);
       Logger.getLogger(SOURCE_CLASS).warning(format);
       File file = new File("log.log");
       try{
-      if(!file.exists()){
-         FileUtils.touch(file);
-         FileUtils.writeStringToFile(file, ("\n"+s +
-                                                  " " +
-                                                  s1 +
-                                                  "\n" +
-                                                  s2 +
-                                                  "\n----------------------------------------------"),
-               "UTF-8", true);
-      }else if(file.lastModified() < System.currentTimeMillis()- TimeUnit.HOURS.toMillis(1)){
+         if(!file.exists()){
+            FileUtils.touch(file);
+            FileUtils.writeStringToFile(file, ("\n"+s +
+                                                       " " +
+                                                       s1 +
+                                                       "\n" +
+                                                       s2 +
+                                                       "\n----------------------------------------------"),
+                    "UTF-8", true);
+         }else if(file.lastModified() < System.currentTimeMillis()- TimeUnit.HOURS.toMillis(1)){
             FileUtils.forceDelete(file);
          }
-      else{
-         FileUtils
-               .writeStringToFile(file, ("\n"+s+
-                                               " "+s1+
-                                               "\n"+s2+
-                                               "\n----------------------------------------------"),
-                     "UTF-8", true);
+         else{
+            FileUtils
+                    .writeStringToFile(file, ("\n"+s+
+                                                      " "+s1+
+                                                      "\n"+s2+
+                                                      "\n----------------------------------------------"),
+                            "UTF-8", true);
+         }
       }
-      }catch(IOException e){
-         Logger.getLogger(SOURCE_CLASS).throwing(SOURCE_CLASS, e.getMessage(), e);
+      catch(IOException ingnore){
+         //
       }
    }
 

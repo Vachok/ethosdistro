@@ -2,7 +2,7 @@ package ru.vachok.ethosdistro.parser;
 
 
 import ru.vachok.ethosdistro.util.DBLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 
 import java.io.*;
@@ -44,6 +44,7 @@ public class ParseToFile implements Parsers {
       return s;
    }
 
+   /*Private metsods*/
    private String saveToFile() {
       File file = new File(fileName);
       try(InputStream inputStream = urlToParse.openStream();
@@ -57,7 +58,7 @@ public class ParseToFile implements Parsers {
       }
       catch(IOException e){
          LOGGER.throwing(SOURCE_CLASS, "getJSON", e);
-         MESSAGE_TO_USER.info(SOURCE_CLASS, "IOException", new TForfs().toStringFromArray(e.getStackTrace()));
+         MESSAGE_TO_USER.info(SOURCE_CLASS, "IOException", new TForms().fromArray(e.getStackTrace()));
          return e.getMessage();
       }
    }

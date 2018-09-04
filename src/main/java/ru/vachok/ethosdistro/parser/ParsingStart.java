@@ -1,11 +1,10 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
 
@@ -23,134 +22,102 @@ import java.util.logging.Logger;
  @since 23.08.2018 (16:48) */
 public class ParsingStart implements Runnable {
 
-   /**
-    Class Simple Name
-    */
-   private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
+    /**
+     {@link Parsers}
+     */
+    private Parsers parsers;
 
-   /**
-    {@link Logger}
-    */
-   private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
+    /**
+     Параметр {@code -t on}
+     */
+    private final boolean test;
 
-   /**
-    * {@link DBLogger}
-    */
-   private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
+    private final MessageToUser fileLogger = new FileLogger();
 
-   /**
-    * URL, как строка
-    */
-   private final String urlAsString;
+    /**
+     URL, как строка
+     */
+    private final String urlAsString;
 
-   /**
-    * {@link Parsers}
-    */
-   private Parsers parsers;
+    /**
+     Class Simple Name
+     */
+    private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
 
-   /**
-    Параметр {@code -t on}
-    */
-   private boolean test;
+    /**
+     {@link Logger}
+     */
+    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
-   /**
-    <b>Конструктор</b>
+    /**
+     {@link DBLogger}
+     */
+    private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
-    @param urlAsString url как строка
-    */
-   public ParsingStart(String urlAsString) {
-      this.parsers = new ParseJsonAsUsualString();
-      this.urlAsString = urlAsString;
-      this.parsers = new ParseJsonAsUsualString();
-   }
 
-   /**
-    Конструктор
+    private URL getUrlFromStr() {
+        URL url = null;
+        try{
+            url = new URL(urlAsString);
+        }
+        catch(MalformedURLException e){
+            ConstantsFor.sendMailAndDB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+        }
+        return url;
+    }
+    public ParsingStart(boolean test) {
+        this.test = test;
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
+    }
 
-    @param urlAsString url как строка
-    @param fileName    файл, для записи (имя)
-    */
-   public ParsingStart(String urlAsString, String fileName) {
-      if(fileName==null){
-         fileName = "answer.json";
-      }
-      this.urlAsString = urlAsString;
-      this.parsers = new ParseToFile(fileName);
-   }
+    @Override
+    public void run() {
+        TO_USER_DATABASE.info(SOURCE_CLASS, "RUN", new Date().toString());
+        this.parsers = new ParseToFile();
+        URL url = getUrlFromStr();
+        parsers.startParsing(url);
+        sendRes(this.test);
+    }
 
-   /**
-    Конструктор
-
-    @param parsers     чем парсим {@link Parsers}
-    @param urlAsString url как строка
-    */
-   public ParsingStart(Parsers parsers, String urlAsString) {
-      this.parsers = parsers;
-      this.urlAsString = urlAsString;
-   }
-
-   /**
-    Конструктор
-
-    @param s url как строка
-    @param test test - запуск с <i>обратным !</i> условием.
-    */
-   public ParsingStart(String s, boolean test) {
-      this.urlAsString = s;
-      this.test = test;
-   }
-
-   @Override
-   public void run() {
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "RUN", new Date().toString());
-      this.parsers = new ParseToFile();
-      URL url = getUrlFromStr();
-      parsers.startParsing(url);
-      String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "email recep", s);
-      sendRes(this.test);
-   }
-
-   private URL getUrlFromStr() {
-      URL url = null;
-      try{
-         url = new URL(urlAsString);
-      }
-      catch(MalformedURLException e){
-         LOGGER.throwing(SOURCE_CLASS, "getSite", e);
-      }
-      return url;
-   }
-
-   private void sendRes(boolean callTest){
-      Boolean call;
-      if(callTest){
-         call = !new ParsingFinalize().call();
-      }else{
-         call= new ParsingFinalize().call();
-      }
-      File file = new File("answer.json");
-      MessageToUser emailS = new ESender(ConstantsFor.RCPT);
-      MessageToUser log = new FileLogger();
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "INFO", "ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size() + "\n" +
-            "Uptime = " + TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - AppStarter.getStartLong()) + " started at " + new Date(AppStarter.getStartLong()));
-      log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
-      if(call){
-         MESSAGE_TO_USER.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         log.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         Thread.currentThread().interrupt();
-      }
-      else {
-         emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         Thread.currentThread().interrupt();
-      }
-   }
+    /*Constru*/
+    /*Private metsods*/
+    private void sendRes(boolean callTest) {
+        String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
+                .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
+        boolean call;
+        String returnString = new ParsingFinalize().call();
+        if(callTest){
+            call = !returnString.equalsIgnoreCase("false");
+        }
+        else{
+            call = returnString.equalsIgnoreCase("false");
+        }
+        File file = new File("answer.json");
+        MessageToUser emailS = new ESender(ConstantsFor.RCPT);
+        MessageToUser log = new FileLogger();
+        log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() ", ConstantsFor.RCPT.size() + " address");
+        TO_USER_DATABASE.infoNoTitles(ConstantsFor.RCPT.toString());
+        if(call){
+            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
+                    " last modified: " + new Date(file.lastModified());
+            String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
+            TO_USER_DATABASE.info(SOURCE_CLASS, upTime, freeSpaceOnDisk + "\n" + statisticsProb);
+            fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
+        }
+        else{
+            String[] split = returnString.split("~~");
+            String subjectIP = split[0];
+            String bodyJSON = split[1];
+            if(ConstantsFor.RCPT.isEmpty()){
+                ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+            }
+            new TForms().fromArray(ConstantsFor.RCPT);
+            emailS.errorAlert(subjectIP, "Mine~ALARM",
+                    new TForms().replaceChars(bodyJSON, ",", "\n") +
+                    "   | NO MINING! " + urlAsString);
+            TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining", returnString +
+                    "   | NO MINING! " + urlAsString);
+        }
+    }
 
 }
