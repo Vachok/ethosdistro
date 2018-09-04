@@ -1,6 +1,9 @@
 package ru.vachok.ethosdistro.util;
 
 
+import javax.mail.Address;
+import javax.mail.Header;
+import java.util.Enumeration;
 import java.util.List;
 
 
@@ -62,6 +65,27 @@ public class TForms {
     public String toStringFromArray(StackTraceElement[] stackTrace) {
         for(StackTraceElement e : stackTrace){
             stringBuilder.append(e.toString()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String fromArray(Address[] emailAddresses) {
+        for(Address a : emailAddresses){
+            stringBuilder.append(a.toString()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String fromEnum(Enumeration enumS) {
+        while(enumS.hasMoreElements()){
+            Header h = ( Header ) enumS.nextElement();
+            stringBuilder
+                    .append(h.getName())
+                    .append(" name")
+                    .append(" ")
+                    .append(h.getValue())
+                    .append(" value")
+                    .append("\n");
         }
         return stringBuilder.toString();
     }

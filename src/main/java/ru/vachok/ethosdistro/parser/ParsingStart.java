@@ -34,12 +34,12 @@ public class ParsingStart extends TimerTask {
     /**
      Параметр {@code -t on}
      */
-    private boolean test;
+    private final boolean test;
 
     /**
      URL, как строка
      */
-    private String urlAsString;
+    private final String urlAsString;
 
     /**
      Class Simple Name
@@ -65,8 +65,7 @@ public class ParsingStart extends TimerTask {
 
     @Override
     public long scheduledExecutionTime() {
-//       long elapTime = System.currentTimeMillis() - ConstantsFor.START_TIME_IN_MILLIS;
-        return super.scheduledExecutionTime();
+        return System.currentTimeMillis() - super.scheduledExecutionTime();
     }
 
     private URL getUrlFromStr() {
@@ -124,18 +123,27 @@ public class ParsingStart extends TimerTask {
             new TForms().fromArray(ConstantsFor.RCPT);
             emailS.errorAlert(subjectIP, "Mine~ALARM",
                     new String(("ЙА ПРОГРАММО! \n" +
-                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА, БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
+                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА!\n" +
+                                        " БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
                                         "mine~0 - выключит меня на 24 часа\n" +
-                                        "mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
-                                        "mine~ - приведёт меня в чувство в течении пары минут!)").getBytes(), StandardCharsets.UTF_8) + "\n" + new TForms().replaceChars(bodyJSON, ",", "\n") +
+                                        "mine~10 - выключит на 10мин. " +
+                                        "(тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
+                                        "mine~ - приведёт меня в чувство в течении пары минут!)")
+                            .getBytes(),
+                            StandardCharsets.UTF_8) + "\n"
+                            + new TForms().replaceChars(bodyJSON, ",", "\n") +
                     "   | NO MINING! " + urlAsString);
             TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining",
 
                     new String(("ЙА ПРОГРАММО! \n" +
-                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА, БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
+                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА!\n" +
+                                        " БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
                                         "mine~0 - выключит меня на 24 часа\n" +
-                                        "mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
-                                        "mine~ - приведёт меня в чувство в течении пары минут!)").getBytes(), StandardCharsets.UTF_8) +
+                                        "mine~10 - выключит на 10мин. " +
+                                        "(тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
+                                        "mine~ - приведёт меня в чувство в течении пары минут!)")
+                            .getBytes(),
+                            StandardCharsets.UTF_8) +
                             returnString + "   | NO MINING! " + urlAsString);
         }
     }

@@ -2,9 +2,7 @@ package ru.vachok.ethosdistro;
 
 
 import ru.vachok.ethosdistro.parser.ParsingStart;
-import ru.vachok.ethosdistro.util.DBLogger;
-import ru.vachok.ethosdistro.util.TForms;
-import ru.vachok.ethosdistro.util.WatchDogNorah;
+import ru.vachok.ethosdistro.util.*;
 import ru.vachok.messenger.MessageToUser;
 
 import java.time.LocalDateTime;
@@ -30,27 +28,13 @@ public class AppStarter {
     private static boolean test = false;
 
     /**
-     Засекаем время старта.
-     */
-    private static final Long START_LONG = System.currentTimeMillis();
-
-    /**
      Class Simple Name
      */
     private static final String SOURCE_CLASS = AppStarter.class.getSimpleName();
 
     private static final Logger logger = Logger.getLogger(SOURCE_CLASS);
 
-    private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
-
-    /**
-     {@link #START_LONG}
-
-     @return the start long
-     */
-    public static Long getStartLong() {
-        return START_LONG;
-    }
+    private static MessageToUser messageToUser = new DBLogger();
 
     /*PS Methods*/
 
@@ -65,7 +49,7 @@ public class AppStarter {
      */
     public static void main(String[] args) {
         if(args.length > 0){
-            MESSAGE_TO_USER
+            messageToUser
                     .info(SOURCE_CLASS,
                             "Arguments",
                             "Starting at: " + new Date() + "\n" + new TForms().fromArray(args));
@@ -73,7 +57,16 @@ public class AppStarter {
         }
         else{
             ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
-            MESSAGE_TO_USER.info(SOURCE_CLASS, "Argument - none", new Date() + "   " + scheduleStart(test));
+            try{
+                messageToUser.info(
+                        SOURCE_CLASS,
+                        "Argument - none",
+                        new Date() + "   " + scheduleStart(test));
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                messageToUser = new FileLogger();
+            }
         }
     }
 
@@ -112,7 +105,7 @@ public class AppStarter {
                     ConstantsFor.RCPT.add(value);
                 }
                 else{
-                    MESSAGE_TO_USER.infoNoTitles(scheduleStart(test));
+                    messageToUser.infoNoTitles(scheduleStart(test));
                 }
             }
             catch(Exception e){
@@ -120,11 +113,10 @@ public class AppStarter {
             }
 
         }
-        MESSAGE_TO_USER.info(AppStarter.class.getName(), startTime, "Initializing " +
+        messageToUser.info(AppStarter.class.getName(), startTime, "Initializing " +
                 ParsingStart.class.getName() + " with " + delay +
                 " seconds delay..." + scheduleStart(test));
     }
-//unstat
 
     /**
      <b>Запуск планировщика отслеживания.</b> {@link #main(String[])}
@@ -142,7 +134,11 @@ public class AppStarter {
                 Executors.unconfigurableScheduledExecutorService(Executors.newSingleThreadScheduledExecutor());
         try{
             Runnable watchDogNorahIsCheckingMail = new WatchDogNorah(test);
-            scheduledExecutorService.scheduleWithFixedDelay(watchDogNorahIsCheckingMail, initialDelay, delay, TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleWithFixedDelay(
+                    watchDogNorahIsCheckingMail,
+                    initialDelay,
+                    delay,
+                    TimeUnit.SECONDS);
 
         }
         catch(Exception e){
