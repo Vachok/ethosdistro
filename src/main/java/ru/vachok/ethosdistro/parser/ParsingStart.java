@@ -1,156 +1,143 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.AppStarter;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForfs;
+import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.messenger.MessagesNull;
 import ru.vachok.messenger.email.ESender;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 
 /**
  <h1>Запуск парсера</h1>
 
  @since 23.08.2018 (16:48) */
-public class ParsingStart implements Runnable {
+public class ParsingStart extends TimerTask {
 
-   /**
-    Class Simple Name
-    */
-   private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
+    /**
+     {@link Parsers}
+     */
+    private Parsers parsers;
 
-   /**
-    {@link Logger}
-    */
-   private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
+    private final MessageToUser fileLogger = new MessagesNull();
 
-   /**
-    * {@link DBLogger}
-    */
-   private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
+    /**
+     Параметр {@code -t on}
+     */
+    private boolean test;
 
-   /**
-    * URL, как строка
-    */
-   private final String urlAsString;
+    /**
+     URL, как строка
+     */
+    private String urlAsString;
 
-   /**
-    * {@link Parsers}
-    */
-   private Parsers parsers;
+    /**
+     Class Simple Name
+     */
+    private static final String SOURCE_CLASS = ParsingStart.class.getSimpleName();
 
-   /**
-    Параметр {@code -t on}
-    */
-   private boolean test;
+    public ParsingStart(boolean isTest) {
+        super();
+        this.urlAsString = ConstantsFor.URL_AS_STRING;
+        this.test = isTest;
+    }
 
-   /**
-    <b>Конструктор</b>
+    @Override
+    public boolean cancel() {
+        Thread.currentThread().interrupt();
+        return super.cancel();
+    }
 
-    @param urlAsString url как строка
-    */
-   public ParsingStart(String urlAsString) {
-      this.parsers = new ParseJsonAsUsualString();
-      this.urlAsString = urlAsString;
-      this.parsers = new ParseJsonAsUsualString();
-   }
+    /**
+     {@link DBLogger}
+     */
+    private static final MessageToUser TO_USER_DATABASE = new DBLogger();
 
-   /**
-    Конструктор
+    @Override
+    public long scheduledExecutionTime() {
+//       long elapTime = System.currentTimeMillis() - ConstantsFor.START_TIME_IN_MILLIS;
+        return super.scheduledExecutionTime();
+    }
 
-    @param urlAsString url как строка
-    @param fileName    файл, для записи (имя)
-    */
-   public ParsingStart(String urlAsString, String fileName) {
-      if(fileName==null){
-         fileName = "answer.json";
-      }
-      this.urlAsString = urlAsString;
-      this.parsers = new ParseToFile(fileName);
-   }
+    private URL getUrlFromStr() {
+        URL url = null;
+        try{
+            url = new URL(urlAsString);
+        }
+        catch(MalformedURLException e){
+            ConstantsFor.SEND_MAIL_AND_DB.accept(e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+        }
+        return url;
+    }
 
-   /**
-    Конструктор
+    /*Constru*/
+    @Override
+    public void run() {
+        String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
+                .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
+        TO_USER_DATABASE.info(SOURCE_CLASS, "RUNTIME - " + upTime, "NOW TIME: " + new Date().toString());
+        this.parsers = new ParseToFile();
+        URL url = getUrlFromStr();
+        parsers.startParsing(url);
+        sendRes(this.test);
+    }
+    /*Private metsods*/
+    private void sendRes(boolean testOn) {
+        String returnString = new ParsingFinalize().call();
+        boolean call = false;
+        if(returnString.contains("false")) call = true;
+        if(testOn) call = !call;
+        File file = new File("answer.json");
+        MessageToUser emailS = new ESender(ConstantsFor.RCPT);
+        MessageToUser log = new FileLogger();
+        log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() ", ConstantsFor.RCPT.size() + " address");
+        TO_USER_DATABASE.infoNoTitles(ConstantsFor.RCPT.toString());
+        if(call){
+            String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
+                    " last modified: " + new Date(file.lastModified());
+            String freeSpaceOnDisk = file.getFreeSpace() / ConstantsFor.MEGABYTE + " free space in Megabytes";
+            fileLogger.info(SOURCE_CLASS, freeSpaceOnDisk, statisticsProb);
+        }
+        else{
+            String[] split = returnString.split("~~");
+            String subjectIP = split[0];
+            String bodyJSON;
+            try{
+                bodyJSON = split[1];
+            }
+            catch(ArrayIndexOutOfBoundsException e){
+                bodyJSON = "NO INFO";
+            }
+            if(ConstantsFor.RCPT.isEmpty()){
+                ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
+            }
+            new TForms().fromArray(ConstantsFor.RCPT);
+            emailS.errorAlert(subjectIP, "Mine~ALARM",
+                    new String(("ЙА ПРОГРАММО! \n" +
+                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА, БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
+                                        "mine~0 - выключит меня на 24 часа\n" +
+                                        "mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
+                                        "mine~ - приведёт меня в чувство в течении пары минут!)").getBytes(), StandardCharsets.UTF_8) + "\n" + new TForms().replaceChars(bodyJSON, ",", "\n") +
+                    "   | NO MINING! " + urlAsString);
+            TO_USER_DATABASE.errorAlert("ALARM!", "Condition not mining",
 
-    @param parsers     чем парсим {@link Parsers}
-    @param urlAsString url как строка
-    */
-   public ParsingStart(Parsers parsers, String urlAsString) {
-      this.parsers = parsers;
-      this.urlAsString = urlAsString;
-   }
-
-   /**
-    Конструктор
-
-    @param s url как строка
-    @param test test - запуск с <i>обратным !</i> условием.
-    */
-   public ParsingStart(String s, boolean test) {
-      this.urlAsString = s;
-      this.test = test;
-   }
-
-   @Override
-   public void run() {
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "RUN", new Date().toString());
-      this.parsers = new ParseToFile();
-      URL url = getUrlFromStr();
-      parsers.startParsing(url);
-      String s = new TForfs().toStringFromArray(ConstantsFor.RCPT);
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "email recep", s);
-      sendRes(this.test);
-   }
-
-   private URL getUrlFromStr() {
-      URL url = null;
-      try{
-         url = new URL(urlAsString);
-      }
-      catch(MalformedURLException e){
-         LOGGER.throwing(SOURCE_CLASS, "getSite", e);
-      }
-      return url;
-   }
-
-   private void sendRes(boolean callTest){
-      Boolean call;
-      if(callTest){
-         call = !new ParsingFinalize().call();
-      }else{
-         call= new ParsingFinalize().call();
-      }
-      File file = new File("answer.json");
-      MessageToUser emailS = new ESender(ConstantsFor.RCPT);
-      MessageToUser log = new FileLogger();
-      MESSAGE_TO_USER.info(SOURCE_CLASS, "INFO", "ConstantsFor.RCPT.size() = " + ConstantsFor.RCPT.size() + "\n" +
-            "Uptime = " + TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - AppStarter.getStartLong()) + " started at " + new Date(AppStarter.getStartLong()));
-      log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() = " , ConstantsFor.RCPT.size()+"");
-      if(call){
-         MESSAGE_TO_USER.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         log.info(SOURCE_CLASS, file
-                     .getFreeSpace() / ConstantsFor.MEGABYTE +
-                     " free space",
-               new Date(file.lastModified()) + "\n" + file.getAbsolutePath());
-         Thread.currentThread().interrupt();
-      }
-      else {
-         emailS.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         log.errorAlert("ALARM!", "Condition not mining", "NO MINING! " + urlAsString);
-         Thread.currentThread().interrupt();
-      }
-   }
+                    new String(("ЙА ПРОГРАММО! \n" +
+                                        "ЕСЛИ Я ТЕБЯ ЗАЕБАЛА, ПРОСТО ОТВЕТЬ В ТЕМЕ ПИСЬМА, БЕЗ ПРОБЕЛОВ (сотри alarm и ок):\n" +
+                                        "mine~0 - выключит меня на 24 часа\n" +
+                                        "mine~10 - выключит на 10мин. (тут в минутах можно выбрать на сколько, mine~20 = 20min, etc...\n" +
+                                        "mine~ - приведёт меня в чувство в течении пары минут!)").getBytes(), StandardCharsets.UTF_8) +
+                            returnString + "   | NO MINING! " + urlAsString);
+        }
+    }
 
 }
