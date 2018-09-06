@@ -2,7 +2,7 @@ package ru.vachok.ethosdistro.email;
 
 
 import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
@@ -23,7 +23,8 @@ public class MessagesFromServer implements Callable<Message[]> {
 
     private static final String S_N_N_S = "%s%n%n%s";
 
-    private static final MessageToUser messageToUser = new DBLogger();
+    /*Fields*/
+    private static final MessageToUser messageToUser = new FileLogger();
 
     private boolean cleanMBox;
 
@@ -74,7 +75,9 @@ public class MessagesFromServer implements Callable<Message[]> {
                     mailProps.getProperty("password"));
         }
         catch(MessagingException e){
-            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+            messageToUser.errorAlert(
+                    SOURCE_CLASS,
+                    e.getMessage(), new TForms().fromArray(e.getStackTrace())); //fixme 06.09.2018 (18:56) остановка
         }
 
         try{
