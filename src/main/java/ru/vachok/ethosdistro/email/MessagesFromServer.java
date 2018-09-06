@@ -1,11 +1,6 @@
 package ru.vachok.ethosdistro.email;
 
 
-import ru.vachok.ethosdistro.ConstantsFor;
-import ru.vachok.ethosdistro.util.FileLogger;
-import ru.vachok.ethosdistro.util.TForms;
-import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.email.ESender;
 import ru.vachok.mysqlandprops.props.DBRegProperties;
 import ru.vachok.mysqlandprops.props.FileProps;
 import ru.vachok.mysqlandprops.props.InitProperties;
@@ -19,41 +14,16 @@ import java.util.concurrent.Callable;
 
 public class MessagesFromServer implements Callable<Message[]> {
 
+    /*Fields*/
     private static final String SOURCE_CLASS = MessagesFromServer.class.getSimpleName();
 
-    private static final String S_N_N_S = "%s%n%n%s";
-
-    /*Fields*/
-    private static final MessageToUser messageToUser = new FileLogger();
-
-    private boolean cleanMBox;
-
-    public MessagesFromServer(boolean cleanMBox) {
-        this.cleanMBox = cleanMBox;
-        MessageToUser messageToUser = new ESender(ConstantsFor.RCPT);
-        messageToUser.info(SOURCE_CLASS, "cleanMBox is", cleanMBox + ".");
+    /*Instances*/
+    MessagesFromServer() {
     }
-
-    public MessagesFromServer() {
-    }
-
-    /**
-     The action to be performed by this timer task.
-     */
 
     @Override
-    public Message[] call() {
-        Message[] messages = new Message[0];
-        try{
-            if(cleanMBox){
-                throw new UnsupportedOperationException("Not Ready Yet");
-            }
-            messages = getInbox().getMessages();
-        }
-        catch(MessagingException e){
-            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
-        }
-        return messages;
+    public Message[] call() throws MessagingException, NullPointerException {
+        return getInbox().getMessages();
     }
 
     protected static Folder getInbox() {
@@ -66,29 +36,22 @@ public class MessagesFromServer implements Callable<Message[]> {
             }
         };
         Session chkSess = Session.getDefaultInstance(mailProps, authenticator);
-        Store store = null;
+        Store store;
+        Folder inBox = null;
         try{
             store = chkSess.getStore();
             store.connect(
                     mailProps.getProperty("host"),
                     mailProps.getProperty("user"),
                     mailProps.getProperty("password"));
+            inBox = Objects.requireNonNull(store).getFolder("Inbox");
+            inBox.open(Folder.READ_WRITE);
         }
-        catch(MessagingException e){
-            messageToUser.errorAlert(
-                    SOURCE_CLASS,
-                    e.getMessage(), new TForms().fromArray(e.getStackTrace())); //fixme 06.09.2018 (18:56) остановка
+        catch(MessagingException ignore){
+            //
         }
 
-        try{
-            Folder inBox = Objects.requireNonNull(store).getFolder("Inbox");
-            inBox.open(Folder.READ_WRITE);
-            return inBox;
-        }
-        catch(MessagingException e){
-            messageToUser.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
-        }
-        throw new UnsupportedOperationException("Inbox not available or empty :(");
+        return inBox;
     }
 
     private static Properties getSessionProps() {

@@ -6,7 +6,6 @@ import ru.vachok.ethosdistro.util.DBLogger;
 import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
-import ru.vachok.messenger.MessagesNull;
 import ru.vachok.messenger.email.ESender;
 
 import java.io.File;
@@ -24,12 +23,7 @@ import java.util.concurrent.TimeUnit;
  @since 23.08.2018 (16:48) */
 public class ParsingStart extends TimerTask {
 
-    /**
-     {@link Parsers}
-     */
-    private Parsers parsers;
-
-    private final MessageToUser fileLogger = new MessagesNull();
+    private final MessageToUser fileLogger = new FileLogger();
 
     /**
      Параметр {@code -t on}
@@ -85,7 +79,10 @@ public class ParsingStart extends TimerTask {
         String upTime = "END (Uptime = " + ( float ) (System.currentTimeMillis() - ConstantsFor
                 .START_TIME_IN_MILLIS) / TimeUnit.HOURS.toMillis(1) + " hrs)";
         TO_USER_DATABASE.info(SOURCE_CLASS, "RUNTIME - " + upTime, "NOW TIME: " + new Date().toString());
-        this.parsers = new ParseToFile();
+        /**
+         {@link Parsers}
+         */
+        Parsers parsers = new ParseToFile();
         URL url = getUrlFromStr();
         parsers.startParsing(url);
         sendRes(this.test);
@@ -94,13 +91,17 @@ public class ParsingStart extends TimerTask {
     private void sendRes(boolean testOn) {
         String returnString = new ParsingFinalize().call();
         boolean call = false;
-        if(returnString.contains("false")) call = true;
-        if(testOn) call = !call;
+        if(returnString.contains("false")){
+            call = true;
+        }
+        if(testOn){
+            call = !call;
+        }
         File file = new File("answer.json");
         MessageToUser emailS = new ESender(ConstantsFor.RCPT);
         MessageToUser log = new FileLogger();
         log.info(SOURCE_CLASS, "ConstantsFor.RCPT.size() ", ConstantsFor.RCPT.size() + " address");
-        TO_USER_DATABASE.infoNoTitles(ConstantsFor.RCPT.toString());
+        fileLogger.infoNoTitles(ConstantsFor.RCPT.toString());
         if(call){
             String statisticsProb = new Date(file.lastModified()) + "\n" + file.getAbsolutePath() +
                     " last modified: " + new Date(file.lastModified());

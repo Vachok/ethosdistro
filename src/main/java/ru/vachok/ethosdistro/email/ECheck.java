@@ -3,9 +3,11 @@ package ru.vachok.ethosdistro.email;
 
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.messenger.email.ESender;
+import ru.vachok.mysqlandprops.EMailAndDB.SpeedRunActualize;
 import ru.vachok.mysqlandprops.props.FileProps;
 import ru.vachok.mysqlandprops.props.InitProperties;
 
@@ -66,6 +68,8 @@ public class ECheck extends MessagesFromServer implements Serializable {
 
     private static transient Properties properties;
 
+    private static final MessageToUser messageToUser = new FileLogger();
+
     /**
      <b>Время, в минутах, для приостановки отправки почты</b>
      */
@@ -123,6 +127,13 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
         }
     }
 
+    public static boolean isGetShould() {
+        FILE_PROPS.getProps();
+        String sOf = properties.getProperty(OR_FALSE);
+        IT_INST.shouldOrFalse = !sOf.equalsIgnoreCase("0");
+        return IT_INST.shouldOrFalse;
+    }
+
     /**
      <b>Первый этап проверок почты</b>
      <p>
@@ -139,7 +150,7 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
         Message[] messages;
         try{
             messages = folder.getMessages();
-            MESSAGE_TO_USER.errorAlert(
+            messageToUser.errorAlert(
                     "Check mail.",
                     "You have " + messages.length + " messages",
                     new Date().toString());
@@ -157,7 +168,7 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
                 return secondMBCheck(folder, messages);
             }
         }
-        catch(MessagingException e){
+        catch(MessagingException | NullPointerException e){
             MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
         return -1;
@@ -222,7 +233,7 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
                 IT_INST.stopMinutes = -1;
                 FILE_PROPS.setProps(properties);
                 folder.close(true);
-
+                return -1;
             }
         }
         return -1;
@@ -235,7 +246,10 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
                     return m;
                 }
                 if(m.getSubject().toLowerCase().contains("speed:")){
-                    MESSAGE_TO_USER.infoNoTitles(m.getSubject());
+                    Thread speedy = new Thread(SpeedRunActualize::new);
+                    speedy.start();
+                    new ESender("143500@gmail.com")
+                            .info(SOURCE_CLASS, "messageSubjectCheck", speedy.isAlive() + " speed actuator");
                 }
                 else{
                     m.reply(true);
@@ -248,11 +262,11 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
                 }
             }
             catch(MessagingException e){
-                MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
+                return m;
 
             }
         }
-        return null;
+        throw new UnsupportedOperationException("No mails");
     }
 
     private static void writeO() {
@@ -276,13 +290,6 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
         catch(IOException e){
             MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
-    }
-
-    public static boolean getShould() {
-        FILE_PROPS.getProps();
-        String sOf = properties.getProperty(OR_FALSE);
-        IT_INST.shouldOrFalse = !sOf.equalsIgnoreCase("0");
-        return IT_INST.shouldOrFalse;
     }
 
     static {

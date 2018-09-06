@@ -1,7 +1,7 @@
 package ru.vachok.ethosdistro.parser;
 
 
-import ru.vachok.ethosdistro.util.DBLogger;
+import ru.vachok.ethosdistro.util.FileLogger;
 import ru.vachok.ethosdistro.util.TForms;
 import ru.vachok.messenger.MessageToUser;
 
@@ -22,7 +22,8 @@ public class ParseToFile implements Parsers {
 
    private static final Logger LOGGER = Logger.getLogger(SOURCE_CLASS);
 
-   private static final MessageToUser MESSAGE_TO_USER = new DBLogger();
+   /*Fields*/
+   private static final MessageToUser MESSAGE_TO_USER = new FileLogger();
    private URL urlToParse;
 
    private String fileName;

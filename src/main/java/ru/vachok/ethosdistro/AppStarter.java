@@ -4,6 +4,9 @@ package ru.vachok.ethosdistro;
 import ru.vachok.ethosdistro.parser.ParsingStart;
 import ru.vachok.ethosdistro.util.*;
 import ru.vachok.messenger.MessageToUser;
+import ru.vachok.mysqlandprops.props.DBRegProperties;
+import ru.vachok.mysqlandprops.props.FileProps;
+import ru.vachok.mysqlandprops.props.InitProperties;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,24 +51,31 @@ public class AppStarter {
      @see TForms
      */
     public static void main(String[] args) {
+        messageToUser
+                .info(
+                        ConstantsFor.APP_NAME,
+                        ConstantsFor.APP_VER + " app ver.",
+                        "start at " + new Date(ConstantsFor.START_TIME_IN_MILLIS));
         if(args.length > 0){
-            messageToUser
-                    .info(SOURCE_CLASS,
-                            "Arguments",
-                            "Starting at: " + new Date() + "\n" + new TForms().fromArray(args));
+            String msg = SOURCE_CLASS + " " +
+                    "Arguments" + " " +
+                    "Starting at: " +
+                    new Date() + "\n" + new TForms().fromArray(args);
+            logger.info(msg);
             argsReader(args);
         }
         else{
             ConstantsFor.RCPT.add(ConstantsFor.KIR_MAIL);
             try{
-                messageToUser.info(
-                        SOURCE_CLASS,
-                        "Argument - none",
-                        new Date() + "   " + scheduleStart(test));
+                String msg = SOURCE_CLASS + " " +
+                        "Argument - none" + " " +
+                        new Date() + "   " + scheduleStart(test);
+                logger.info(msg);
             }
             catch(Exception e){
-                e.printStackTrace();
                 messageToUser = new FileLogger();
+                logger.throwing(SOURCE_CLASS, "main", e);
+                messageToUser.errorAlert(SOURCE_CLASS, "main", e.getMessage());
             }
         }
     }
@@ -139,11 +149,24 @@ public class AppStarter {
                     initialDelay,
                     delay,
                     TimeUnit.SECONDS);
-
+            shutdownHook(scheduledExecutorService);
         }
         catch(Exception e){
             logger.warning(e.getMessage());
         }
-        return "Runnable parseRun = new ParsingStart(http://hous01.ethosdistro.com/ Test is " + test;
+        return "Runnable watchDogNorahIsCheckingMail = new WatchDogNorah(test) Test is " + test;
+    }
+
+    private static void shutdownHook(ScheduledExecutorService scheduledExecutorService) {
+        InitProperties[] propsInitors =
+                {new DBRegProperties(ConstantsFor.APP_NAME + SOURCE_CLASS), new FileProps(SOURCE_CLASS)};
+        for(InitProperties i : propsInitors){
+            i.setProps(ConstantsFor.sysProperties);
+        }
+        String stopCauses = scheduledExecutorService.isShutdown() +
+                " is shutdown, " +
+                scheduledExecutorService.isTerminated() +
+                " is term";
+        logger.info(stopCauses);
     }
 }

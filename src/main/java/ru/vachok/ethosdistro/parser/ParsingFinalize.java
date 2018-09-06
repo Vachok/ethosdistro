@@ -26,12 +26,11 @@ public class ParsingFinalize implements Callable<String> {
      */
     private static final String SOURCE_CLASS = ParsingFinalize.class.getSimpleName();
 
+    /*Fields*/
     /**
      {@link }
      */
     private static final MessageToUser messageToUser = new DBLogger();
-
-    /*Fields*/
     private static final String FALSE_STRING = "false";
 
 

@@ -8,9 +8,7 @@ import ru.vachok.messenger.email.ESender;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 
@@ -29,6 +27,11 @@ public enum ConstantsFor {
     public static final int MEGABYTE = 1024 * 1024;
 
     /**
+     Настройки системы
+     */
+    public static final Properties sysProperties = System.getProperties();
+
+    /**
      Время первоначального простоя
      */
     public static final long INITIAL_DELAY = 4L;
@@ -36,7 +39,7 @@ public enum ConstantsFor {
     /**
      Задержка между проверками по-умолчанию
      */
-    public static final long DELAY_IN_SECONDS = 33L;
+    public static final long DELAY_IN_SECONDS = 150L;
 
     /**
      Список почтовых адресов
@@ -78,9 +81,34 @@ public enum ConstantsFor {
     };
 
     /**
+     Версия
+     */
+    public static final String APP_VER = getAppVer();
+
+    /**
      <b>Узнать имя локального ПК</b>
      */
     public static final String PC_NAME = getPCName();
+
+    public static final int BAD_STATUS = 666;
+
+    /**
+     Техническое имя приложения.
+     */
+    public static final String APP_NAME = (ConstantsFor.class
+                                                   .getPackage()
+                                                   .getName()
+                                                   .replaceAll("\\Q.\\E", "_") + "-");
+
+    private static String getAppVer() {
+        if(getPCName().equalsIgnoreCase("home") || getPCName().toLowerCase().contains("no0027")){
+            return System.getProperties().getProperty("sun.java.command")
+                    .split("ethosdistro-")[1].replace(".jar", "");
+        }
+        else{
+            return "0.507";
+        }
+    }
 
     /**
      @return {@link #PC_NAME}

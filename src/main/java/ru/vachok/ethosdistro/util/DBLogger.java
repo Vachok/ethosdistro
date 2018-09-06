@@ -1,7 +1,6 @@
 package ru.vachok.ethosdistro.util;
 
 
-import com.mysql.jdbc.CommunicationsException;
 import ru.vachok.ethosdistro.ConstantsFor;
 import ru.vachok.messenger.MessageToUser;
 import ru.vachok.mysqlandprops.DataConnectTo;
@@ -18,6 +17,13 @@ import java.util.logging.Logger;
  @since 25.08.2018 (22:22) */
 public class DBLogger implements MessageToUser {
 
+    /*Fields*/
+
+    /**
+     Simple Name класса, для поиска настроек
+     */
+    private static final String SOURCE_CLASS = DBLogger.class.getSimpleName();
+
     private String logString;
 
     private String className;
@@ -26,11 +32,7 @@ public class DBLogger implements MessageToUser {
 
     private String dbName = "ru_vachok_ethosdistro";
 
-    /**
-     Simple Name класса, для поиска настроек
-     */
-    private static final String SOURCE_CLASS = DBLogger.class.getSimpleName();
-
+    /*Instances*/
     /*Constru*/
     public DBLogger(String dbName) {
         this.dbName = dbName;
@@ -59,8 +61,9 @@ public class DBLogger implements MessageToUser {
         try{
             sendLogs();
         }
-        catch(CommunicationsException ignore){
-            //
+        catch(Exception e){
+            MessageToUser messageToUser = new FileLogger();
+            messageToUser.errorAlert(SOURCE_CLASS, "sendLogs", new TForms().fromArray(e.getStackTrace()));
         }
     }
 
@@ -69,12 +72,7 @@ public class DBLogger implements MessageToUser {
         this.mistype = "INFO no titles";
         this.className = SOURCE_CLASS;
         this.logString = s;
-        try{
-            sendLogs();
-        }
-        catch(CommunicationsException ignore){
-            //
-        }
+        sendLogs();
     }
 
     @Override
@@ -88,7 +86,7 @@ public class DBLogger implements MessageToUser {
     }
 
     /*Private metsods*/
-    private void sendLogs() throws CommunicationsException {
+    private void sendLogs() {
         String format = MessageFormat
                 .format("Sending to database = {0}\n{1}\n{2}", className, mistype, logString);
         Logger logger = Logger.getLogger(SOURCE_CLASS);
@@ -104,8 +102,11 @@ public class DBLogger implements MessageToUser {
             preparedStatement.executeUpdate();
             logger.info("Send to DB is " + true);
         }
-        catch(SQLException ignore){
-            //
+        catch(SQLException e){
+            MessageToUser messageToUser = new FileLogger();
+            messageToUser.errorAlert(
+                    SOURCE_CLASS, "sendLogs", e.getMessage() + "\n" + new TForms().fromArray(e.getStackTrace()));
+            Thread.currentThread().interrupt();
         }
     }
 }
