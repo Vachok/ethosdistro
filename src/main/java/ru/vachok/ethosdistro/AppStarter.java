@@ -149,7 +149,11 @@ public class AppStarter {
                     initialDelay,
                     delay,
                     TimeUnit.SECONDS);
-            shutdownHook(scheduledExecutorService);
+            scheduledExecutorService.scheduleWithFixedDelay(
+                    watchDogNorahIsCheckingMail,
+                    ConstantsFor.INITIAL_DELAY,
+                    ConstantsFor.DELAY_IN_SECONDS,
+                    TimeUnit.SECONDS);
         }
         catch(Exception e){
             logger.warning(e.getMessage());

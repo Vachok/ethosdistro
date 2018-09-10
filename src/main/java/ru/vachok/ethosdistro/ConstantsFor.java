@@ -83,7 +83,7 @@ public enum ConstantsFor {
     /**
      Версия
      */
-    public static final String APP_VER = getAppVer();
+    public static final String APP_VER = "0.507";
 
     /**
      <b>Узнать имя локального ПК</b>
@@ -99,16 +99,6 @@ public enum ConstantsFor {
                                                    .getPackage()
                                                    .getName()
                                                    .replaceAll("\\Q.\\E", "_") + "-");
-
-    private static String getAppVer() {
-        if(getPCName().equalsIgnoreCase("home") || getPCName().toLowerCase().contains("no0027")){
-            return System.getProperties().getProperty("sun.java.command")
-                    .split("ethosdistro-")[1].replace(".jar", "");
-        }
-        else{
-            return "0.507";
-        }
-    }
 
     /**
      @return {@link #PC_NAME}

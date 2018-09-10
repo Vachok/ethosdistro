@@ -168,7 +168,7 @@ public static void setShouldOrFalse(boolean shouldOrFalse) {
                 return secondMBCheck(folder, messages);
             }
         }
-        catch(MessagingException | NullPointerException e){
+        catch(MessagingException e){
             MESSAGE_TO_USER.errorAlert(SOURCE_CLASS, e.getMessage(), new TForms().fromArray(e.getStackTrace()));
         }
         return -1;
