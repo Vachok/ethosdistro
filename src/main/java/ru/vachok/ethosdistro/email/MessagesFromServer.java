@@ -50,12 +50,11 @@ public class MessagesFromServer implements Callable<Message[]> {
     MessagesFromServer() {
     }
 
+    /*Instances*/
     @Override
-    public Message[] call() throws MessagingException, NullPointerException {
+    public Message[] call() throws MessagingException {
         return getInbox().getMessages();
     }
-
-    /*Instances*/
 
     private static Properties getSessionProps() {
         InitProperties initProperties = new DBRegProperties("mail-regru");

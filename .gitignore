@@ -30,3 +30,4 @@ src/test/java/
 ECheck.propertie
 WatchDogNorah.properties
 /ECheck.properties
+AppStarter.properties

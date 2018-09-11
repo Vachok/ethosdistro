@@ -39,7 +39,7 @@ public enum ConstantsFor {
     /**
      Задержка между проверками по-умолчанию
      */
-    public static final long DELAY_IN_SECONDS = 150L;
+    public static final long DELAY_IN_SECONDS = 130L;
 
     /**
      Список почтовых адресов
@@ -83,7 +83,7 @@ public enum ConstantsFor {
     /**
      Версия
      */
-    public static final String APP_VER = "0.507";
+    public static final String APP_VER = "0.508";
 
     /**
      <b>Узнать имя локального ПК</b>
